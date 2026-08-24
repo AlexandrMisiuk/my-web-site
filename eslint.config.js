@@ -7,7 +7,7 @@ import tseslint from 'typescript-eslint';
 import prettier from 'eslint-config-prettier';
 
 export default tseslint.config(
-    { ignores: ['dist', 'node_modules', '.junie', '.agents', '.idea'] },
+    { ignores: ['dist', 'node_modules', '.junie', '.agents', '.claude', '.idea', 'docs', 'public'] },
     {
         extends: [js.configs.recommended, ...tseslint.configs.recommended, prettier],
         files: ['**/*.{ts,tsx}'],
