@@ -1,0 +1,35 @@
+# Technical Concerns & Considerations
+
+This document highlights critical implementation concerns, potential pitfalls, responsive/accessibility guards, and constraints to monitor as the portfolio evolves.
+
+## Key Concerns & Mitigations
+
+### 1. Cumulative Layout Shift (CLS) on Images & Media
+
+- **Concern**: Async loading of project media can introduce layout shifts if intrinsic dimensions are missing.
+- **Mitigation**: All project media items must supply explicit `width` and `height` attributes or fixed aspect ratio containers (`aspect-video`, `aspect-[16/10]`), along with `loading="lazy"` and `decoding="async"`.
+
+### 2. Missing or Broken Anchor Targets
+
+- **Concern**: Navigating to sections via header or mobile menu can fail or misalign if section IDs deviate from `src/data/navigation.ts`.
+- **Mitigation**: Single source of truth in `navigation.ts`. Use CSS `scroll-padding-top: var(--header-height)` on `html` so sticky headers never cover anchor headings.
+
+### 3. Contrast Compliance in Both Color Schemes
+
+- **Concern**: Subtle text or borders may fail WCAG AA contrast (4.5:1 for body, 3:1 for large text/UI) in dark or light mode.
+- **Mitigation**: Palette is defined semantically with tuned dark mode variants (e.g., cobalt accent shifts to `#7D95FF` in `.dark`). Validate all foreground/background pairings.
+
+### 4. Narrow Viewports (320px) Horizontal Overflow
+
+- **Concern**: Unbroken URLs, code tags, or tight padding can cause horizontal scrollbars on small mobile devices.
+- **Mitigation**: Test mobile layouts down to 320px. Use `break-words`, `overflow-hidden` where needed, and ensure minimum touch target size of 44×44px for interactive buttons and links.
+
+### 5. Motion Sickness & Accessibility
+
+- **Concern**: Animations may cause disorientation for users sensitive to motion.
+- **Mitigation**: All transitions and scroll-driven keyframes must be wrapped inside `@media (prefers-reduced-motion: no-preference)`.
+
+### 6. Unpopulated Placeholders & Empty Anchor Links
+
+- **Concern**: Missing data (e.g., unpublished CV or GitHub link) could produce broken `#` links.
+- **Mitigation**: UI components must strictly verify that URL strings are non-empty before rendering clickable action buttons.

@@ -1,0 +1,17 @@
+# Agents
+.agents
+.claude
+.junie
+
+# IDE
+.idea
+
+# Other
+dist
+docs
+public
+node_modules
+
+*.tsbuildinfo
+package-lock.json
+skills-lock.json
