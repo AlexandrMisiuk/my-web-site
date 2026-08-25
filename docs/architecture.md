@@ -11,7 +11,9 @@ This document provides a condensed overview of the architecture, key concepts, a
 - **Per-Tab Theme Persistence**: The user's manual color scheme choice is stored in `sessionStorage` (persisting across page reloads in the active tab), while new tabs or windows open cleanly with system defaults.
 - **KISS Theme State Hook**: Lightweight `useColorScheme` hook leveraging standard React `useState` (synchronous lazy initialization) and `useEffect` (OS `matchMedia` change subscription and cleanup), strictly avoiding external state managers.
 - **Bespoke Atomic UI Primitives & SVG Icons**: Handcrafted, accessible UI primitives (`ActionLink`, `Tag`, `Eyebrow`) and self-contained SVG icons (`SunIcon`, `MoonIcon`, `ArrowUpRightIcon`, `ArrowRightIcon`, `GitHubIcon`, `LinkedInIcon`, `MailIcon`, `DocumentIcon`) eliminating heavy external icon or UI libraries.
-- **Decoupled Data Layer**: All portfolio content (personal profile, navigation items, projects, principles, technologies, about text) is structured as type-safe TypeScript modules in `src/data/`. Components remain strictly presentational.
+- **Decoupled Data Layer**: All portfolio content (personal profile, navigation items, projects, principles, technologies, about text) is structured as type-safe TypeScript modules in `src/data/`. Components remain strictly presentational and consume data via `@/data`.
+- **Zero Cumulative Layout Shift (CLS)**: The `ProjectMedia` contract mandates explicit `width` and `height` properties to preserve aspect ratios before async media loads.
+- **Empty String Omission Pattern**: Unsupplied contact or social links use empty strings (`''`) with `// TODO: replace` comments, enabling presentational components to conditionally omit anchor tags rather than rendering broken `#` links.
 - **Native Scroll & Animation**: Scroll reveals leverage CSS scroll-driven animations (`animation-timeline: view()`) gated behind `@supports` with full `prefers-reduced-motion` fallbacks.
 
 ## Directory Layout & Responsibilities
@@ -23,7 +25,16 @@ src/
 │   ├── layout/         # Application shell: Header, MobileNav, ThemeToggle, SkipLink, IndexRail, Section, Footer
 │   ├── sections/       # Primary page sections: Hero, SelectedWork, ProjectCard, HowIWork, About, Technologies, Contact
 │   └── ui/             # Atomic primitives: ActionLink, Tag, Eyebrow, and SVG icon primitives (icons/)
-├── data/               # Content data layer: types.ts, site.ts, navigation.ts, projects.ts, principles.ts, technologies.ts, about.ts
+├── data/               # Decoupled content data layer
+│   ├── types.ts        # TypeScript data contracts & interfaces
+│   ├── site.ts         # Profile identity, status, role, and social links
+│   ├── navigation.ts   # 5 indexed sections (01-05) and section IDs
+│   ├── projects.ts     # Showcase projects & case study models
+│   ├── principles.ts   # 4 core engineering principles
+│   ├── technologies.ts # 10 core technical stack skills
+│   ├── about.ts        # Biographical prose copy
+│   ├── index.ts        # Unified barrel export
+│   └── README.md       # Content maintainer guide
 ├── hooks/              # Custom hooks: useColorScheme, useActiveSection
 ├── styles/             # Global styles: index.css (Tailwind CSS v4 `@theme`, `[data-theme="dark"]`, `@layer base`, keyframes)
 ├── App.tsx             # Root application shell assembling layout and sections
@@ -35,10 +46,20 @@ src/
 
 ```mermaid
 graph TD
-    DATA[src/data/*] --> SECTIONS[src/components/sections/*]
-    DATA --> LAYOUT[src/components/layout/*]
+    subgraph DataLayer["src/data/ (Typed Content Layer)"]
+        TYPES[types.ts]
+        MODULES[site.ts / navigation.ts / projects.ts / principles.ts / technologies.ts / about.ts]
+        INDEX[index.ts barrel export]
+        
+        TYPES --> MODULES
+        MODULES --> INDEX
+    end
+
+    INDEX --> SECTIONS[src/components/sections/*]
+    INDEX --> LAYOUT[src/components/layout/*]
+    INDEX --> APP[src/App.tsx]
     HOOKS[src/hooks/*] --> LAYOUT
-    CSS[src/styles/index.css] --> APP[App.tsx]
+    CSS[src/styles/index.css] --> APP
     LAYOUT --> APP
     SECTIONS --> APP
     APP --> MAIN[main.tsx]

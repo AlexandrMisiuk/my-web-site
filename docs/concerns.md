@@ -7,12 +7,12 @@ This document highlights critical implementation concerns, potential pitfalls, r
 ### 1. Cumulative Layout Shift (CLS) on Images & Media
 
 - **Concern**: Async loading of project media can introduce layout shifts if intrinsic dimensions are missing.
-- **Mitigation**: All project media items must supply explicit `width` and `height` attributes or fixed aspect ratio containers (`aspect-video`, `aspect-[16/10]`), along with `loading="lazy"` and `decoding="async"`.
+- **Mitigation**: All project media items must supply explicit `width` and `height` attributes (enforced by the `ProjectMedia` contract in `src/data/types.ts`) or fixed aspect ratio containers (`aspect-video`, `aspect-[16/10]`), along with `loading="lazy"` and `decoding="async"`.
 
 ### 2. Missing or Broken Anchor Targets
 
 - **Concern**: Navigating to sections via header or mobile menu can fail or misalign if section IDs deviate from `src/data/navigation.ts`.
-- **Mitigation**: Single source of truth in `navigation.ts`. Use CSS `scroll-padding-top: var(--header-height)` on `html` so sticky headers never cover anchor headings.
+- **Mitigation**: Single source of truth in `navigation.ts` (`navItems` and `SECTION_IDS`). Use CSS `scroll-padding-top: var(--header-height)` on `html` so sticky headers never cover anchor headings.
 
 ### 3. Contrast Compliance in Both Color Schemes
 
@@ -31,10 +31,15 @@ This document highlights critical implementation concerns, potential pitfalls, r
 
 ### 6. Unpopulated Placeholders & Empty Anchor Links
 
-- **Concern**: Missing data (e.g., unpublished CV or GitHub link) could produce broken `#` links.
-- **Mitigation**: UI components must strictly verify that URL strings are non-empty before rendering clickable action buttons. `ActionLink` falls back to standard `<button>` when `href` is absent.
+- **Concern**: Missing data (e.g., unpublished CV, GitHub link, or case study URL) could produce broken `#` links.
+- **Mitigation**: Unsupplied links in `src/data/site.ts` and `src/data/projects.ts` use empty strings (`''`) or optional fields. UI components must strictly verify `Boolean(link)` before rendering clickable action buttons or anchor tags.
 
 ### 7. Storage Unavailability & Privacy Sandboxes
 
 - **Concern**: Browser private browsing modes or sandboxed iframes can throw security errors on `sessionStorage` access.
 - **Mitigation**: All `sessionStorage` read and write calls are guarded by `try/catch` blocks in both the pre-paint script and `useColorScheme` hook, gracefully falling back to DOM attributes and `matchMedia`.
+
+### 8. Schema Drift in Data Layer
+
+- **Concern**: Introducing new section components or properties in `src/data/` could result in silent contract divergence or broken runtime assumptions.
+- **Mitigation**: All data modules are validated against strict TypeScript interfaces in `src/data/types.ts` with `readonly` modifiers to enforce immutability, validated on every build via `npm run typecheck`.

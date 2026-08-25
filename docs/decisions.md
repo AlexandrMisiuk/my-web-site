@@ -26,15 +26,25 @@ This document records the key architectural choices, technical decisions, and tr
 
 ### 5. Type-Safe Data Layer over CMS/JSON
 
-- **Decision**: Keep portfolio data in strongly typed TypeScript files (`src/data/`) rather than an external CMS or dynamic runtime JSON.
+- **Decision**: Keep portfolio data in strongly typed TypeScript files (`src/data/`) exposed through a barrel export (`src/data/index.ts`) rather than an external CMS or dynamic runtime JSON.
 - **Rationale**: Zero API latency, full compile-time validation, automatic tree-shaking, and trivial editing ergonomics for a personal portfolio.
 
-### 6. Native CSS Motion & Progressive Scroll Enhancement
+### 6. Empty String Omission Pattern for Contact Links
+
+- **Decision**: Represent unsupplied personal contact links (GitHub, email, CV) as empty strings (`''`) paired with explicit `// TODO: replace` comments.
+- **Rationale**: Distinguishes intentional empty states from undefined properties, allows quick searchability via grep, and gives presentational components a simple `Boolean(link)` condition to omit anchor tags without ever rendering broken `#` links.
+
+### 7. Layout Stability via Mandatory Media Dimensions
+
+- **Decision**: Mandate explicit `width` and `height` properties in the `ProjectMedia` contract.
+- **Rationale**: Forces all project screenshots, mockups, and preview videos to declare intrinsic dimensions, preventing Cumulative Layout Shift (CLS) when assets load asynchronously.
+
+### 8. Native CSS Motion & Progressive Scroll Enhancement
 
 - **Decision**: Use native CSS animations and `animation-timeline: view()` guarded by `@supports`, backed by `prefers-reduced-motion`.
 - **Rationale**: Zero JavaScript animation overhead, runs off the main thread, and gracefully degrades to instant visibility on unsupported browsers or when reduced motion is preferred.
 
-### 7. Strict Flat ESLint 9 + JSX A11y
+### 9. Strict Flat ESLint 9 + JSX A11y
 
 - **Decision**: Standardize on flat `eslint.config.js` with TypeScript-ESLint, React Hooks, and JSX A11y rules.
 - **Rationale**: Ensures accessible DOM structure, semantic HTML landmarks, and strict TypeScript best practices across all components from day one.
