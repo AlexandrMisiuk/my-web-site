@@ -12,7 +12,7 @@ This document highlights critical implementation concerns, potential pitfalls, r
 ### 2. Missing or Broken Anchor Targets
 
 - **Concern**: Navigating to sections via header or mobile menu can fail or misalign if section IDs deviate from `src/data/navigation.ts`.
-- **Mitigation**: Single source of truth in `navigation.ts` (`navItems` and `SECTION_IDS`). Use CSS `scroll-padding-top: var(--header-height)` on `html` so sticky headers never cover anchor headings.
+- **Mitigation**: Single source of truth in `navigation.ts` (`navItems` and `SECTION_IDS`). Use CSS `scroll-padding-top: var(--header-height)` on `html` and `scroll-mt-[var(--header-height)]` on `Section` so sticky headers never cover anchor headings.
 
 ### 3. Contrast Compliance in Both Color Schemes
 
@@ -22,12 +22,12 @@ This document highlights critical implementation concerns, potential pitfalls, r
 ### 4. Narrow Viewports (320px) Horizontal Overflow
 
 - **Concern**: Unbroken URLs, code tags, or tight padding can cause horizontal scrollbars on small mobile devices.
-- **Mitigation**: Test mobile layouts down to 320px. Use `break-words`, `overflow-hidden` where needed, and ensure minimum touch target size of 44×44px for interactive buttons and links (`ThemeToggle`, `ActionLink`).
+- **Mitigation**: Test mobile layouts down to 320px. Use `break-words`, `overflow-hidden` where needed, and ensure minimum touch target size of 44×44px for interactive buttons and links (`ThemeToggle`, `ActionLink`, hamburger toggle, mobile nav links).
 
 ### 5. Motion Sickness & Accessibility
 
 - **Concern**: Animations may cause disorientation for users sensitive to motion.
-- **Mitigation**: All transitions and scroll-driven keyframes must be wrapped inside `@media (prefers-reduced-motion: no-preference)`.
+- **Mitigation**: All transitions, index rail animations, and scroll-driven keyframes must be wrapped inside `@media (prefers-reduced-motion: no-preference)` with `motion-reduce:transition-none`.
 
 ### 6. Unpopulated Placeholders & Empty Anchor Links
 
@@ -43,3 +43,18 @@ This document highlights critical implementation concerns, potential pitfalls, r
 
 - **Concern**: Introducing new section components or properties in `src/data/` could result in silent contract divergence or broken runtime assumptions.
 - **Mitigation**: All data modules are validated against strict TypeScript interfaces in `src/data/types.ts` with `readonly` modifiers to enforce immutability, validated on every build via `npm run typecheck`.
+
+### 9. Body Scroll Lock & Focus Trap Leaking
+
+- **Concern**: Unmounting the mobile navigation during fast resize or navigation transitions could leave `document.body.style.overflow = 'hidden'` or trap focus inappropriately.
+- **Mitigation**: `MobileNav` implements cleanup routines that restore previous body overflow and return focus to `triggerRef`. Additionally, a `matchMedia('(min-width: 48rem)')` listener automatically triggers `onClose()` if the viewport widens past the mobile breakpoint while open.
+
+### 10. Scroll-Spy Ambiguity & Flutter on Short Sections
+
+- **Concern**: Small adjacent sections or rapid viewport scrolling could cause scroll-spy index fluttering or empty intersecting sets.
+- **Mitigation**: `useActiveSection` evaluates intersections against `SECTION_IDS` in strict document order (first matching ID wins), maintains a persistent Set of visible IDs in a ref, and provides edge guards for top of document (`scrollY < 100` -> `hero`) and bottom of page (`window.innerHeight + scrollY >= scrollHeight - 50` -> last section).
+
+### 11. Index Rail Viewport Overlap at `xl+`
+
+- **Concern**: Fixed `IndexRail` markers on wide screens could overlap main container content on intermediate viewport widths near 1280px.
+- **Mitigation**: `IndexRail` is hidden below `xl` (1280px), positioned in the left margin (`left-6`) outside the `Container` max-width (`80rem` / 1280px), and styled with `pointer-events-none` so it never obstructs clicks or interactive targets.

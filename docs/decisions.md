@@ -48,3 +48,23 @@ This document records the key architectural choices, technical decisions, and tr
 
 - **Decision**: Standardize on flat `eslint.config.js` with TypeScript-ESLint, React Hooks, and JSX A11y rules.
 - **Rationale**: Ensures accessible DOM structure, semantic HTML landmarks, and strict TypeScript best practices across all components from day one.
+
+### 10. Shared `Container` Grid Primitive
+
+- **Decision**: Centralize max-width (`80rem`), responsive gutters (`px-5 sm:px-8 lg:px-12 xl:px-16`), and optional 12-column grid (`lg:grid lg:grid-cols-12 lg:gap-x-6 xl:gap-x-8`) into a polymorphic `Container` component (`src/components/layout/Container.tsx`).
+- **Rationale**: Eliminates duplicated breakpoint measurements across `Header`, `Section`, and `Footer`, guarantees identical horizontal alignment across all viewport sizes, and provides an ergonomic container interface.
+
+### 11. Full-Screen Overlay Mobile Navigation
+
+- **Decision**: Implement `MobileNav` as a full-screen overlay disclosure beneath the sticky header with focus trap, Escape-to-close, body scroll lock with cleanup restoration, and auto-closing on expanding beyond `md` (768px).
+- **Rationale**: Maximizes touch ergonomics on mobile devices with large (≥ 44×44px) tap targets, satisfies accessibility requirements for keyboard and screen-reader users, and avoids layout shifts or pushed content.
+
+### 12. Single-`IntersectionObserver` Scroll-Spy Keyed to CSS Variables
+
+- **Decision**: Drive active section state with a single `IntersectionObserver` in `useActiveSection` attached to `SECTION_IDS`, computing the top root margin from `--header-height` (`getComputedStyle` with fallback) and `-55%` bottom margin.
+- **Rationale**: Avoids continuous scroll event listeners and layout recalculations, synchronizes `aria-current` across navigation links and the index rail, and adapts automatically to fluid header heights.
+
+### 13. Decorative `aria-hidden` Index Rail at `xl+`
+
+- **Decision**: Render `IndexRail` exclusively at `xl+` (1280px+) with `aria-hidden="true"` and `pointer-events-none`.
+- **Rationale**: Acts strictly as a visual reading progress indicator without polluting the accessibility tree or creating duplicate interactive tab stops.

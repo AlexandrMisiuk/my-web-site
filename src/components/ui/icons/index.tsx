@@ -171,3 +171,45 @@ export function LinkedInIcon({ size = 20, className, ...props }: IconProps) {
         </svg>
     );
 }
+
+export function MenuIcon({ size = 20, className, ...props }: IconProps) {
+    return (
+        <svg
+            width={size}
+            height={size}
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.75"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden="true"
+            className={className}
+            {...props}
+        >
+            <line x1="4" x2="20" y1="12" y2="12" />
+            <line x1="4" x2="20" y1="6" y2="6" />
+            <line x1="4" x2="20" y1="18" y2="18" />
+        </svg>
+    );
+}
+
+export function CloseIcon({ size = 20, className, ...props }: IconProps) {
+    return (
+        <svg
+            width={size}
+            height={size}
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.75"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden="true"
+            className={className}
+            {...props}
+        >
+            <path d="M18 6 6 18M6 6l12 12" />
+        </svg>
+    );
+}
