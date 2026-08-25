@@ -17,12 +17,12 @@ This document highlights critical implementation concerns, potential pitfalls, r
 ### 3. Contrast Compliance in Both Color Schemes
 
 - **Concern**: Subtle text or borders may fail WCAG AA contrast (4.5:1 for body, 3:1 for large text/UI) in dark or light mode.
-- **Mitigation**: Palette is defined semantically with tuned dark mode variants (e.g., cobalt accent shifts to `#7D95FF` in `.dark`). Validate all foreground/background pairings.
+- **Mitigation**: Palette is defined semantically with tuned dark mode variants (e.g., cobalt accent shifts to `#7D95FF` under `[data-theme="dark"]`, paired with dark canvas text). Validate all foreground/background pairings.
 
 ### 4. Narrow Viewports (320px) Horizontal Overflow
 
 - **Concern**: Unbroken URLs, code tags, or tight padding can cause horizontal scrollbars on small mobile devices.
-- **Mitigation**: Test mobile layouts down to 320px. Use `break-words`, `overflow-hidden` where needed, and ensure minimum touch target size of 44×44px for interactive buttons and links.
+- **Mitigation**: Test mobile layouts down to 320px. Use `break-words`, `overflow-hidden` where needed, and ensure minimum touch target size of 44×44px for interactive buttons and links (`ThemeToggle`, `ActionLink`).
 
 ### 5. Motion Sickness & Accessibility
 
@@ -32,4 +32,9 @@ This document highlights critical implementation concerns, potential pitfalls, r
 ### 6. Unpopulated Placeholders & Empty Anchor Links
 
 - **Concern**: Missing data (e.g., unpublished CV or GitHub link) could produce broken `#` links.
-- **Mitigation**: UI components must strictly verify that URL strings are non-empty before rendering clickable action buttons.
+- **Mitigation**: UI components must strictly verify that URL strings are non-empty before rendering clickable action buttons. `ActionLink` falls back to standard `<button>` when `href` is absent.
+
+### 7. Storage Unavailability & Privacy Sandboxes
+
+- **Concern**: Browser private browsing modes or sandboxed iframes can throw security errors on `sessionStorage` access.
+- **Mitigation**: All `sessionStorage` read and write calls are guarded by `try/catch` blocks in both the pre-paint script and `useColorScheme` hook, gracefully falling back to DOM attributes and `matchMedia`.

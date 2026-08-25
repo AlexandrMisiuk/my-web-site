@@ -401,7 +401,7 @@ None. If you later want regression coverage, Vitest + Testing Library is the nat
 
 # Delivery Steps
 
-###   Step 1: Scaffold the Vite project and wire up the toolchain
+### ✓ Step 1: Scaffold the Vite project and wire up the toolchain
 `npm run dev`, `npm run build`, `npm run lint` and `npm run typecheck` all succeed on a bare page inside the existing git repo.
 
 - Scaffold in place with `npm create vite@latest . -- --template react-ts` (Vite 8 / React 19 / TypeScript), preserving `Editor.md`, `skills-lock.json` and `.git`.
@@ -412,7 +412,7 @@ None. If you later want regression coverage, Vitest + Testing Library is the nat
 - Write `.gitignore` and a README covering the stack, scripts and where content is edited.
 - Strip the Vite demo boilerplate (counter, logos, `App.css`, default `index.css`) down to an empty shell.
 
-###   Step 2: Build the design token layer, typography system and theme switching
+### ✓ Step 2: Build the design token layer, typography system and theme switching
 The cool ink & cobalt design system exists as CSS tokens, fonts render, and light/dark switching works without a flash.
 
 - Install `@fontsource-variable/instrument-sans` and `@fontsource-variable/jetbrains-mono`; import them in `main.tsx` and preload the primary weights.

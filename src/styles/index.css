@@ -1,1 +1,102 @@
 @import 'tailwindcss';
+
+@custom-variant dark (&:where([data-theme='dark'], [data-theme='dark'] *));
+
+@theme {
+    /* Color Palette - Light Default */
+    --color-canvas: #f4f5f7;
+    --color-surface: #ffffff;
+    --color-ink: #14161a;
+    --color-ink-muted: #5a6070;
+    --color-hairline: #dde0e6;
+    --color-accent: #2b4bff;
+    --color-accent-hover: #1e3ce0;
+
+    /* Typography */
+    --font-sans: 'Instrument Sans Variable', system-ui, -apple-system, sans-serif;
+    --font-mono: 'JetBrains Mono Variable', ui-monospace, monospace;
+
+    /* Fluid Type Scale */
+    --text-display: clamp(2.75rem, 1.6rem + 5.2vw, 6.5rem);
+    --text-h2: clamp(1.75rem, 1.2rem + 2.2vw, 3rem);
+    --text-h3: clamp(1.25rem, 1.05rem + 0.8vw, 1.75rem);
+    --text-lead: clamp(1.125rem, 1rem + 0.4vw, 1.375rem);
+    --text-body: clamp(0.9375rem, 0.9rem + 0.15vw, 1.0625rem);
+    --text-mono-xs: 0.75rem;
+
+    /* Spacing & Sizing */
+    --spacing-section: clamp(5rem, 3rem + 8vw, 10rem);
+    --header-height: 4rem;
+    --radius-sm: 4px;
+}
+
+/* Dark Mode Token Overrides via Data Attribute */
+[data-theme='dark'] {
+    --color-canvas: #0d0f12;
+    --color-surface: #14171c;
+    --color-ink: #e9eaee;
+    --color-ink-muted: #9aa1ae;
+    --color-hairline: #232830;
+    --color-accent: #7d95ff;
+    --color-accent-hover: #9bb0ff;
+}
+
+/* Base Layer Defaults */
+@layer base {
+    html {
+        scroll-padding-top: var(--header-height);
+    }
+
+    body {
+        @apply bg-canvas text-ink font-sans antialiased;
+        min-height: 100vh;
+    }
+
+    h1,
+    h2,
+    h3 {
+        text-wrap: balance;
+    }
+
+    :focus-visible {
+        outline: 2px solid var(--color-accent);
+        outline-offset: 3px;
+    }
+}
+
+/* Motion & Animation */
+@media (prefers-reduced-motion: no-preference) {
+    html {
+        scroll-behavior: smooth;
+    }
+
+    @supports (animation-timeline: view()) {
+        .reveal {
+            animation: reveal-in linear both;
+            animation-timeline: view();
+            animation-range: entry 8% cover 26%;
+        }
+    }
+}
+
+@keyframes reveal-in {
+    from {
+        opacity: 0;
+        transform: translateY(1.25rem);
+    }
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+@keyframes hero-rise {
+    from {
+        opacity: 0;
+        transform: translateY(1rem);
+    }
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
