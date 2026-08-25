@@ -92,7 +92,7 @@ export default function App() {
                         {navItems.map((item) => (
                             <div
                                 key={item.id}
-                                className="border-hairline bg-surface flex items-center justify-between rounded-[var(--radius-sm)] border p-4"
+                                className="border-hairline bg-surface flex items-center justify-between rounded-sm border p-4"
                             >
                                 <span className="text-body text-ink font-medium">{item.label}</span>
                                 <span className="text-mono-xs text-accent font-mono font-semibold">{item.index}</span>
@@ -111,7 +111,7 @@ export default function App() {
                         {projects.map((proj) => (
                             <div
                                 key={proj.id}
-                                className="border-hairline bg-surface flex flex-col justify-between gap-4 rounded-[var(--radius-sm)] border p-6"
+                                className="border-hairline bg-surface flex flex-col justify-between gap-4 rounded-sm border p-6"
                             >
                                 <div className="flex flex-col gap-3">
                                     <div className="flex items-center justify-between">
@@ -148,7 +148,7 @@ export default function App() {
                         {principles.map((principle, idx) => (
                             <div
                                 key={principle.id}
-                                className="border-hairline bg-surface flex flex-col gap-3 rounded-[var(--radius-sm)] border p-6"
+                                className="border-hairline bg-surface flex flex-col gap-3 rounded-sm border p-6"
                             >
                                 <div className="flex items-center justify-between">
                                     <h3 className="text-h3 text-ink font-semibold">{principle.title}</h3>
@@ -181,7 +181,7 @@ export default function App() {
                     <h2 id="about-heading" className="text-h2 text-ink font-semibold">
                         Biographical Prose ({aboutContent.paragraphs.length} Paragraphs)
                     </h2>
-                    <div className="border-hairline bg-surface flex flex-col gap-4 rounded-[var(--radius-sm)] border p-6">
+                    <div className="border-hairline bg-surface flex flex-col gap-4 rounded-sm border p-6">
                         {aboutContent.paragraphs.map((p, i) => (
                             <p key={i} className="text-body text-ink leading-relaxed">
                                 {p}
@@ -196,7 +196,7 @@ export default function App() {
                     <h2 id="icons-heading" className="text-h2 text-ink font-semibold">
                         Vector Icons & CSS Motion Layer
                     </h2>
-                    <div className="border-hairline bg-surface flex flex-wrap items-center gap-6 rounded-[var(--radius-sm)] border p-6">
+                    <div className="border-hairline bg-surface flex flex-wrap items-center gap-6 rounded-sm border p-6">
                         <div className="flex items-center gap-2">
                             <SunIcon size={24} className="text-accent" />
                             <span className="text-mono-xs text-ink-muted font-mono">SunIcon</span>
