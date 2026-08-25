@@ -99,7 +99,7 @@ export function MobileNav({ isOpen, onClose, activeId, triggerRef }: MobileNavPr
             role="dialog"
             aria-modal="true"
             aria-label="Navigation menu"
-            className="bg-canvas fixed inset-x-0 top-[var(--header-height)] bottom-0 z-40 flex h-dvh flex-col justify-between overflow-y-auto p-6 md:hidden"
+            className="bg-canvas fixed inset-x-0 top-(--header-height) z-40 flex h-(--mobile-nav-height) flex-col justify-between overflow-y-auto p-6 md:hidden"
         >
             <Container className="flex h-full flex-col justify-between py-6">
                 <nav aria-label="Mobile Primary">
@@ -112,7 +112,7 @@ export function MobileNav({ isOpen, onClose, activeId, triggerRef }: MobileNavPr
                                         href={`#${item.id}`}
                                         onClick={onClose}
                                         aria-current={isActive ? 'true' : undefined}
-                                        className={`text-[32px] flex min-h-[44px] items-center gap-4 transition-colors ${
+                                        className={`text-[32px] flex min-h-11 items-center gap-4 transition-colors ${
                                             isActive ? 'text-accent font-semibold' : 'text-ink-muted hover:text-ink'
                                         }`}
                                     >
