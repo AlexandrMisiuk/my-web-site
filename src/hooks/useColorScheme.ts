@@ -5,7 +5,6 @@ export type ColorScheme = 'light' | 'dark';
 export const THEME_STORAGE_KEY = 'theme';
 
 function resolveInitialTheme(): ColorScheme {
-    if (typeof window === 'undefined') return 'light';
     try {
         const stored = sessionStorage.getItem(THEME_STORAGE_KEY);
         if (stored === 'dark' || stored === 'light') {

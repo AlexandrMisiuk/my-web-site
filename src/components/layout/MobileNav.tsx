@@ -17,17 +17,18 @@ export function MobileNav({ isOpen, onClose, activeId, triggerRef }: MobileNavPr
     useEffect(() => {
         if (!isOpen) return;
 
+        const panel = panelRef.current;
+        /* v8 ignore next -- the dialog ref is attached before this effect runs */
+        if (!panel) return;
+
         const previousOverflow = document.body.style.overflow;
         document.body.style.overflow = 'hidden';
 
-        const panel = panelRef.current;
-        if (panel) {
-            const focusables = panel.querySelectorAll<HTMLElement>(
-                'a[href], button:not([disabled]), textarea:not([disabled]), input[type="text"]:not([disabled]), input[type="radio"]:not([disabled]), input[type="checkbox"]:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])',
-            );
-            if (focusables.length > 0) {
-                focusables[0].focus();
-            }
+        const focusables = panel.querySelectorAll<HTMLElement>(
+            'a[href], button:not([disabled]), textarea:not([disabled]), input[type="text"]:not([disabled]), input[type="radio"]:not([disabled]), input[type="checkbox"]:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])',
+        );
+        if (focusables.length > 0) {
+            focusables[0].focus();
         }
 
         const handleKeyDown = (e: KeyboardEvent) => {
@@ -38,17 +39,16 @@ export function MobileNav({ isOpen, onClose, activeId, triggerRef }: MobileNavPr
             }
 
             if (e.key === 'Tab') {
-                if (!panel) return;
-                const focusables = panel.querySelectorAll<HTMLElement>(
+                const tabbables = panel.querySelectorAll<HTMLElement>(
                     'a[href], button:not([disabled]), textarea:not([disabled]), input[type="text"]:not([disabled]), input[type="radio"]:not([disabled]), input[type="checkbox"]:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])',
                 );
-                if (focusables.length === 0) {
+                if (tabbables.length === 0) {
                     e.preventDefault();
                     return;
                 }
 
-                const firstElement = focusables[0];
-                const lastElement = focusables[focusables.length - 1];
+                const firstElement = tabbables[0];
+                const lastElement = tabbables[tabbables.length - 1];
 
                 if (e.shiftKey) {
                     if (document.activeElement === firstElement) {
@@ -112,7 +112,7 @@ export function MobileNav({ isOpen, onClose, activeId, triggerRef }: MobileNavPr
                                         href={`#${item.id}`}
                                         onClick={onClose}
                                         aria-current={isActive ? 'true' : undefined}
-                                        className={`text-[32px] flex min-h-11 items-center gap-4 transition-colors ${
+                                        className={`flex min-h-11 items-center gap-4 text-[32px] transition-colors ${
                                             isActive ? 'text-accent font-semibold' : 'text-ink-muted hover:text-ink'
                                         }`}
                                     >
