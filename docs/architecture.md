@@ -19,10 +19,16 @@ This document provides a condensed overview of the architecture, key concepts, a
 - **Decoupled Data Layer**: All portfolio content (personal profile, navigation items, projects, principles, technologies, about text) is structured as type-safe TypeScript modules in `src/data/`. Components remain strictly presentational and consume data via `@/data`.
 - **Empty String Omission Pattern**: Unsupplied contact or social links use empty strings (`''`) with `// TODO: replace` comments, enabling presentational components to conditionally omit anchor tags rather than rendering broken `#` links.
 - **Native Scroll & Animation**: Scroll reveals leverage CSS scroll-driven animations (`animation-timeline: view()`) gated behind `@supports` with full `prefers-reduced-motion` fallbacks.
+- **Two-Tier Testing Architecture**: Vitest 4 + jsdom + React Testing Library share the Vite pipeline for unit/component tests; Playwright exercises the built artifact via `vite preview` across 320 / 768 / 1440. Detail lives in `docs/testing.md`.
+- **Centralized Browser API Doubles**: `src/test/` owns controllable `matchMedia` and `IntersectionObserver` fakes so unit tests drive intersections and media-query changes instead of asserting on mock internals.
+- **Accessibility-as-a-Gate**: `@axe-core/playwright` runs WCAG 2.1 AA scans in both color schemes across the viewport matrix, making the WCAG AA commitment executable.
 
 ## Directory Layout & Responsibilities
 
 ```
+e2e/                    # Playwright specs, axe fixture, viewport matrix
+docs/testing.md         # Testing architecture, TDD workflow, coverage policy
+
 src/
 ├── assets/             # Static graphics, SVG artwork, and media placeholders
 ├── components/
@@ -40,6 +46,7 @@ src/
 │   ├── index.ts        # Unified barrel export
 │   └── README.md       # Content maintainer guide
 ├── hooks/              # Custom hooks: useColorScheme, useActiveSection
+├── test/               # Unit harness: setup, matchMedia / IntersectionObserver doubles, renderWithUser
 ├── styles/             # Global styles: index.css (Tailwind CSS v4 `@theme`, `[data-theme="dark"]`, `@layer base`, keyframes)
 ├── App.tsx             # Root application shell assembling layout and sections
 ├── main.tsx            # Application entry point mounting React root and importing variable fonts

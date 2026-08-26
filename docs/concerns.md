@@ -58,3 +58,38 @@ This document highlights critical implementation concerns, potential pitfalls, r
 
 - **Concern**: Fixed `IndexRail` markers on wide screens could overlap main container content on intermediate viewport widths near 1280px.
 - **Mitigation**: `IndexRail` is hidden below `xl` (1280px), positioned in the left margin (`left-6`) outside the `Container` max-width (`80rem` / 1280px), and styled with `pointer-events-none` so it never obstructs clicks or interactive targets.
+
+### 12. jsdom Browser API Gaps
+
+- **Concern**: jsdom has no `IntersectionObserver` / `matchMedia`, and `getComputedStyle` returns empty custom properties, so `--header-height` silently exercises only the 64px fallback.
+- **Mitigation**: Centralized doubles in `src/test/` plus tests that explicitly set `--header-height` (or stub `getComputedStyle`) to cover rem, px, invalid, and fallback branches.
+
+### 13. E2E Flakiness from Scroll-Driven Animation
+
+- **Concern**: `animation-timeline: view()` reveals and transitions make scroll assertions flake.
+- **Mitigation**: Global Playwright `reducedMotion: 'reduce'`, web-first attribute assertions, and a lint-enforced ban on `waitForTimeout`.
+
+### 14. Test State Leakage
+
+- **Concern**: `sessionStorage`, `data-theme`, and `body.style.overflow` are process-global in jsdom.
+- **Mitigation**: A global `afterEach` in `src/test/setup.ts` resets all three, plus both browser-API doubles.
+
+### 15. Placeholder Content Coupling
+
+- **Concern**: `src/components/sections/` is unbuilt and `App.tsx` still renders temporary copy, so text assertions would rot immediately.
+- **Mitigation**: E2E asserts on landmarks, roles, IDs, and `aria-*` state — never on placeholder prose.
+
+### 16. Playwright Binary and Build Cost
+
+- **Concern**: E2E rebuilds the bundle per run and needs a Chromium download.
+- **Mitigation**: `reuseExistingServer`, Chromium-only projects, and documenting `npx playwright install chromium` as a one-off.
+
+### 17. 100% Coverage Can Incentivise Hollow Tests
+
+- **Concern**: A numeric target invites assertion-free renders and creeping exclusions.
+- **Mitigation**: Role-based behavioural assertions, a closed exclusion list enumerated in `vite.config.ts`, and the rule in `docs/testing.md` that any new exclusion needs written justification.
+
+### 18. Coverage Gate Friction as the Codebase Grows
+
+- **Concern**: Once `src/components/sections/` is built, holding 100% costs real effort.
+- **Mitigation**: Accepted deliberately. TDD means the test exists first, so the gate is never met in a red state at commit time.

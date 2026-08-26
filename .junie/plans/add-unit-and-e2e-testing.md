@@ -613,7 +613,7 @@ Append, continuing the existing numbering:
 
 # Delivery Steps
 
-###   Step 1: Install testing skills and wire the Vitest harness into the build
+### ✓ Step 1: Install testing skills and wire the Vitest harness into the build
 `npm test` runs a green Vitest suite in jsdom with the `@/*` alias resolving and all tooling configs updated.
 
 - Install the four vetted agent skills via the Skills CLI, updating `skills-lock.json`: `antfu/skills@vitest`, `microsoft/playwright-cli@playwright-cli`, `currents-dev/playwright-best-practices-skill@playwright-best-practices`, `addyosmani/web-quality-skills@accessibility`.
@@ -625,7 +625,7 @@ Append, continuing the existing numbering:
 - Add `test`, `test:watch`, and `test:coverage` scripts to `package.json`.
 - Extend `eslint.config.js` with an `eslint-plugin-testing-library` block for test files and add `coverage` to `ignores`; add `coverage` to `.gitignore` and `.prettierignore`.
 
-###   Step 2: Unit-test the hooks and the data layer contracts
+### ✓ Step 2: Unit-test the hooks and the data layer contracts
 The theme, scroll-spy, and content-contract logic is fully covered by fast, isolated unit tests.
 
 - Add `src/hooks/useColorScheme.test.ts` covering `sessionStorage` resolution, `data-theme` fallback, `prefers-color-scheme` fallback, `setTheme`/`toggle` side effects, OS change events being ignored under a session override, and a throwing storage stub simulating private mode.
@@ -633,7 +633,7 @@ The theme, scroll-spy, and content-contract logic is fully covered by fast, isol
 - Add `src/data/content.test.ts` asserting `navItems` IDs are a subset of `SECTION_IDS`, indices are unique and sequential, no link equals `#`, every `Project.media` declares non-zero `width`/`height`, and principle/technology IDs are unique and non-empty.
 - Drive all browser APIs through the `src/test/` doubles rather than inline mocks.
 
-###   Step 3: Component-test the UI primitives and layout shell
+### ✓ Step 3: Component-test the UI primitives and layout shell
 Every existing component in `src/components/` has behavior and accessibility-contract coverage via React Testing Library.
 
 - Add `src/components/ui/ActionLink.test.tsx` for the anchor-vs-button branch, auto external detection with `target`/`rel` resolution, the opens-in-a-new-tab screen-reader text, prop overrides, and `onClick` on both branches.
@@ -647,7 +647,7 @@ Every existing component in `src/components/` has behavior and accessibility-con
 - Query by accessible role and name throughout; never assert on Tailwind class strings.
 - Run `npm run test:coverage` and close every remaining gap with real assertions before the thresholds are switched on.
 
-###   Step 4: Scaffold Playwright and cover the core user journeys
+### ✓ Step 4: Scaffold Playwright and cover the core user journeys
 `npm run test:e2e` builds the site, serves it via `vite preview`, and runs journey specs green across three viewport projects.
 
 - Add devDependencies `@playwright/test` and `eslint-plugin-playwright`; document `npx playwright install chromium` as a one-time step.
@@ -658,7 +658,7 @@ Every existing component in `src/components/` has behavior and accessibility-con
 - Add `e2e/mobile-nav.spec.ts` for open/close, body scroll lock, Escape with focus return, nav-item selection closing the overlay, and auto-close on widening past 768px.
 - Add `test:e2e` and `test:e2e:ui` scripts, an `eslint-plugin-playwright` flat block for `e2e/**`, and `playwright-report` plus `test-results` to `.gitignore` and `.prettierignore`.
 
-###   Step 5: Add automated accessibility and responsive e2e guards
+### ✓ Step 5: Add automated accessibility and responsive e2e guards
 Axe-core WCAG 2.1 AA scans and responsive layout guards run as part of the e2e suite in both color schemes.
 
 - Add the `@axe-core/playwright` devDependency.
@@ -667,7 +667,7 @@ Axe-core WCAG 2.1 AA scans and responsive layout guards run as part of the e2e s
 - Add `e2e/responsive.spec.ts` asserting no horizontal overflow at 320px, a minimum 44x44 px bounding box for the theme toggle, hamburger, nav links and action links, and that `IndexRail` is absent below `xl` while never intercepting pointer events at 1440px.
 - Assert only on landmarks, roles, IDs and `aria-*` state so the specs survive the placeholder copy currently rendered by `App.tsx`.
 
-###   Step 6: Enforce the 100% coverage gate and author docs/testing.md
+### ✓ Step 6: Enforce the 100% coverage gate and author docs/testing.md
 The coverage thresholds are live, `npm run verify` fails below 100%, and `docs/testing.md` documents the whole strategy.
 
 - Enable `thresholds: { lines: 100, statements: 100, functions: 100, branches: 100 }` in the `coverage` block of `vite.config.ts`.
@@ -677,7 +677,7 @@ The coverage thresholds are live, `npm run verify` fails below 100%, and `docs/t
 - Create `docs/testing.md` with the eight sections: Testing Philosophy and the TDD mandate, Two-Tier Architecture, Commands, Coverage Policy with the justified exclusion list, Unit Test Conventions, `src/test/` Harness API, E2E Conventions, and Troubleshooting.
 - Embed the test-pipeline Mermaid diagram in `docs/testing.md` as its architectural reference.
 
-###   Step 7: Write the TDD and coverage mandates into AGENTS.md, README.md and the docs/ knowledge base
+### ✓ Step 7: Write the TDD and coverage mandates into AGENTS.md, README.md and the docs/ knowledge base
 Every governance document states that future development is test-driven with 100% unit coverage, and the full gate chain passes cleanly.
 
 - Update `AGENTS.md`: add a mandatory Test-Driven Development section (red/green/refactor, no production code without a prior failing test, regression test first for bug fixes, 100% coverage non-negotiable, exclusions require justification), a Testing Stack architectural boundary, a Testing Standards subsection under Code Style, `docs/testing.md` registered under Documentation Governance, and an expanded Quality Gates block using `npm run test:coverage` plus `npm run test:e2e` and the `npx playwright install chromium` prerequisite.

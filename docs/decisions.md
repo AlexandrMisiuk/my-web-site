@@ -68,3 +68,58 @@ This document records the key architectural choices, technical decisions, and tr
 
 - **Decision**: Render `IndexRail` exclusively at `xl+` (1280px+) with `aria-hidden="true"` and `pointer-events-none`.
 - **Rationale**: Acts strictly as a visual reading progress indicator without polluting the accessibility tree or creating duplicate interactive tab stops.
+
+### 14. Vitest 4 over Jest
+
+- **Decision**: Use Vitest 4 as the unit runner.
+- **Rationale**: Reuses the Vite 8 pipeline, `@/*` alias, and Oxc transform. `vitest@4.1.11` peer-supports `vite@^8`.
+
+### 15. Vitest Config Colocated in `vite.config.ts`
+
+- **Decision**: Import `defineConfig` from `vitest/config` and keep the `test` block next to the Vite config.
+- **Rationale**: One alias definition, no parallel build config. Vite ignores `test` during production builds.
+
+### 16. jsdom + React Testing Library over Browser Mode
+
+- **Decision**: Run the unit tier in jsdom with Testing Library, not Vitest Browser Mode.
+- **Rationale**: Fast, dependency-light, well-understood. DOM-API gaps are covered by centralized doubles in `src/test/`.
+
+### 17. Explicit Vitest Imports over `globals: true`
+
+- **Decision**: Import `describe` / `it` / `expect` from `vitest` in every test file.
+- **Rationale**: Keeps the ESLint flat config free of injected globals and keeps test intent explicit.
+
+### 18. Playwright Against the Production Preview Build
+
+- **Decision**: Playwright `webServer` runs `npm run build && npm run preview`.
+- **Rationale**: E2E validates the shipped artifact, including the inline pre-paint theme script in `index.html`.
+
+### 19. Viewport Projects over Per-Test Resizing
+
+- **Decision**: Three Chromium projects at 320 / 768 / 1440 rather than resizing inside individual tests.
+- **Rationale**: Clean, parallel coverage of concerns #4 and #11.
+
+### 20. Automated axe-core Accessibility Gate
+
+- **Decision**: `@axe-core/playwright` scans WCAG 2.0/2.1 A + AA in both themes, including the open mobile-nav dialog.
+- **Rationale**: Makes the WCAG AA commitment in `AGENTS.md` executable rather than aspirational. Decorative `aria-hidden` nodes (IndexRail) are excluded from contrast so the scan stays honest.
+
+### 21. 100% Unit Coverage as a Failing Gate
+
+- **Decision**: V8 thresholds of 100 on lines, statements, functions, and branches, with `coverage.include` covering every runtime module under `src/` and a short, justified exclusion list.
+- **Rationale**: Affordable because the codebase is small, and it makes the TDD mandate mechanically enforceable via `npm run test:coverage` inside `verify`.
+
+### 22. Test-Driven Development Mandated for All Future Work
+
+- **Decision**: Red / green / refactor is the required workflow, recorded in `AGENTS.md` and `README.md` rather than enforced by hooks.
+- **Rationale**: CI is out of scope. The coverage gate is the practical backstop: untested production code cannot pass `verify`.
+
+### 23. Dedicated `docs/testing.md`
+
+- **Decision**: Testing gets its own document instead of growing `architecture.md`.
+- **Rationale**: It now spans two runners, a harness, a coverage policy, and a workflow mandate. The other `docs/` files link to it rather than duplicating it.
+
+### 24. No Visual Regression, No CI Yet
+
+- **Decision**: Do not add `toHaveScreenshot()` baselines or a `.github/` workflow in this change.
+- **Rationale**: Visual snapshots are high-maintenance and font-rendering flaky. CI was explicitly deferred; local scripts and `verify` are the gate for now.
