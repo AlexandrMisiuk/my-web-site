@@ -5,14 +5,21 @@ import { renderWithUser, screen, within } from '@/test/render';
 import App from './App';
 
 describe('App', () => {
-    it('composes the skip link, header, main landmark, and footer', () => {
+    it('composes the skip link, header, main landmark, and footer with valid heading hierarchy', () => {
         renderWithUser(<App />);
 
         expect(screen.getByRole('link', { name: 'Skip to main content' })).toHaveAttribute('href', '#main');
         expect(screen.getByRole('navigation', { name: 'Primary' })).toBeInTheDocument();
         expect(screen.getByRole('main')).toHaveAttribute('id', 'main');
         expect(screen.getByRole('contentinfo')).toBeInTheDocument();
-        expect(screen.getAllByRole('heading', { level: 1 })).toHaveLength(1);
+
+        const h1Headings = screen.getAllByRole('heading', { level: 1 });
+        expect(h1Headings).toHaveLength(1);
+        expect(h1Headings[0]).toHaveTextContent('Oleksandr Misiuk');
+
+        expect(screen.getByRole('heading', { level: 2, name: 'Selected Work' })).toBeInTheDocument();
+        expect(screen.getByRole('heading', { level: 3, name: 'Personal Product' })).toBeInTheDocument();
+        expect(screen.getByRole('heading', { level: 3, name: 'Enterprise Web Platform' })).toBeInTheDocument();
     });
 
     it('wires the active section into the primary navigation', () => {

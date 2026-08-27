@@ -3,8 +3,9 @@ import { Header } from '@/components/layout/Header';
 import { IndexRail } from '@/components/layout/IndexRail';
 import { Section } from '@/components/layout/Section';
 import { SkipLink } from '@/components/layout/SkipLink';
+import { Hero } from '@/components/sections/Hero';
+import { SelectedWork } from '@/components/sections/SelectedWork';
 import { SECTION_IDS } from '@/data/navigation';
-import { siteProfile } from '@/data/site';
 import { useActiveSection } from '@/hooks/useActiveSection';
 
 export default function App() {
@@ -19,22 +20,12 @@ export default function App() {
             <main id="main" tabIndex={-1} className="outline-none">
                 {/* 00 / Hero */}
                 <Section id="hero" variant="plain">
-                    <div className="flex flex-col gap-6 py-12 sm:py-20 lg:py-28">
-                        <h1 className="text-display text-ink font-bold tracking-tight">{siteProfile.name}</h1>
-                        <p className="text-lead text-ink-muted max-w-2xl">
-                            {siteProfile.role} — {siteProfile.statement}
-                        </p>
-                        <p className="text-mono-xs text-ink-muted font-mono">
-                            [Hero section content arriving in Step 5]
-                        </p>
-                    </div>
+                    <Hero />
                 </Section>
 
                 {/* 01 / Selected Work */}
                 <Section id="work" index="01" label="Selected Work">
-                    <p className="text-mono-xs text-ink-muted font-mono">
-                        [Selected work case studies arriving in Step 5]
-                    </p>
+                    <SelectedWork />
                 </Section>
 
                 {/* 02 / How I Work */}
