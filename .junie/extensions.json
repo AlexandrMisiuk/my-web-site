@@ -1,0 +1,12 @@
+{
+    "github-vercel-vercel-plugin": {
+        "url": "https://github.com/vercel/vercel-plugin",
+        "extensions": [
+            "vercel-plugin"
+        ],
+        "source": {
+            "type": "git",
+            "url": "https://github.com/vercel/vercel-plugin"
+        }
+    }
+}
