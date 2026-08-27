@@ -123,3 +123,28 @@ This document records the key architectural choices, technical decisions, and tr
 
 - **Decision**: Do not add `toHaveScreenshot()` baselines or a `.github/` workflow in this change.
 - **Rationale**: Visual snapshots are high-maintenance and font-rendering flaky. CI was explicitly deferred; local scripts and `verify` are the gate for now.
+
+### 25. Section Encapsulation vs. Composition
+
+- **Decision**: Retain `Section` as the structural layout container in `App.tsx` and encapsulate presentational components (`Hero`, `SelectedWork`) inside section children.
+- **Rationale**: Preserves uniform layout grid alignment, section IDs, scroll anchors, and `IntersectionObserver` scroll-spy registration without duplicating section headers.
+
+### 26. CLS-Safe Media Container with Aspect Ratio Wrapping
+
+- **Decision**: Wrap project media previews in `ProjectCard` inside fixed aspect-ratio containers (`aspect-[16/10] sm:aspect-[16/9]`) and enforce `width`, `height`, `loading="lazy"`, and `decoding="async"` on all images/videos.
+- **Rationale**: Prevents Cumulative Layout Shift (CLS) as assets load over the network and guarantees visual alignment across project cards.
+
+### 27. Graceful Empty State for Project Showcase
+
+- **Decision**: Provide an explicit empty state branch in `SelectedWork` when `projects.length === 0`.
+- **Rationale**: Prevents awkward layout gaps if projects are temporarily unpopulated or filtered, and provides an accessible, testable UI fallback.
+
+### 28. Purely Presentational Section Components with Data Injections
+
+- **Decision**: Design `Hero` and `SelectedWork` to accept optional props (`profile?: SiteProfile`, `projects?: readonly Project[]`) defaulted to imports from `@/data`.
+- **Rationale**: Enables frictionless consumption in `App.tsx` while facilitating isolated unit testing for edge cases and permutations.
+
+### 29. Reusable `StatusPill` UI Primitive
+
+- **Decision**: Extract availability status indicators and project phase badges into a dedicated, reusable `StatusPill` primitive (`src/components/ui/StatusPill.tsx`) with color variants (`emerald`, `amber`, `accent`, `muted`), background variants (`canvas`, `surface`), size variants (`sm`, `md`), and optional ping animation (`pulse`).
+- **Rationale**: Eliminates CSS duplication between `Hero` and `ProjectCard`, standardizes font metrics and dot indicator dimensions, encapsulates status animation and reduced-motion fallbacks, and keeps presentational section components clean and declarative.
