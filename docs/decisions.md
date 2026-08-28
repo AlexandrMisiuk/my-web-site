@@ -153,3 +153,18 @@ This document records the key architectural choices, technical decisions, and tr
 
 - **Decision**: Provide `public/favicon.svg` as the primary site favicon with embedded CSS `@media (prefers-color-scheme: dark)` styling and update `index.html` to reference `href="/favicon.svg"`.
 - **Rationale**: Eliminates raster scaling artifacts across high-DPI viewports, matches the monogram geometry from the brand assets, and dynamically adjusts canvas background and ink foreground to the user's OS color scheme.
+
+### 31. Presentational Section Decoupling with Data Injections & Empty Fallbacks
+
+- **Decision**: Implement `HowIWork`, `About`, `Technologies`, and `Contact` section components accepting optional typed props defaulted to imports from `src/data/`, with accessible empty-state fallbacks.
+- **Rationale**: Keeps all section components purely presentational and decoupled from runtime state, allowing frictionless consumption in `App.tsx` and deterministic unit testing across mock data fixtures and edge cases.
+
+### 32. Semantic Monospace Technology Chips
+
+- **Decision**: Render the `Technologies` skill matrix as a semantic `<ul>`/`<li>` list of `Tag` components with JetBrains Mono styling, wrapping cleanly at all screen widths without proficiency meters, percentages, or third-party logos.
+- **Rationale**: Conforms to the editorial, low-temperature aesthetic while preserving proper accessibility tree semantics for assistive technologies.
+
+### 33. Resilient Contact Action Dispatcher
+
+- **Decision**: Implement `Contact` using `ActionLink` with self-contained SVG icon primitives (`MailIcon`, `LinkedInIcon`, `GitHubIcon`, `DocumentIcon`) and conditional omission of unpopulated links.
+- **Rationale**: Ensures interactive touch targets satisfy the 44×44px accessibility threshold, provides screen reader cues for external tabs (`(opens in a new tab)`), handles direct CV downloads, and eliminates broken `#` anchor tags.

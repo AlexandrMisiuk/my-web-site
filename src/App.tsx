@@ -3,8 +3,12 @@ import { Header } from '@/components/layout/Header';
 import { IndexRail } from '@/components/layout/IndexRail';
 import { Section } from '@/components/layout/Section';
 import { SkipLink } from '@/components/layout/SkipLink';
+import { About } from '@/components/sections/About';
+import { Contact } from '@/components/sections/Contact';
 import { Hero } from '@/components/sections/Hero';
+import { HowIWork } from '@/components/sections/HowIWork';
 import { SelectedWork } from '@/components/sections/SelectedWork';
+import { Technologies } from '@/components/sections/Technologies';
 import { SECTION_IDS } from '@/data/navigation';
 import { useActiveSection } from '@/hooks/useActiveSection';
 
@@ -30,28 +34,22 @@ export default function App() {
 
                 {/* 02 / How I Work */}
                 <Section id="how-i-work" index="02" label="How I Work">
-                    <p className="text-mono-xs text-ink-muted font-mono">[Engineering principles arriving in Step 6]</p>
+                    <HowIWork />
                 </Section>
 
                 {/* 03 / About */}
                 <Section id="about" index="03" label="About">
-                    <p className="text-mono-xs text-ink-muted font-mono">
-                        [Biography and background arriving in Step 6]
-                    </p>
+                    <About />
                 </Section>
 
                 {/* 04 / Technologies */}
                 <Section id="technologies" index="04" label="Technologies">
-                    <p className="text-mono-xs text-ink-muted font-mono">
-                        [Technical stack and tooling matrix arriving in Step 6]
-                    </p>
+                    <Technologies />
                 </Section>
 
                 {/* 05 / Contact */}
                 <Section id="contact" index="05" label="Contact">
-                    <p className="text-mono-xs text-ink-muted font-mono">
-                        [Contact and availability details arriving in Step 6]
-                    </p>
+                    <Contact />
                 </Section>
             </main>
 

@@ -11,7 +11,13 @@ This document provides a condensed overview of the architecture, key concepts, a
 - **Per-Tab Theme Persistence**: The user's manual color scheme choice is stored in `sessionStorage` (persisting across page reloads in the active tab), while new tabs or windows open cleanly with system defaults.
 - **Unified Layout Grid Primitive (`Container`)**: A shared `layout/Container` primitive centralizes max-width (`80rem`), responsive gutters (`px-5 sm:px-8 lg:px-12 xl:px-16`), and optional 12-column grid (`lg:grid lg:grid-cols-12 lg:gap-x-6 xl:gap-x-8`) across `Header`, `Section`, and `Footer`.
 - **Anchored Asymmetrical Sections (`Section` & `SectionHeader`)**: Every section standardizes vertical rhythm (`py-[var(--spacing-section)]`), scroll anchor offset (`scroll-mt-[var(--header-height)]`), and CSS `.reveal` animations. Non-hero sections split into 3-column sticky headers (`Eyebrow` + index + hairline rule + `h2`) and 8-column content bodies.
-- **Section Component Presentation (`Hero`, `SelectedWork`, `ProjectCard`)**: `Hero` renders above-the-fold profile statement, availability status indicator, and CTA links. `SelectedWork` renders project case study articles (`ProjectCard`) with CLS-safe aspect ratio media containers, status pills, tech tags, and conditional action links with graceful empty-state handling.
+- **Section Component Presentation (`Hero`, `SelectedWork`, `ProjectCard`, `HowIWork`, `About`, `Technologies`, `Contact`)**:
+  - `Hero`: Renders above-the-fold profile statement, availability status indicator, and CTA links.
+  - `SelectedWork`: Renders project case study articles (`ProjectCard`) with CLS-safe aspect ratio media containers, status pills, tech tags, and conditional action links with graceful empty-state handling.
+  - `HowIWork`: Arranges 4 core engineering principles in an asymmetric responsive grid with mono indices, semantic `<h3>` titles, and body descriptions.
+  - `About`: Renders biographical background paragraphs constrained to readable measure (`max-w-[62ch]`).
+  - `Technologies`: Renders a compact semantic `<ul>` of mono `Tag` chips without proficiency bars, percentages, or external icons.
+  - `Contact`: Renders closing statement ("Let's build something great."), status indicator, and interactive `ActionLink` CTAs (Email, LinkedIn, GitHub, CV) conditionally omitting unsupplied links.
 - **Single-IntersectionObserver Scroll-Spy (`useActiveSection`)**: Exactly one `IntersectionObserver` instance watches `SECTION_IDS`, dynamically calculating its top root margin from the `--header-height` CSS token. It drives `aria-current` in header/mobile navigation and active marker state in the index rail.
 - **Accessible Full-Screen Mobile Disclosure (`MobileNav`)**: Below the `md` (768px) breakpoint, a 44×44px hamburger trigger opens a full-screen overlay with focus trapping, Escape-to-close, body scroll lock with cleanup restoration, and auto-close upon expanding beyond `md`.
 - **Decorative Index Rail (`IndexRail`)**: Fixed at `xl+` in the left viewport margin, rendered with `aria-hidden="true"` and non-interactive status bars that track section reading progress.
@@ -80,6 +86,23 @@ graph TD
     S_WORK --> CONT_W[Container 12-col grid]
     CONT_W --> WORK[SelectedWork]
     WORK --> CARD[ProjectCard]
+
+    S_HOW --> SH_HOW[SectionHeader]
+    S_HOW --> CONT_HOW[Container 12-col grid]
+    CONT_HOW --> HOW[HowIWork]
+
+    S_ABOUT --> SH_ABOUT[SectionHeader]
+    S_ABOUT --> CONT_ABOUT[Container 12-col grid]
+    CONT_ABOUT --> ABOUT[About]
+
+    S_TECH --> SH_TECH[SectionHeader]
+    S_TECH --> CONT_TECH[Container 12-col grid]
+    CONT_TECH --> TECH[Technologies]
+
+    S_CONTACT --> SH_CONTACT[SectionHeader]
+    S_CONTACT --> CONT_CONTACT[Container 12-col grid]
+    CONT_CONTACT --> CONTACT[Contact]
+
     FOOTER --> CONT_F[Container]
 
     HOOK[useActiveSection(SECTION_IDS)] -.->|activeId| APP
