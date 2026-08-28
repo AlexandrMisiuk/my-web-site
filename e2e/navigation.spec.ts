@@ -60,4 +60,17 @@ test.describe('navigation', () => {
         await page.keyboard.press('Enter');
         await expect(page.locator('#main')).toBeFocused();
     });
+
+    test('document head contains valid SVG favicon link and serves favicon.svg', async ({ page, request }) => {
+        await page.goto('/');
+        const favicon = page.locator('link[rel="icon"]');
+        await expect(favicon).toHaveAttribute('type', 'image/svg+xml');
+        await expect(favicon).toHaveAttribute('href', '/favicon.svg');
+
+        const res = await request.get('/favicon.svg');
+        expect(res.ok()).toBe(true);
+        expect(res.headers()['content-type']).toContain('image/svg+xml');
+        const svgBody = await res.text();
+        expect(svgBody).toContain('<svg');
+    });
 });

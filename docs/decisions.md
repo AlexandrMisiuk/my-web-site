@@ -148,3 +148,8 @@ This document records the key architectural choices, technical decisions, and tr
 
 - **Decision**: Extract availability status indicators and project phase badges into a dedicated, reusable `StatusPill` primitive (`src/components/ui/StatusPill.tsx`) with color variants (`emerald`, `amber`, `accent`, `muted`), background variants (`canvas`, `surface`), size variants (`sm`, `md`), and optional ping animation (`pulse`).
 - **Rationale**: Eliminates CSS duplication between `Hero` and `ProjectCard`, standardizes font metrics and dot indicator dimensions, encapsulates status animation and reduced-motion fallbacks, and keeps presentational section components clean and declarative.
+
+### 30. Theme-Aware SVG Favicon
+
+- **Decision**: Provide `public/favicon.svg` as the primary site favicon with embedded CSS `@media (prefers-color-scheme: dark)` styling and update `index.html` to reference `href="/favicon.svg"`.
+- **Rationale**: Eliminates raster scaling artifacts across high-DPI viewports, matches the monogram geometry from the brand assets, and dynamically adjusts canvas background and ink foreground to the user's OS color scheme.
