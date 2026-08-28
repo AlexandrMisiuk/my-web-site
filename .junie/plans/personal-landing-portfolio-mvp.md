@@ -423,7 +423,7 @@ The cool ink & cobalt design system exists as CSS tokens, fonts render, and ligh
 - Add the pre-paint colour-scheme script to `index.html`; implement `src/hooks/useColorScheme.ts` (follows `matchMedia`, stops following after a manual toggle, writes to no storage) and the `ThemeToggle` component with `aria-pressed`.
 - Build the shared primitives: `ui/ActionLink` (primary/ghost variants, external-link semantics), `ui/Tag`, `ui/Eyebrow`, `ui/icons` (LinkedIn, GitHub, arrow, mail, sun/moon as inline SVG).
 
-###   Step 3: Create the typed content data layer
+### ✓ Step 3: Create the typed content data layer
 Every piece of copy, link and project on the site is editable from `src/data/` without touching a component.
 
 - Write `src/data/types.ts` with `SiteProfile`, `Project`, `ProjectMedia`, `ProjectStatus`, `Principle` and `NavItem`.
@@ -433,7 +433,7 @@ Every piece of copy, link and project on the site is editable from `src/data/` w
 - Write `principles.ts` (Product first, Thoughtful architecture, Details matter, Ownership — each with senior-level engineering-judgement copy), `technologies.ts` (the ten supplied technologies) and `about.ts` (placeholder prose marked for replacement).
 - Add `src/data/README.md` mapping each common update ("add a screenshot", "add a case study", "change the status line") to the exact file and field.
 
-###   Step 4: Assemble the responsive layout shell and navigation
+### ✓ Step 4: Assemble the responsive layout shell and navigation
 The page has a working sticky header, mobile menu, skip link, index rail and footer, with all six empty sections wired to anchors.
 
 - Build `layout/Section` (`<section id aria-labelledby>`, vertical rhythm, `.reveal`) and `layout/SectionHeader` (mono eyebrow + index + hairline rule + `h2`) as the structural backbone used by every section.
@@ -443,7 +443,7 @@ The page has a working sticky header, mobile menu, skip link, index rail and foo
 - Build `layout/IndexRail`: fixed left-margin progress markers at `xl+` only, `aria-hidden`, hidden entirely below `xl`.
 - Build `layout/SkipLink` and `layout/Footer`, and compose everything in `App.tsx` with the 12-column grid container, responsive gutters and `main` landmark.
 
-###   Step 5: Implement Hero and the reusable Selected Work component
+### ✓ Step 5: Implement Hero and the reusable Selected Work component
 The top of the page is complete: a typographic hero and two data-driven project cards with working media and link slots.
 
 - Build `sections/Hero`: single `h1`, role line, the statement set at display scale with tight tracking, the status line in mono, and the CTA cluster (Selected Work primary; LinkedIn, GitHub, CV as ghost actions rendered only when the URL is non-empty).
@@ -452,7 +452,7 @@ The top of the page is complete: a typographic hero and two data-driven project 
 - Build `sections/ProjectCard`: title, mono status badge, summary, technology tags, media, and conditional case-study / external / repo links with correct `rel` and screen-reader hints for new tabs; hairline-defined, alternating asymmetric layout at `lg+`.
 - Build `sections/SelectedWork` mapping over `projects.ts`, and verify a third entry appears with no component change before reverting the test edit.
 
-###   Step 6: Implement the remaining sections and run the responsive, accessibility and performance pass
+### ✓ Step 6: Implement the remaining sections and run the responsive, accessibility and performance pass
 All six sections are complete and the site passes build, lint, type, responsive, a11y and motion checks.
 
 - Build `sections/HowIWork`: the four principles in an asymmetric grid with mono indices, headline and short body each.

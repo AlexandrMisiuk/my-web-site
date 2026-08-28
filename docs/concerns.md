@@ -74,10 +74,10 @@ This document highlights critical implementation concerns, potential pitfalls, r
 - **Concern**: `sessionStorage`, `data-theme`, and `body.style.overflow` are process-global in jsdom.
 - **Mitigation**: A global `afterEach` in `src/test/setup.ts` resets all three, plus both browser-API doubles.
 
-### 15. Placeholder Content Coupling
+### 15. Semantic Structure & Heading Order Across All 6 Sections
 
-- **Concern**: Sections 02–05 (`how-i-work`, `about`, `technologies`, `contact`) still render temporary copy, so text assertions on unbuilt sections would rot upon Step 6 delivery.
-- **Mitigation**: E2E asserts on landmarks, roles, IDs, and `aria-*` state — never on placeholder prose.
+- **Concern**: Integrating remaining sections (`how-i-work`, `about`, `technologies`, `contact`) could disrupt the document outline or introduce duplicate headings.
+- **Mitigation**: All 6 sections are fully implemented, standardizing on a single `<h1>` in `Hero`, `<h2>` headings inside `SectionHeader` for each numbered section, and `<h3>` tags for sub-items (principles, project cards). E2E tests validate structural roles, section IDs, and ARIA attributes.
 
 ### 16. Playwright Binary and Build Cost
 
