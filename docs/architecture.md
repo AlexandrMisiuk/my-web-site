@@ -11,11 +11,12 @@ This document provides a condensed overview of the architecture, key concepts, a
 - **Per-Tab Theme Persistence**: The user's manual color scheme choice is stored in `sessionStorage` (persisting across page reloads in the active tab), while new tabs or windows open cleanly with system defaults.
 - **Unified Layout Grid Primitive (`Container`)**: A shared `layout/Container` primitive centralizes max-width (`80rem`), responsive gutters (`px-5 sm:px-8 lg:px-12 xl:px-16`), and optional 12-column grid (`lg:grid lg:grid-cols-12 lg:gap-x-6 xl:gap-x-8`) across `Header`, `Section`, and `Footer`.
 - **Anchored Asymmetrical Sections (`Section` & `SectionHeader`)**: Every section standardizes vertical rhythm (`py-[var(--spacing-section)]`), scroll anchor offset (`scroll-mt-[var(--header-height)]`), and CSS `.reveal` animations. Non-hero sections split into 3-column sticky headers (`Eyebrow` + index + hairline rule + `h2`) and 8-column content bodies.
+- **Section Component Presentation (`Hero`, `SelectedWork`, `ProjectCard`)**: `Hero` renders above-the-fold profile statement, availability status indicator, and CTA links. `SelectedWork` renders project case study articles (`ProjectCard`) with CLS-safe aspect ratio media containers, status pills, tech tags, and conditional action links with graceful empty-state handling.
 - **Single-IntersectionObserver Scroll-Spy (`useActiveSection`)**: Exactly one `IntersectionObserver` instance watches `SECTION_IDS`, dynamically calculating its top root margin from the `--header-height` CSS token. It drives `aria-current` in header/mobile navigation and active marker state in the index rail.
 - **Accessible Full-Screen Mobile Disclosure (`MobileNav`)**: Below the `md` (768px) breakpoint, a 44×44px hamburger trigger opens a full-screen overlay with focus trapping, Escape-to-close, body scroll lock with cleanup restoration, and auto-close upon expanding beyond `md`.
 - **Decorative Index Rail (`IndexRail`)**: Fixed at `xl+` in the left viewport margin, rendered with `aria-hidden="true"` and non-interactive status bars that track section reading progress.
 - **First-Class Accessibility & Keyboard Landmarks**: `SkipLink` provides the first keyboard tab stop to `#main`. Landmarks (`header`, `nav`, `main`, `section`, `footer`), single `h1`, ordered `h2`s with `aria-labelledby`, and visible `:focus-visible` rings across both light and dark themes ensure WCAG AA compliance.
-- **Bespoke Atomic UI Primitives & SVG Icons**: Handcrafted, accessible UI primitives (`ActionLink`, `Tag`, `Eyebrow`) and self-contained SVG icons (`SunIcon`, `MoonIcon`, `MenuIcon`, `CloseIcon`, `ArrowUpRightIcon`, `ArrowRightIcon`, `GitHubIcon`, `LinkedInIcon`, `MailIcon`, `DocumentIcon`) eliminating heavy external icon or UI libraries.
+- **Bespoke Atomic UI Primitives & SVG Icons**: Handcrafted, accessible UI primitives (`ActionLink`, `Tag`, `Eyebrow`, `StatusPill`) and self-contained SVG icons (`SunIcon`, `MoonIcon`, `MenuIcon`, `CloseIcon`, `ArrowUpRightIcon`, `ArrowRightIcon`, `GitHubIcon`, `LinkedInIcon`, `MailIcon`, `DocumentIcon`) eliminating heavy external icon or UI libraries.
 - **Decoupled Data Layer**: All portfolio content (personal profile, navigation items, projects, principles, technologies, about text) is structured as type-safe TypeScript modules in `src/data/`. Components remain strictly presentational and consume data via `@/data`.
 - **Empty String Omission Pattern**: Unsupplied contact or social links use empty strings (`''`) with `// TODO: replace` comments, enabling presentational components to conditionally omit anchor tags rather than rendering broken `#` links.
 - **Native Scroll & Animation**: Scroll reveals leverage CSS scroll-driven animations (`animation-timeline: view()`) gated behind `@supports` with full `prefers-reduced-motion` fallbacks.
@@ -34,7 +35,7 @@ src/
 ├── components/
 │   ├── layout/         # Application shell: Header, MobileNav, ThemeToggle, SkipLink, IndexRail, Section, SectionHeader, Container, Footer
 │   ├── sections/       # Primary page sections: Hero, SelectedWork, ProjectCard, HowIWork, About, Technologies, Contact
-│   └── ui/             # Atomic primitives: ActionLink, Tag, Eyebrow, and SVG icon primitives (icons/)
+│   └── ui/             # Atomic primitives: ActionLink, Tag, Eyebrow, StatusPill, and SVG icon primitives (icons/)
 ├── data/               # Decoupled content data layer
 │   ├── types.ts        # TypeScript data contracts & interfaces
 │   ├── site.ts         # Profile identity, status, role, and social links
@@ -74,8 +75,11 @@ graph TD
     MAIN --> S_TECH[Section id='technologies' 04 / Technologies]
     MAIN --> S_CONTACT[Section id='contact' 05 / Contact]
 
+    S_HERO --> HERO[Hero]
     S_WORK --> SH_WORK[SectionHeader]
-    S_WORK --> CONT_W[Container (12-col grid)]
+    S_WORK --> CONT_W[Container 12-col grid]
+    CONT_W --> WORK[SelectedWork]
+    WORK --> CARD[ProjectCard]
     FOOTER --> CONT_F[Container]
 
     HOOK[useActiveSection(SECTION_IDS)] -.->|activeId| APP

@@ -76,7 +76,7 @@ This document highlights critical implementation concerns, potential pitfalls, r
 
 ### 15. Placeholder Content Coupling
 
-- **Concern**: `src/components/sections/` is unbuilt and `App.tsx` still renders temporary copy, so text assertions would rot immediately.
+- **Concern**: Sections 02–05 (`how-i-work`, `about`, `technologies`, `contact`) still render temporary copy, so text assertions on unbuilt sections would rot upon Step 6 delivery.
 - **Mitigation**: E2E asserts on landmarks, roles, IDs, and `aria-*` state — never on placeholder prose.
 
 ### 16. Playwright Binary and Build Cost
@@ -93,3 +93,8 @@ This document highlights critical implementation concerns, potential pitfalls, r
 
 - **Concern**: Once `src/components/sections/` is built, holding 100% costs real effort.
 - **Mitigation**: Accepted deliberately. TDD means the test exists first, so the gate is never met in a red state at commit time.
+
+### 19. Media Accessibility & Video Element Captions
+
+- **Concern**: Video previews in `ProjectCard` may trigger accessibility audits if missing controls, labels, or captions tracks.
+- **Mitigation**: `<video>` elements include explicit `aria-label` mapped from `media.alt`, `controls`, `preload="none"`, and empty `<track kind="captions">` tags for valid WCAG AA compliance.
