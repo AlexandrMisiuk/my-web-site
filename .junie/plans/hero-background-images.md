@@ -28,8 +28,8 @@ The previous plan was right that the background belongs on `<section>` (outside 
 
 ### Overview & Goals
 Give `Section` a generic full-bleed background slot and use it to paint theme-aware hero artwork edge-to-edge:
-- `src/assets/hero-light.jpeg` in light theme
-- `src/assets/hero-dark.jpeg` in dark theme
+- `../../src/assets/hero-light-2026-08-30.jpeg` in light theme
+- `../../src/assets/hero-dark-2026-08-30.jpeg` in dark theme
 
 The inner `Container` keeps copy and controls on the standard max-width grid. Theme switching stays CSS-only against `[data-theme]`. Foreground text stays WCAG AA via a gradient scrim. Unit coverage stays at 100%. No new UI or state libraries.
 
@@ -37,7 +37,7 @@ The inner `Container` keeps copy and controls on the standard max-width grid. Th
 - **In Scope**:
   - Add an optional `background?: React.ReactNode` slot to `Section` that paints a full-bleed decorative layer behind `Container`.
   - Export `SectionBackground` from `src/components/layout/Section.tsx` for theme-aware dual images plus a contrast scrim.
-  - Wire `<Section id="hero" variant="plain" background={...}>` in `src/App.tsx` with `hero-light.jpeg` and `hero-dark.jpeg`.
+  - Wire `<Section id="hero" variant="plain" background={...}>` in `src/App.tsx` with `hero-light-2026-08-30.jpeg` and `hero-dark-2026-08-30.jpeg`.
   - Keep `Hero.tsx` presentational — no asset imports, no background markup.
   - CSS-only theme switching against `[data-theme]` (`dark:hidden` / `hidden dark:block`).
   - Gradient scrim (`from-canvas/20 via-canvas/75 to-canvas`) so hero copy stays WCAG AA.
@@ -214,7 +214,7 @@ export interface SectionProps {
 
 ### File Structure
 - Modified: `src/components/layout/Section.tsx`, `src/components/layout/shell.test.tsx`, `src/App.tsx`, `e2e/theme.spec.ts`, `docs/architecture.md`, `docs/decisions.md`, `docs/concerns.md`
-- Assets (unchanged): `src/assets/hero-light.jpeg`, `src/assets/hero-dark.jpeg`
+- Assets (unchanged): `../../src/assets/hero-light-2026-08-30.jpeg`, `../../src/assets/hero-dark-2026-08-30.jpeg`
 - Not modified: `Hero.tsx`, `App.test.tsx`, `e2e/a11y.spec.ts`, `e2e/responsive.spec.ts` (already cover contrast and 320px overflow)
 
 ### Architecture Diagram
@@ -286,7 +286,7 @@ Hero artwork paints full-width at the section level; `Hero.tsx` stays presentati
 
 - Write failing `SectionBackground` tests in `shell.test.tsx`: light-only (one `img`, `alt=""`, lazy/auto); dual + `priority` (two `src`s, eager/high/async).
 - Export `SectionBackground` from `src/components/layout/Section.tsx` with `light`, optional `dark`, optional `priority`. Images are `absolute inset-0 object-cover`; always include the canvas scrim. No `alt`/`scrim`/`className` knobs.
-- In `src/App.tsx`, import `hero-light.jpeg` / `hero-dark.jpeg` and pass `background={<SectionBackground light={heroLight} dark={heroDark} priority />}` to `<Section id="hero" variant="plain">`.
+- In `src/App.tsx`, import `hero-light-2026-08-30.jpeg` / `hero-dark-2026-08-30.jpeg` and pass `background={<SectionBackground light={heroLight} dark={heroDark} priority />}` to `<Section id="hero" variant="plain">`.
 - Leave `Hero.tsx` and `App.test.tsx` unchanged. Confirm `npm run test:coverage` is 100%.
 - Extend `e2e/theme.spec.ts`: light image visible / dark hidden, then reverse after toggle; dark image visible on first paint under `colorScheme: 'dark'`.
 
