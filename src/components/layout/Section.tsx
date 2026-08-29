@@ -18,7 +18,7 @@ export function Section({ id, index, label, variant = 'default', className = '',
         <section
             id={id}
             aria-labelledby={!isPlain ? `${id}-heading` : undefined}
-            className={`reveal scroll-mt-[var(--header-height)] py-[var(--spacing-section)] ${className}`.trim()}
+            className={`reveal py-section scroll-mt-(--header-height) ${className}`.trim()}
         >
             {isPlain ? (
                 <Container>{children}</Container>

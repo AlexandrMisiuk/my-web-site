@@ -33,7 +33,7 @@ export function ProjectCard({ project, className = '' }: ProjectCardProps) {
     return (
         <article
             aria-labelledby={`${project.id}-title`}
-            className={`group border-hairline bg-surface flex flex-col gap-6 rounded-[var(--radius-sm)] border p-6 transition-colors sm:p-8 ${className}`.trim()}
+            className={`group border-hairline bg-surface flex flex-col gap-6 rounded-sm border p-6 transition-colors sm:p-8 ${className}`.trim()}
         >
             <div className="flex flex-wrap items-center justify-between gap-3">
                 <h3 id={`${project.id}-title`} className="text-h3 text-ink font-semibold tracking-tight">

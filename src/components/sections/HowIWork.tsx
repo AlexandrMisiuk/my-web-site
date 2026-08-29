@@ -10,7 +10,7 @@ export function HowIWork({ principles = defaultPrinciples, className = '' }: How
     if (principles.length === 0) {
         return (
             <div
-                className={`border-hairline rounded-[var(--radius-sm)] border border-dashed p-8 text-center sm:p-12 ${className}`.trim()}
+                className={`border-hairline rounded-sm border border-dashed p-8 text-center sm:p-12 ${className}`.trim()}
             >
                 <p className="text-body text-ink-muted">Principles will be published soon.</p>
             </div>
@@ -23,7 +23,7 @@ export function HowIWork({ principles = defaultPrinciples, className = '' }: How
                 <article
                     key={principle.id}
                     aria-labelledby={`${principle.id}-title`}
-                    className="border-hairline bg-surface flex flex-col gap-3 rounded-[var(--radius-sm)] border p-6 transition-colors sm:p-8"
+                    className="border-hairline bg-surface flex flex-col gap-3 rounded-sm border p-6 transition-colors sm:p-8"
                 >
                     <span className="text-mono-xs text-ink-muted font-mono tracking-wider" aria-hidden="true">
                         {String(index + 1).padStart(2, '0')}

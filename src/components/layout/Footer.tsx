@@ -25,7 +25,7 @@ export function Footer({ className = '' }: FooterProps) {
                         <ActionLink
                             href={siteProfile.links.linkedin}
                             variant="ghost"
-                            className="min-h-[36px] px-3 py-1.5 font-mono text-xs"
+                            className="min-h-9 px-3 py-1.5 font-mono text-xs"
                             aria-label="LinkedIn profile"
                         >
                             <LinkedInIcon size={16} />
@@ -37,7 +37,7 @@ export function Footer({ className = '' }: FooterProps) {
                         <ActionLink
                             href={siteProfile.links.github}
                             variant="ghost"
-                            className="min-h-[36px] px-3 py-1.5 font-mono text-xs"
+                            className="min-h-9 px-3 py-1.5 font-mono text-xs"
                             aria-label="GitHub profile"
                         >
                             <GitHubIcon size={16} />
@@ -49,7 +49,7 @@ export function Footer({ className = '' }: FooterProps) {
                         <ActionLink
                             href={`mailto:${siteProfile.links.email}`}
                             variant="ghost"
-                            className="min-h-[36px] px-3 py-1.5 font-mono text-xs"
+                            className="min-h-9 px-3 py-1.5 font-mono text-xs"
                             aria-label="Send email"
                         >
                             <MailIcon size={16} />
@@ -62,7 +62,7 @@ export function Footer({ className = '' }: FooterProps) {
                             href={siteProfile.links.cv}
                             variant="ghost"
                             download
-                            className="min-h-[36px] px-3 py-1.5 font-mono text-xs"
+                            className="min-h-9 px-3 py-1.5 font-mono text-xs"
                             aria-label="Download CV"
                         >
                             <DocumentIcon size={16} />
