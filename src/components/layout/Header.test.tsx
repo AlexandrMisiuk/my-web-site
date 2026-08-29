@@ -1,21 +1,35 @@
-import { afterEach, describe, expect, it } from 'vitest';
-import { navItems } from '@/data/navigation';
-import { siteProfile } from '@/data/site';
+import { describe, expect, it } from 'vitest';
+import type { NavItem, SiteProfile } from '@/data/types';
 import { renderWithUser, screen, within } from '@/test/render';
 import { Header } from './Header';
 
-const originalLinks = { ...siteProfile.links };
+const mockNavItems: readonly NavItem[] = [
+    { id: 'work', label: 'Selected Work', index: '01' },
+    { id: 'how-i-work', label: 'How I Work', index: '02' },
+    { id: 'about', label: 'About', index: '03' },
+    { id: 'technologies', label: 'Technologies', index: '04' },
+    { id: 'contact', label: 'Contact', index: '05' },
+];
 
-afterEach(() => {
-    Object.assign(siteProfile.links, originalLinks);
-});
+const mockProfile: SiteProfile = {
+    name: 'Alex Developer',
+    role: 'Software Engineer',
+    statement: 'Building software.',
+    status: 'Available',
+    links: {
+        linkedin: 'https://linkedin.com/in/example',
+        github: 'https://github.com/example',
+        email: 'hello@example.com',
+        cv: '/cv/test.pdf',
+    },
+};
 
 describe('Header', () => {
     it('renders the Primary nav landmark with every nav item', () => {
-        renderWithUser(<Header activeId="work" />);
+        renderWithUser(<Header activeId="work" items={mockNavItems} profile={mockProfile} />);
 
         const nav = screen.getByRole('navigation', { name: 'Primary' });
-        for (const item of navItems) {
+        for (const item of mockNavItems) {
             expect(within(nav).getByRole('link', { name: new RegExp(item.label) })).toHaveAttribute(
                 'href',
                 `#${item.id}`,
@@ -24,7 +38,7 @@ describe('Header', () => {
     });
 
     it('marks only the active item with aria-current', () => {
-        renderWithUser(<Header activeId="about" />);
+        renderWithUser(<Header activeId="about" items={mockNavItems} profile={mockProfile} />);
 
         const nav = screen.getByRole('navigation', { name: 'Primary' });
         expect(within(nav).getByRole('link', { name: /about/i })).toHaveAttribute('aria-current', 'true');
@@ -32,7 +46,7 @@ describe('Header', () => {
     });
 
     it('toggles the hamburger expanded state and accessible name', async () => {
-        const { user } = renderWithUser(<Header activeId="work" />);
+        const { user } = renderWithUser(<Header activeId="work" items={mockNavItems} profile={mockProfile} />);
         const trigger = screen.getByRole('button', { name: 'Open menu' });
 
         expect(trigger).toHaveAttribute('aria-expanded', 'false');
@@ -48,16 +62,23 @@ describe('Header', () => {
     });
 
     it('omits the CV action when the cv link is empty', () => {
-        siteProfile.links.cv = '';
-        renderWithUser(<Header activeId="work" />);
+        const profileWithoutCv: SiteProfile = {
+            ...mockProfile,
+            links: { ...mockProfile.links, cv: '' },
+        };
+        renderWithUser(<Header activeId="work" items={mockNavItems} profile={profileWithoutCv} />);
 
         expect(screen.queryByRole('link', { name: 'CV' })).not.toBeInTheDocument();
     });
 
     it('renders the CV action when a cv link is provided', () => {
-        siteProfile.links.cv = '/cv/test.pdf';
-        renderWithUser(<Header activeId="work" />);
+        renderWithUser(<Header activeId="work" items={mockNavItems} profile={mockProfile} />);
 
         expect(screen.getByRole('link', { name: 'CV' })).toHaveAttribute('href', '/cv/test.pdf');
+    });
+
+    it('renders without crashing when default props are used', () => {
+        renderWithUser(<Header activeId="work" />);
+        expect(screen.getByRole('navigation', { name: 'Primary' })).toBeInTheDocument();
     });
 });

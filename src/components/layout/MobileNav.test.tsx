@@ -1,12 +1,31 @@
 import { createRef, type ComponentProps } from 'react';
 import { act, fireEvent } from '@testing-library/react';
-import { afterEach, describe, expect, it, vi } from 'vitest';
-import { siteProfile } from '@/data/site';
+import { describe, expect, it, vi } from 'vitest';
+import type { NavItem, SiteProfile } from '@/data/types';
 import { mockMatchMedia, setMediaMatches } from '@/test/matchMedia';
 import { renderWithUser, screen, within } from '@/test/render';
 import { MobileNav } from './MobileNav';
 
-const originalLinks = { ...siteProfile.links };
+const mockNavItems: readonly NavItem[] = [
+    { id: 'work', label: 'Selected Work', index: '01' },
+    { id: 'how-i-work', label: 'How I Work', index: '02' },
+    { id: 'about', label: 'About', index: '03' },
+    { id: 'technologies', label: 'Technologies', index: '04' },
+    { id: 'contact', label: 'Contact', index: '05' },
+];
+
+const mockProfile: SiteProfile = {
+    name: 'Alex Developer',
+    role: 'Software Engineer',
+    statement: 'Building software.',
+    status: 'Available',
+    links: {
+        linkedin: 'https://linkedin.com/in/example',
+        github: 'https://github.com/example',
+        email: 'hello@example.com',
+        cv: '/cv/test.pdf',
+    },
+};
 
 function renderOpenNav(overrides?: Partial<ComponentProps<typeof MobileNav>>) {
     const triggerRef = createRef<HTMLButtonElement>();
@@ -18,15 +37,19 @@ function renderOpenNav(overrides?: Partial<ComponentProps<typeof MobileNav>>) {
     triggerRef.current = trigger;
 
     const view = renderWithUser(
-        <MobileNav isOpen onClose={onClose} activeId="work" triggerRef={triggerRef} {...overrides} />,
+        <MobileNav
+            isOpen
+            onClose={onClose}
+            activeId="work"
+            triggerRef={triggerRef}
+            items={mockNavItems}
+            profile={mockProfile}
+            {...overrides}
+        />,
     );
 
     return { ...view, onClose, trigger, triggerRef };
 }
-
-afterEach(() => {
-    Object.assign(siteProfile.links, originalLinks);
-});
 
 describe('MobileNav', () => {
     it('renders nothing when closed', () => {
@@ -127,9 +150,24 @@ describe('MobileNav', () => {
     });
 
     it('renders the CV action inside the overlay when a cv link is provided', () => {
-        siteProfile.links.cv = '/cv/test.pdf';
-        renderOpenNav();
+        renderOpenNav({
+            profile: {
+                ...mockProfile,
+                links: { ...mockProfile.links, cv: '/cv/test.pdf' },
+            },
+        });
 
         expect(screen.getByRole('link', { name: 'Download CV' })).toHaveAttribute('href', '/cv/test.pdf');
+    });
+
+    it('omits the CV action inside the overlay when cv link is empty', () => {
+        renderOpenNav({
+            profile: {
+                ...mockProfile,
+                links: { ...mockProfile.links, cv: '' },
+            },
+        });
+
+        expect(screen.queryByRole('link', { name: 'Download CV' })).not.toBeInTheDocument();
     });
 });

@@ -168,3 +168,8 @@ This document records the key architectural choices, technical decisions, and tr
 
 - **Decision**: Implement `Contact` using `ActionLink` with self-contained SVG icon primitives (`MailIcon`, `LinkedInIcon`, `GitHubIcon`, `DocumentIcon`) and conditional omission of unpopulated links.
 - **Rationale**: Ensures interactive touch targets satisfy the 44×44px accessibility threshold, provides screen reader cues for external tabs (`(opens in a new tab)`), handles direct CV downloads, and eliminates broken `#` anchor tags.
+
+### 34. Decoupling Unit Tests from Data Layer Content and Real Network/API Calls
+
+- **Decision**: Unit tests must run completely hermetically in jsdom without making real network or API calls, and must not import runtime data from `@/data` or assert on literal portfolio copy or links. Tests supply isolated mock fixtures or test props directly to components and hooks.
+- **Rationale**: Prevents edits to personal bio, project showcases, skills, or contact links in `src/data/` from breaking unit test suites or causing false regressions, while ensuring tests remain fast, deterministic, and isolated.

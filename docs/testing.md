@@ -26,7 +26,7 @@ graph TD
         SU --> IO[IntersectionObserver double]
         SU --> JD[jest-dom matchers]
         VT --> RTL[React Testing Library and user-event]
-        RTL --> SRC["src/hooks, src/components, src/data"]
+        RTL --> SRC["src/hooks, src/components"]
         VT --> COV["V8 coverage to coverage/"]
     end
 
@@ -52,7 +52,7 @@ graph TD
     GATES --> BUILD[build]
 ```
 
-- **Unit / component tier** owns hooks, presentational contracts, data invariants, and jsdom-level interaction. Fast, no network, no browser binary.
+- **Unit / component tier** owns hooks, presentational contracts, and jsdom-level interaction. Fast, hermetic, no real network/API calls, no data layer coupling, and no browser binary.
 - **E2E tier** owns real-browser journeys against the production bundle (`vite build` + `vite preview`): hash navigation, theme persistence, mobile disclosure, WCAG scans, and the viewport matrix.
 - Put a test in the unit tier when the behaviour can be driven through React Testing Library or a hook. Put it in e2e when it depends on CSS layout, real `IntersectionObserver`, the pre-paint theme script, or a multi-page user journey.
 
@@ -81,6 +81,7 @@ The exclusion list is closed. Adding an entry requires a one-line justification 
 | `src/main.tsx` | Bootstrap only: `createRoot(...).render(<App />)` |
 | `src/test/**` | The harness itself |
 | `src/data/types.ts` | Type-only module, no runtime output |
+| `src/data/**` | Static content data layer; decoupled from unit tests so content edits never break test suites |
 | `src/**/*.d.ts` | Ambient declarations |
 | `src/**/*.{test,spec}.{ts,tsx}` | The tests themselves |
 
@@ -92,6 +93,8 @@ A last-resort ignore is an inline `/* v8 ignore next -- reason */` on a genuinel
 
 - Co-locate as `*.test.ts(x)` beside the source module.
 - Import `describe` / `it` / `expect` from `vitest` — no `globals: true`.
+- Never make real API or network calls: unit tests run hermetically in `jsdom` with centralized test doubles.
+- Never import runtime data from `@/data`: unit tests must not import runtime data from `@/data` or depend on literal copy/links; pass mock fixtures or props directly to components and hooks. Type imports (`import type { ... } from '@/data/types'`) remain permitted.
 - Query by accessible role and name (`getByRole`) before test IDs.
 - Use `user-event` (via `renderWithUser`) over raw `fireEvent` for interaction.
 - Never assert on Tailwind class strings.

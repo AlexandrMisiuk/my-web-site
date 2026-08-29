@@ -1,17 +1,27 @@
 import React, { useEffect, useRef } from 'react';
 import { Container } from '@/components/layout/Container';
 import { ActionLink } from '@/components/ui/ActionLink';
-import { navItems } from '@/data/navigation';
-import { siteProfile } from '@/data/site';
+import { navItems as defaultNavItems } from '@/data/navigation';
+import { siteProfile as defaultProfile } from '@/data/site';
+import type { NavItem, SiteProfile } from '@/data/types';
 
 export interface MobileNavProps {
     isOpen: boolean;
     onClose: () => void;
     activeId: string;
     triggerRef: React.RefObject<HTMLButtonElement | null>;
+    items?: readonly NavItem[];
+    profile?: SiteProfile;
 }
 
-export function MobileNav({ isOpen, onClose, activeId, triggerRef }: MobileNavProps) {
+export function MobileNav({
+    isOpen,
+    onClose,
+    activeId,
+    triggerRef,
+    items = defaultNavItems,
+    profile = defaultProfile,
+}: MobileNavProps) {
     const panelRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -104,7 +114,7 @@ export function MobileNav({ isOpen, onClose, activeId, triggerRef }: MobileNavPr
             <Container className="flex h-full flex-col justify-between py-6">
                 <nav aria-label="Mobile Primary">
                     <ul className="flex flex-col gap-2">
-                        {navItems.map((item) => {
+                        {items.map((item) => {
                             const isActive = activeId === item.id;
                             return (
                                 <li key={item.id} className="border-hairline/60 border-b py-2">
@@ -126,9 +136,9 @@ export function MobileNav({ isOpen, onClose, activeId, triggerRef }: MobileNavPr
                 </nav>
 
                 <div className="border-hairline flex flex-col gap-4 border-t pt-6">
-                    {siteProfile.links.cv ? (
+                    {profile.links.cv ? (
                         <ActionLink
-                            href={siteProfile.links.cv}
+                            href={profile.links.cv}
                             variant="ghost"
                             download
                             onClick={onClose}
