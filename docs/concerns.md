@@ -98,3 +98,8 @@ This document highlights critical implementation concerns, potential pitfalls, r
 
 - **Concern**: Video previews in `ProjectCard` may trigger accessibility audits if missing controls, labels, or captions tracks.
 - **Mitigation**: `<video>` elements include explicit `aria-label` mapped from `media.alt`, `controls`, `preload="none"`, and empty `<track kind="captions">` tags for valid WCAG AA compliance.
+
+### 20. Full-Bleed Section Background Contrast, Bandwidth & Stacking Isolation
+
+- **Concern**: Large above-the-fold background artwork can delay LCP, consume duplicate bandwidth across themes, slip behind canvas backgrounds in stacking contexts, clip `.reveal` animations or focus rings if `overflow-hidden` is placed on `<section>`, or reduce foreground text readability.
+- **Mitigation**: Clipping is strictly confined to the decorative background wrapper, avoiding `overflow-hidden` on the `<section>` landmark so focus rings and translate animations remain unclipped. The landmark applies `relative isolate` when a background is present to keep `-z-10` layers bounded. Background images (~116–124KB) use eager loading and high fetch priority only on hero (`priority={true}`), while defaults remain lazy. A multi-stop gradient scrim (`from-canvas/20 via-canvas/75 to-canvas`) and calibrated opacities (`0.4` light / `0.3` dark) maintain WCAG AA contrast across light and dark themes.

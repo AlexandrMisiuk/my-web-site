@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { render, screen, within } from '@/test/render';
 import { Container } from './Container';
 import { IndexRail } from './IndexRail';
-import { Section } from './Section';
+import { Section, SectionBackground } from './Section';
 import { SkipLink } from './SkipLink';
 
 describe('SkipLink', () => {
@@ -68,6 +68,71 @@ describe('Section', () => {
 
         expect(screen.getByRole('heading', { level: 1, name: 'Hero' })).toBeInTheDocument();
         expect(screen.queryByRole('region', { name: 'Hero' })).not.toBeInTheDocument();
+    });
+
+    it('omits the decorative wrapper when background is not provided', () => {
+        render(
+            <Section id="work" index="01" label="Selected Work">
+                Body
+            </Section>,
+        );
+
+        const section = screen.getByRole('region', { name: 'Selected Work' });
+        expect(section.querySelector('[aria-hidden="true"]')).toBeNull();
+    });
+
+    it('renders a full-bleed decorative background wrapper when provided without adding tab stops', () => {
+        render(
+            <Section id="hero" variant="plain" background={<div data-testid="bg-layer">Background layer</div>}>
+                <h1>Hero</h1>
+            </Section>,
+        );
+
+        const bgLayer = screen.getByTestId('bg-layer');
+        const bgWrapper = bgLayer.parentElement;
+
+        expect(bgWrapper).not.toBeNull();
+        expect(bgWrapper).toHaveAttribute('aria-hidden', 'true');
+        expect(within(bgWrapper as HTMLElement).queryAllByRole('link', { hidden: true })).toHaveLength(0);
+        expect(within(bgWrapper as HTMLElement).queryAllByRole('button', { hidden: true })).toHaveLength(0);
+        expect(screen.getByRole('heading', { level: 1, name: 'Hero' })).toBeInTheDocument();
+    });
+});
+
+describe('SectionBackground', () => {
+    it('renders a single decorative light image with default lazy loading when dark is omitted', () => {
+        render(<SectionBackground light="/assets/light.jpg" />);
+
+        const images = document.querySelectorAll('img');
+        expect(images).toHaveLength(1);
+
+        const lightImg = images[0];
+        expect(lightImg).toHaveAttribute('src', '/assets/light.jpg');
+        expect(lightImg).toHaveAttribute('alt', '');
+        expect(lightImg).toHaveAttribute('loading', 'lazy');
+        expect(lightImg).toHaveAttribute('fetchpriority', 'auto');
+        expect(lightImg).toHaveAttribute('decoding', 'async');
+    });
+
+    it('renders dual theme images with eager priority when priority is true', () => {
+        render(<SectionBackground light="/assets/light.jpg" dark="/assets/dark.jpg" priority />);
+
+        const images = document.querySelectorAll('img');
+        expect(images).toHaveLength(2);
+
+        const [lightImg, darkImg] = images;
+
+        expect(lightImg).toHaveAttribute('src', '/assets/light.jpg');
+        expect(lightImg).toHaveAttribute('alt', '');
+        expect(lightImg).toHaveAttribute('loading', 'eager');
+        expect(lightImg).toHaveAttribute('fetchpriority', 'high');
+        expect(lightImg).toHaveAttribute('decoding', 'async');
+
+        expect(darkImg).toHaveAttribute('src', '/assets/dark.jpg');
+        expect(darkImg).toHaveAttribute('alt', '');
+        expect(darkImg).toHaveAttribute('loading', 'eager');
+        expect(darkImg).toHaveAttribute('fetchpriority', 'high');
+        expect(darkImg).toHaveAttribute('decoding', 'async');
     });
 });
 

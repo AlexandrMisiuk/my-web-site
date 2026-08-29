@@ -10,9 +10,9 @@ This document provides a condensed overview of the architecture, key concepts, a
 - **Zero-Flash `data-theme` Theming**: Initial color scheme (dark or light) is applied before first paint via an inline `<head>` script inspecting `sessionStorage.getItem('theme')` with OS `prefers-color-scheme` fallback. Theme overrides target `[data-theme="dark"]` on `document.documentElement` without modifying root class names.
 - **Per-Tab Theme Persistence**: The user's manual color scheme choice is stored in `sessionStorage` (persisting across page reloads in the active tab), while new tabs or windows open cleanly with system defaults.
 - **Unified Layout Grid Primitive (`Container`)**: A shared `layout/Container` primitive centralizes max-width (`80rem`), responsive gutters (`px-5 sm:px-8 lg:px-12 xl:px-16`), and optional 12-column grid (`lg:grid lg:grid-cols-12 lg:gap-x-6 xl:gap-x-8`) across `Header`, `Section`, and `Footer`.
-- **Anchored Asymmetrical Sections (`Section` & `SectionHeader`)**: Every section standardizes vertical rhythm (`py-[var(--spacing-section)]`), scroll anchor offset (`scroll-mt-[var(--header-height)]`), and CSS `.reveal` animations. Non-hero sections split into 3-column sticky headers (`Eyebrow` + index + hairline rule + `h2`) and 8-column content bodies.
+- **Anchored Asymmetrical Sections (`Section`, `SectionBackground`, & `SectionHeader`)**: Every section standardizes vertical rhythm (`py-[var(--spacing-section)]`), scroll anchor offset (`scroll-mt-[var(--header-height)]`), and CSS `.reveal` animations. `Section` supports an optional full-bleed `background?: React.ReactNode` slot rendered in a decorative `aria-hidden="true"` wrapper with `relative isolate` and `-z-10`. `SectionBackground` provides a theme-aware dual-image helper with CSS switching (`dark:hidden` / `hidden dark:block`), priority loading controls, and a gradient scrim. Non-hero sections split into 3-column sticky headers (`Eyebrow` + index + hairline rule + `h2`) and 8-column content bodies.
 - **Section Component Presentation (`Hero`, `SelectedWork`, `ProjectCard`, `HowIWork`, `About`, `Technologies`, `Contact`)**:
-  - `Hero`: Renders above-the-fold profile statement, availability status indicator, and CTA links.
+  - `Hero`: Renders above-the-fold profile statement, availability status indicator, and CTA links. Composed with `SectionBackground` in `App.tsx` for full-bleed theme-aware artwork (`hero-light.jpeg` / `hero-dark.jpeg`).
   - `SelectedWork`: Renders project case study articles (`ProjectCard`) with CLS-safe aspect ratio media containers, status pills, tech tags, and conditional action links with graceful empty-state handling.
   - `HowIWork`: Arranges 4 core engineering principles in an asymmetric responsive grid with mono indices, semantic `<h3>` titles, and body descriptions.
   - `About`: Renders biographical background paragraphs constrained to readable measure (`max-w-[62ch]`).
@@ -39,7 +39,7 @@ docs/testing.md         # Testing architecture, TDD workflow, coverage policy
 src/
 ├── assets/             # Static graphics, SVG artwork, and media placeholders
 ├── components/
-│   ├── layout/         # Application shell: Header, MobileNav, ThemeToggle, SkipLink, IndexRail, Section, SectionHeader, Container, Footer
+│   ├── layout/         # Application shell: Header, MobileNav, ThemeToggle, SkipLink, IndexRail, Section (and SectionBackground), SectionHeader, Container, Footer
 │   ├── sections/       # Primary page sections: Hero, SelectedWork, ProjectCard, HowIWork, About, Technologies, Contact
 │   └── ui/             # Atomic primitives: ActionLink, Tag, Eyebrow, StatusPill, and SVG icon primitives (icons/)
 ├── data/               # Decoupled content data layer
