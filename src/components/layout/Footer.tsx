@@ -21,6 +21,18 @@ export function Footer({ className = '' }: FooterProps) {
                 </div>
 
                 <div className="flex flex-wrap items-center gap-2.5">
+                    {siteProfile.links.email ? (
+                        <ActionLink
+                            href={`mailto:${siteProfile.links.email}`}
+                            variant="ghost"
+                            className="min-h-9 px-3 py-1.5 font-mono text-xs"
+                            aria-label="Send email"
+                        >
+                            <MailIcon size={18} />
+                            <span>Email</span>
+                        </ActionLink>
+                    ) : null}
+
                     {siteProfile.links.linkedin ? (
                         <ActionLink
                             href={siteProfile.links.linkedin}
@@ -28,7 +40,7 @@ export function Footer({ className = '' }: FooterProps) {
                             className="min-h-9 px-3 py-1.5 font-mono text-xs"
                             aria-label="LinkedIn profile"
                         >
-                            <LinkedInIcon size={16} />
+                            <LinkedInIcon size={18} />
                             <span>LinkedIn</span>
                         </ActionLink>
                     ) : null}
@@ -40,20 +52,8 @@ export function Footer({ className = '' }: FooterProps) {
                             className="min-h-9 px-3 py-1.5 font-mono text-xs"
                             aria-label="GitHub profile"
                         >
-                            <GitHubIcon size={16} />
+                            <GitHubIcon size={18} />
                             <span>GitHub</span>
-                        </ActionLink>
-                    ) : null}
-
-                    {siteProfile.links.email ? (
-                        <ActionLink
-                            href={`mailto:${siteProfile.links.email}`}
-                            variant="ghost"
-                            className="min-h-9 px-3 py-1.5 font-mono text-xs"
-                            aria-label="Send email"
-                        >
-                            <MailIcon size={16} />
-                            <span>Email</span>
                         </ActionLink>
                     ) : null}
 
@@ -65,8 +65,8 @@ export function Footer({ className = '' }: FooterProps) {
                             className="min-h-9 px-3 py-1.5 font-mono text-xs"
                             aria-label="Download CV"
                         >
-                            <DocumentIcon size={16} />
-                            <span>CV</span>
+                            <DocumentIcon size={18} />
+                            <span>Download CV</span>
                         </ActionLink>
                     ) : null}
                 </div>
