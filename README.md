@@ -1,6 +1,6 @@
 # Oleksandr Misiuk — Frontend Portfolio & Landing Page
 
-Personal professional landing page and frontend portfolio for Oleksandr Misiuk, Senior Frontend Engineer. Designed and built with a static-first, high-craft editorial aesthetic emphasizing typography, responsiveness, accessibility, and performance.
+Personal professional landing page and frontend portfolio for Oleksandr Misiuk, Sofrware Engineer. Designed and built with a static-first, high-craft editorial aesthetic emphasizing typography, responsiveness, accessibility, and performance.
 
 ## Tech Stack
 
