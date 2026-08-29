@@ -133,7 +133,7 @@ jsdom `getComputedStyle` returns empty custom properties. Tests that exercise `-
 - Assert on landmarks, roles, IDs, and `aria-*` state — never on placeholder section copy.
 - Projects: `desktop-1440`, `tablet-768`, `mobile-320`. Skip viewport-specific cases with `test.skip` keyed to `viewport.width`.
 - Global `contextOptions.reducedMotion: 'reduce'` neutralises CSS scroll-driven animation flake.
-- `e2e/fixtures/axe.ts` exposes `makeAxeBuilder()` scoped to `wcag2a`, `wcag2aa`, `wcag21a`, `wcag21aa`, excluding `[aria-hidden="true"]` so the decorative IndexRail does not fail colour-contrast.
+- `e2e/fixtures/axe.ts` exposes `makeAxeBuilder()` scoped to `wcag2a`, `wcag2aa`, `wcag21a`, `wcag21aa`, excluding `[aria-hidden="true"]` so decorative elements do not fail colour-contrast.
 - Dedicated touch controls (theme toggle, hamburger, `ActionLink`) must be ≥ 44×44. Compact desktop text nav is held to WCAG 2.5.8 AA (24×24).
 
 ## Troubleshooting
@@ -142,5 +142,4 @@ jsdom `getComputedStyle` returns empty custom properties. Tests that exercise `-
 - **Flaky e2e scroll-spy** — assert after hash navigation or after scrolling to the deterministic top/bottom edge; never sleep. Confirm `reducedMotion` is still `'reduce'`.
 - **`--header-height` only hits the 64px fallback** — jsdom does not resolve CSS custom properties. Set the property in the test before rendering the hook.
 - **Playwright cannot find Chromium** — run `npx playwright install chromium` once.
-- **Axe colour-contrast on IndexRail** — inactive rail labels use `text-ink-muted/50` and are `aria-hidden`. They are excluded from the scan; do not "fix" them by asserting on decorative contrast.
 - **Diagnosing a failed `verify`** — the chain is `typecheck → lint → format:check → test:coverage → build`. The first non-zero step is the one to fix; `test:coverage` failing is a missing unit test, not an e2e issue.

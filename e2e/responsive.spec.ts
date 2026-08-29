@@ -57,18 +57,4 @@ test.describe('responsive layout', () => {
             await assertMinTarget(footerLinks.nth(index));
         }
     });
-
-    test('IndexRail is absent from the layout below xl', async ({ page, viewport }) => {
-        test.skip((viewport?.width ?? 0) >= 1280, 'IndexRail appears at the xl breakpoint');
-        await page.goto('/');
-        await expect(page.getByRole('complementary', { includeHidden: true })).toBeHidden();
-    });
-
-    test('IndexRail does not intercept pointer events at 1440', async ({ page, viewport }) => {
-        test.skip((viewport?.width ?? 0) < 1280, 'IndexRail is display:none below xl');
-        await page.goto('/');
-        const rail = page.getByRole('complementary', { includeHidden: true });
-        await expect(rail).toBeVisible();
-        await expect(rail).toHaveCSS('pointer-events', 'none');
-    });
 });

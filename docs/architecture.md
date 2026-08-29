@@ -18,9 +18,8 @@ This document provides a condensed overview of the architecture, key concepts, a
   - `About`: Renders biographical background paragraphs constrained to readable measure (`max-w-[62ch]`).
   - `Technologies`: Renders a compact semantic `<ul>` of mono `Tag` chips without proficiency bars, percentages, or external icons.
   - `Contact`: Renders closing statement ("Let's build something great."), status indicator, and interactive `ActionLink` CTAs (Email, LinkedIn, GitHub, CV) conditionally omitting unsupplied links.
-- **Single-IntersectionObserver Scroll-Spy (`useActiveSection`)**: Exactly one `IntersectionObserver` instance watches `SECTION_IDS`, dynamically calculating its top root margin from the `--header-height` CSS token. It drives `aria-current` in header/mobile navigation and active marker state in the index rail.
+- **Single-IntersectionObserver Scroll-Spy (`useActiveSection`)**: Exactly one `IntersectionObserver` instance watches `SECTION_IDS`, dynamically calculating its top root margin from the `--header-height` CSS token. It drives `aria-current` in header/mobile navigation.
 - **Accessible Full-Screen Mobile Disclosure (`MobileNav`)**: Below the `md` (768px) breakpoint, a 44×44px hamburger trigger opens a full-screen overlay with focus trapping, Escape-to-close, body scroll lock with cleanup restoration, and auto-close upon expanding beyond `md`.
-- **Decorative Index Rail (`IndexRail`)**: Fixed at `xl+` in the left viewport margin, rendered with `aria-hidden="true"` and non-interactive status bars that track section reading progress.
 - **First-Class Accessibility & Keyboard Landmarks**: `SkipLink` provides the first keyboard tab stop to `#main`. Landmarks (`header`, `nav`, `main`, `section`, `footer`), single `h1`, ordered `h2`s with `aria-labelledby`, and visible `:focus-visible` rings across both light and dark themes ensure WCAG AA compliance.
 - **Bespoke Atomic UI Primitives & SVG Icons**: Handcrafted, accessible UI primitives (`ActionLink`, `Tag`, `Eyebrow`, `StatusPill`) and self-contained SVG icons (`SunIcon`, `MoonIcon`, `MenuIcon`, `CloseIcon`, `ArrowUpRightIcon`, `ArrowRightIcon`, `GitHubIcon`, `LinkedInIcon`, `MailIcon`, `DocumentIcon`) eliminating heavy external icon or UI libraries.
 - **Decoupled Data Layer**: All portfolio content (personal profile, navigation items, projects, principles, technologies, about text) is structured as type-safe TypeScript modules in `src/data/`. Components remain strictly presentational and consume data via `@/data`.
@@ -39,7 +38,7 @@ docs/testing.md         # Testing architecture, TDD workflow, coverage policy
 src/
 ├── assets/             # Static graphics, SVG artwork, and media placeholders
 ├── components/
-│   ├── layout/         # Application shell: Header, MobileNav, ThemeToggle, SkipLink, IndexRail, Section (and SectionBackground), SectionHeader, Container, Footer
+│   ├── layout/         # Application shell: Header, MobileNav, ThemeToggle, SkipLink, Section (and SectionBackground), SectionHeader, Container, Footer
 │   ├── sections/       # Primary page sections: Hero, SelectedWork, ProjectCard, HowIWork, About, Technologies, Contact
 │   └── ui/             # Atomic primitives: ActionLink, Tag, Eyebrow, StatusPill, and SVG icon primitives (icons/)
 ├── data/               # Decoupled content data layer
@@ -66,7 +65,6 @@ src/
 graph TD
     APP[App.tsx] --> SKIP[SkipLink (#main)]
     APP --> HEADER[Header (sticky)]
-    APP --> RAIL[IndexRail (xl+, aria-hidden)]
     APP --> MAIN[main#main]
     APP --> FOOTER[Footer]
 
@@ -107,6 +105,5 @@ graph TD
 
     HOOK[useActiveSection(SECTION_IDS)] -.->|activeId| APP
     APP -.->|activeId| HEADER
-    APP -.->|activeId| RAIL
     HEADER -.->|activeId| MOBILE
 ```

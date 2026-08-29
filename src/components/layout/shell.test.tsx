@@ -1,7 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { render, screen, within } from '@/test/render';
 import { Container } from './Container';
-import { IndexRail } from './IndexRail';
 import { Section, SectionBackground } from './Section';
 import { SkipLink } from './SkipLink';
 
@@ -133,16 +132,5 @@ describe('SectionBackground', () => {
         expect(darkImg).toHaveAttribute('loading', 'eager');
         expect(darkImg).toHaveAttribute('fetchpriority', 'high');
         expect(darkImg).toHaveAttribute('decoding', 'async');
-    });
-});
-
-describe('IndexRail', () => {
-    it('is hidden from the accessibility tree and exposes no tab stops', () => {
-        render(<IndexRail activeId="work" />);
-
-        const rail = screen.getByRole('complementary', { hidden: true });
-        expect(rail).toHaveAttribute('aria-hidden', 'true');
-        expect(within(rail).queryAllByRole('link', { hidden: true })).toHaveLength(0);
-        expect(within(rail).queryAllByRole('button', { hidden: true })).toHaveLength(0);
     });
 });

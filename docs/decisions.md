@@ -62,119 +62,114 @@ This document records the key architectural choices, technical decisions, and tr
 ### 12. Single-`IntersectionObserver` Scroll-Spy Keyed to CSS Variables
 
 - **Decision**: Drive active section state with a single `IntersectionObserver` in `useActiveSection` attached to `SECTION_IDS`, computing the top root margin from `--header-height` (`getComputedStyle` with fallback) and `-55%` bottom margin.
-- **Rationale**: Avoids continuous scroll event listeners and layout recalculations, synchronizes `aria-current` across navigation links and the index rail, and adapts automatically to fluid header heights.
+- **Rationale**: Avoids continuous scroll event listeners and layout recalculations, synchronizes `aria-current` across navigation links, and adapts automatically to fluid header heights.
 
-### 13. Decorative `aria-hidden` Index Rail at `xl+`
-
-- **Decision**: Render `IndexRail` exclusively at `xl+` (1280px+) with `aria-hidden="true"` and `pointer-events-none`.
-- **Rationale**: Acts strictly as a visual reading progress indicator without polluting the accessibility tree or creating duplicate interactive tab stops.
-
-### 14. Vitest 4 over Jest
+### 13. Vitest 4 over Jest
 
 - **Decision**: Use Vitest 4 as the unit runner.
 - **Rationale**: Reuses the Vite 8 pipeline, `@/*` alias, and Oxc transform. `vitest@4.1.11` peer-supports `vite@^8`.
 
-### 15. Vitest Config Colocated in `vite.config.ts`
+### 14. Vitest Config Colocated in `vite.config.ts`
 
 - **Decision**: Import `defineConfig` from `vitest/config` and keep the `test` block next to the Vite config.
 - **Rationale**: One alias definition, no parallel build config. Vite ignores `test` during production builds.
 
-### 16. jsdom + React Testing Library over Browser Mode
+### 15. jsdom + React Testing Library over Browser Mode
 
 - **Decision**: Run the unit tier in jsdom with Testing Library, not Vitest Browser Mode.
 - **Rationale**: Fast, dependency-light, well-understood. DOM-API gaps are covered by centralized doubles in `src/test/`.
 
-### 17. Explicit Vitest Imports over `globals: true`
+### 16. Explicit Vitest Imports over `globals: true`
 
 - **Decision**: Import `describe` / `it` / `expect` from `vitest` in every test file.
 - **Rationale**: Keeps the ESLint flat config free of injected globals and keeps test intent explicit.
 
-### 18. Playwright Against the Production Preview Build
+### 17. Playwright Against the Production Preview Build
 
 - **Decision**: Playwright `webServer` runs `npm run build && npm run preview`.
 - **Rationale**: E2E validates the shipped artifact, including the inline pre-paint theme script in `index.html`.
 
-### 19. Viewport Projects over Per-Test Resizing
+### 18. Viewport Projects over Per-Test Resizing
 
 - **Decision**: Three Chromium projects at 320 / 768 / 1440 rather than resizing inside individual tests.
-- **Rationale**: Clean, parallel coverage of concerns #4 and #11.
+- **Rationale**: Clean, parallel coverage across mobile, tablet, and desktop breakpoints (including narrow-viewport overflow in concern #4).
 
-### 20. Automated axe-core Accessibility Gate
+### 19. Automated axe-core Accessibility Gate
 
 - **Decision**: `@axe-core/playwright` scans WCAG 2.0/2.1 A + AA in both themes, including the open mobile-nav dialog.
-- **Rationale**: Makes the WCAG AA commitment in `AGENTS.md` executable rather than aspirational. Decorative `aria-hidden` nodes (IndexRail) are excluded from contrast so the scan stays honest.
+- **Rationale**: Makes the WCAG AA commitment in `AGENTS.md` executable rather than aspirational. Decorative `aria-hidden` nodes are excluded from contrast so the scan stays honest.
 
-### 21. 100% Unit Coverage as a Failing Gate
+### 20. 100% Unit Coverage as a Failing Gate
 
 - **Decision**: V8 thresholds of 100 on lines, statements, functions, and branches, with `coverage.include` covering every runtime module under `src/` and a short, justified exclusion list.
 - **Rationale**: Affordable because the codebase is small, and it makes the TDD mandate mechanically enforceable via `npm run test:coverage` inside `verify`.
 
-### 22. Test-Driven Development Mandated for All Future Work
+### 21. Test-Driven Development Mandated for All Future Work
 
 - **Decision**: Red / green / refactor is the required workflow, recorded in `AGENTS.md` and `README.md` rather than enforced by hooks.
 - **Rationale**: CI is out of scope. The coverage gate is the practical backstop: untested production code cannot pass `verify`.
 
-### 23. Dedicated `docs/testing.md`
+### 22. Dedicated `docs/testing.md`
 
 - **Decision**: Testing gets its own document instead of growing `architecture.md`.
 - **Rationale**: It now spans two runners, a harness, a coverage policy, and a workflow mandate. The other `docs/` files link to it rather than duplicating it.
 
-### 24. No Visual Regression, No CI Yet
+### 23. No Visual Regression, No CI Yet
 
 - **Decision**: Do not add `toHaveScreenshot()` baselines or a `.github/` workflow in this change.
 - **Rationale**: Visual snapshots are high-maintenance and font-rendering flaky. CI was explicitly deferred; local scripts and `verify` are the gate for now.
 
-### 25. Section Encapsulation vs. Composition
+### 24. Section Encapsulation vs. Composition
 
 - **Decision**: Retain `Section` as the structural layout container in `App.tsx` and encapsulate presentational components (`Hero`, `SelectedWork`) inside section children.
 - **Rationale**: Preserves uniform layout grid alignment, section IDs, scroll anchors, and `IntersectionObserver` scroll-spy registration without duplicating section headers.
 
-### 26. CLS-Safe Media Container with Aspect Ratio Wrapping
+### 25. CLS-Safe Media Container with Aspect Ratio Wrapping
 
 - **Decision**: Wrap project media previews in `ProjectCard` inside fixed aspect-ratio containers (`aspect-[16/10] sm:aspect-[16/9]`) and enforce `width`, `height`, `loading="lazy"`, and `decoding="async"` on all images/videos.
 - **Rationale**: Prevents Cumulative Layout Shift (CLS) as assets load over the network and guarantees visual alignment across project cards.
 
-### 27. Graceful Empty State for Project Showcase
+### 26. Graceful Empty State for Project Showcase
 
 - **Decision**: Provide an explicit empty state branch in `SelectedWork` when `projects.length === 0`.
 - **Rationale**: Prevents awkward layout gaps if projects are temporarily unpopulated or filtered, and provides an accessible, testable UI fallback.
 
-### 28. Purely Presentational Section Components with Data Injections
+### 27. Purely Presentational Section Components with Data Injections
 
 - **Decision**: Design `Hero` and `SelectedWork` to accept optional props (`profile?: SiteProfile`, `projects?: readonly Project[]`) defaulted to imports from `@/data`.
 - **Rationale**: Enables frictionless consumption in `App.tsx` while facilitating isolated unit testing for edge cases and permutations.
 
-### 29. Reusable `StatusPill` UI Primitive
+### 28. Reusable `StatusPill` UI Primitive
 
 - **Decision**: Extract availability status indicators and project phase badges into a dedicated, reusable `StatusPill` primitive (`src/components/ui/StatusPill.tsx`) with color variants (`emerald`, `amber`, `accent`, `muted`), background variants (`canvas`, `surface`), size variants (`sm`, `md`), and optional ping animation (`pulse`).
 - **Rationale**: Eliminates CSS duplication between `Hero` and `ProjectCard`, standardizes font metrics and dot indicator dimensions, encapsulates status animation and reduced-motion fallbacks, and keeps presentational section components clean and declarative.
 
-### 30. Theme-Aware SVG Favicon
+### 29. Theme-Aware SVG Favicon
 
 - **Decision**: Provide `public/favicon.svg` as the primary site favicon with embedded CSS `@media (prefers-color-scheme: dark)` styling and update `index.html` to reference `href="/favicon.svg"`.
 - **Rationale**: Eliminates raster scaling artifacts across high-DPI viewports, matches the monogram geometry from the brand assets, and dynamically adjusts canvas background and ink foreground to the user's OS color scheme.
 
-### 31. Presentational Section Decoupling with Data Injections & Empty Fallbacks
+### 30. Presentational Section Decoupling with Data Injections & Empty Fallbacks
 
 - **Decision**: Implement `HowIWork`, `About`, `Technologies`, and `Contact` section components accepting optional typed props defaulted to imports from `src/data/`, with accessible empty-state fallbacks.
 - **Rationale**: Keeps all section components purely presentational and decoupled from runtime state, allowing frictionless consumption in `App.tsx` and deterministic unit testing across mock data fixtures and edge cases.
 
-### 32. Semantic Monospace Technology Chips
+### 31. Semantic Monospace Technology Chips
 
 - **Decision**: Render the `Technologies` skill matrix as a semantic `<ul>`/`<li>` list of `Tag` components with JetBrains Mono styling, wrapping cleanly at all screen widths without proficiency meters, percentages, or third-party logos.
 - **Rationale**: Conforms to the editorial, low-temperature aesthetic while preserving proper accessibility tree semantics for assistive technologies.
 
-### 33. Resilient Contact Action Dispatcher
+### 32. Resilient Contact Action Dispatcher
 
 - **Decision**: Implement `Contact` using `ActionLink` with self-contained SVG icon primitives (`MailIcon`, `LinkedInIcon`, `GitHubIcon`, `DocumentIcon`) and conditional omission of unpopulated links.
 - **Rationale**: Ensures interactive touch targets satisfy the 44×44px accessibility threshold, provides screen reader cues for external tabs (`(opens in a new tab)`), handles direct CV downloads, and eliminates broken `#` anchor tags.
 
-### 34. Decoupling Unit Tests from Data Layer Content and Real Network/API Calls
+### 33. Decoupling Unit Tests from Data Layer Content and Real Network/API Calls
 
 - **Decision**: Unit tests must run completely hermetically in jsdom without making real network or API calls, and must not import runtime data from `@/data` or assert on literal portfolio copy or links. Tests supply isolated mock fixtures or test props directly to components and hooks.
 - **Rationale**: Prevents edits to personal bio, project showcases, skills, or contact links in `src/data/` from breaking unit test suites or causing false regressions, while ensuring tests remain fast, deterministic, and isolated.
 
-### 35. Full-Bleed Section Background Composition & `SectionBackground` Helper
+### 34. Full-Bleed Section Background Composition & `SectionBackground` Helper
 
 - **Decision**: Provide `Section` with an optional `background?: React.ReactNode` slot rendered inside a decorative full-bleed wrapper (`absolute inset-0 -z-10 overflow-hidden pointer-events-none aria-hidden="true"`) with `relative isolate` applied to `<section>` when the slot is populated. Export `SectionBackground` from `src/components/layout/Section.tsx` for dual theme images (`dark:hidden` / `hidden dark:block`), `priority` loading control (`loading="eager"`, `fetchPriority="high"`, `decoding="async"`), and contrast gradient scrim overlay. Hero background assets are composed at the root in `App.tsx`.
 - **Rationale**: Preserves the structural landmark role of `Section` without introducing complex multi-attribute config objects, and avoids clipping focus rings or `.reveal` translate animations by keeping `overflow-hidden` scoped exclusively to the decorative wrapper. Hero component remains purely presentational and free of asset dependencies. Dual-image CSS visibility switching synchronizes immediately with `[data-theme]` without runtime JavaScript state or re-render flashes.
