@@ -173,3 +173,8 @@ This document records the key architectural choices, technical decisions, and tr
 
 - **Decision**: Provide `Section` with an optional `background?: React.ReactNode` slot rendered inside a decorative full-bleed wrapper (`absolute inset-0 -z-10 overflow-hidden pointer-events-none aria-hidden="true"`) with `relative isolate` applied to `<section>` when the slot is populated. Export `SectionBackground` from `src/components/layout/Section.tsx` for dual theme images (`dark:hidden` / `hidden dark:block`), `priority` loading control (`loading="eager"`, `fetchPriority="high"`, `decoding="async"`), and contrast gradient scrim overlay. Hero background assets are composed at the root in `App.tsx`.
 - **Rationale**: Preserves the structural landmark role of `Section` without introducing complex multi-attribute config objects, and avoids clipping focus rings or `.reveal` translate animations by keeping `overflow-hidden` scoped exclusively to the decorative wrapper. Hero component remains purely presentational and free of asset dependencies. Dual-image CSS visibility switching synchronizes immediately with `[data-theme]` without runtime JavaScript state or re-render flashes.
+
+### 35. Streamlined Header Action Area without CV ActionLink
+
+- **Decision**: Remove the desktop CV `ActionLink` button from the sticky `Header` actions container, keeping only the `ThemeToggle` and mobile menu trigger button (`md:hidden`), while retaining CV download links in dedicated contact surfaces (`MobileNav`, `Contact`, `Footer`).
+- **Rationale**: Streamlines the persistent header to primary section navigation and theme switching without visual clutter or redundant action links, while preserving CV access in appropriate context sections.

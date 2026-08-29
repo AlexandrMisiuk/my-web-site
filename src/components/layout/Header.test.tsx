@@ -61,20 +61,10 @@ describe('Header', () => {
         expect(screen.getByRole('button', { name: 'Open menu' })).toHaveAttribute('aria-expanded', 'false');
     });
 
-    it('omits the CV action when the cv link is empty', () => {
-        const profileWithoutCv: SiteProfile = {
-            ...mockProfile,
-            links: { ...mockProfile.links, cv: '' },
-        };
-        renderWithUser(<Header activeId="work" items={mockNavItems} profile={profileWithoutCv} />);
-
-        expect(screen.queryByRole('link', { name: 'CV' })).not.toBeInTheDocument();
-    });
-
-    it('renders the CV action when a cv link is provided', () => {
+    it('does not render a CV action link even when a cv link is provided', () => {
         renderWithUser(<Header activeId="work" items={mockNavItems} profile={mockProfile} />);
 
-        expect(screen.getByRole('link', { name: 'CV' })).toHaveAttribute('href', '/cv/test.pdf');
+        expect(screen.queryByRole('link', { name: 'CV' })).not.toBeInTheDocument();
     });
 
     it('renders without crashing when default props are used', () => {

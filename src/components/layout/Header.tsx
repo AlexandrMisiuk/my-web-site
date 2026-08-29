@@ -2,7 +2,6 @@ import { useState, useRef } from 'react';
 import { Container } from '@/components/layout/Container';
 import { MobileNav } from '@/components/layout/MobileNav';
 import { ThemeToggle } from '@/components/layout/ThemeToggle';
-import { ActionLink } from '@/components/ui/ActionLink';
 import { CloseIcon, MenuIcon } from '@/components/ui/icons';
 import { navItems as defaultNavItems } from '@/data/navigation';
 import { siteProfile as defaultProfile } from '@/data/site';
@@ -74,18 +73,8 @@ export function Header({ activeId, items = defaultNavItems, profile = defaultPro
                     </ul>
                 </nav>
 
-                {/* Header actions: CV + ThemeToggle + Hamburger */}
+                {/* Header actions: ThemeToggle + Hamburger */}
                 <div className="flex items-center gap-2 sm:gap-3">
-                    {profile.links.cv ? (
-                        <ActionLink
-                            href={profile.links.cv}
-                            variant="ghost"
-                            download
-                            className="hidden min-h-9 px-3 py-1.5 font-mono text-xs sm:inline-flex"
-                        >
-                            CV
-                        </ActionLink>
-                    ) : null}
                     <ThemeToggle />
                     <button
                         ref={triggerRef}
