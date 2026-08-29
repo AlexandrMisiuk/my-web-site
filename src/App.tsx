@@ -1,5 +1,5 @@
-import heroLightBg from '@/assets/hero-light-2026-08-30.jpeg';
-import heroDarkBg from '@/assets/hero-dark-2026-08-30.jpeg';
+import heroLightBg from '@/assets/hero-light.jpeg';
+import heroDarkBg from '@/assets/hero-dark.jpeg';
 import { Footer } from '@/components/layout/Footer';
 import { Header } from '@/components/layout/Header';
 import { Section, SectionBackground } from '@/components/layout/Section';
