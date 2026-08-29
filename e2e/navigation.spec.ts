@@ -17,6 +17,14 @@ test.describe('navigation', () => {
         await expect(page.getByRole('contentinfo')).toBeVisible();
     });
 
+    test('brand logo link is visible in header and points to #hero', async ({ page }) => {
+        await page.goto('/');
+        const brandLink = page.getByRole('banner').getByRole('link', { name: 'Oleksandr Misiuk' });
+        await expect(brandLink).toBeVisible();
+        await expect(brandLink).toHaveAttribute('href', '#hero');
+        await expect(brandLink.locator('img')).toBeVisible();
+    });
+
     test('desktop nav links update the hash and reveal the target heading', async ({ page, viewport }) => {
         test.skip((viewport?.width ?? 0) < 768, 'Primary nav is visible from the md breakpoint up');
 

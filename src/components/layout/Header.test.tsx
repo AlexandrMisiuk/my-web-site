@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import brandLogo from '@/assets/brand-logo.svg';
 import type { NavItem, SiteProfile } from '@/data/types';
 import { renderWithUser, screen, within } from '@/test/render';
 import { Header } from './Header';
@@ -65,6 +66,18 @@ describe('Header', () => {
         renderWithUser(<Header activeId="work" items={mockNavItems} profile={mockProfile} />);
 
         expect(screen.queryByRole('link', { name: 'CV' })).not.toBeInTheDocument();
+    });
+
+    it('renders the brand logo link pointing to #hero with accessible name matching profile.name', () => {
+        renderWithUser(<Header activeId="work" items={mockNavItems} profile={mockProfile} />);
+
+        const brandLink = screen.getByRole('link', { name: mockProfile.name });
+        expect(brandLink).toHaveAttribute('href', '#hero');
+
+        const logoImg = brandLink.querySelector('img');
+        expect(logoImg).toBeInTheDocument();
+        expect(logoImg).toHaveAttribute('src', brandLogo);
+        expect(logoImg).toHaveAttribute('alt', mockProfile.name);
     });
 
     it('renders without crashing when default props are used', () => {

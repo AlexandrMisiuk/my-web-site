@@ -178,3 +178,8 @@ This document records the key architectural choices, technical decisions, and tr
 
 - **Decision**: Remove the desktop CV `ActionLink` button from the sticky `Header` actions container, keeping only the `ThemeToggle` and mobile menu trigger button (`md:hidden`), while retaining CV download links in dedicated contact surfaces (`MobileNav`, `Contact`, `Footer`).
 - **Rationale**: Streamlines the persistent header to primary section navigation and theme switching without visual clutter or redundant action links, while preserving CV access in appropriate context sections.
+
+### 36. Header Brand Identity SVG Asset
+
+- **Decision**: Render the SVG brand logo (`src/assets/brand-logo.svg`) inside the `#hero` anchor in `Header` with `aria-label={profile.name}` and decorative `alt=""` on the `<img>` tag with explicit `32x32px` dimensions.
+- **Rationale**: Replaces plain text brand name with vector monogram asset to reinforce visual identity while preserving accessible naming for assistive technologies and preventing Cumulative Layout Shift (CLS).

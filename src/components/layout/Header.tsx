@@ -1,4 +1,5 @@
 import { useState, useRef } from 'react';
+import brandLogo from '@/assets/brand-logo.svg';
 import { Container } from '@/components/layout/Container';
 import { MobileNav } from '@/components/layout/MobileNav';
 import { ThemeToggle } from '@/components/layout/ThemeToggle';
@@ -30,9 +31,10 @@ export function Header({ activeId, items = defaultNavItems, profile = defaultPro
             <Container as="div" className="flex h-full items-center justify-between">
                 <a
                     href="#hero"
-                    className="group text-ink hover:text-accent focus-visible:outline-accent flex items-center gap-2 font-mono text-sm font-semibold tracking-tight transition-colors focus-visible:outline-2 focus-visible:outline-offset-2"
+                    aria-label={profile.name}
+                    className="focus-visible:outline-accent group inline-flex items-center justify-center rounded-sm transition-transform hover:scale-105 focus-visible:outline-2 focus-visible:outline-offset-2"
                 >
-                    <span>{profile.name}</span>
+                    <img src={brandLogo} alt={profile.name} className="h-11 w-11" />
                 </a>
 
                 {/* Desktop navigation */}
