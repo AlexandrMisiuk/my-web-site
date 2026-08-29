@@ -32,7 +32,7 @@ export function Header({ activeId, items = defaultNavItems, profile = defaultPro
                 <a
                     href="#hero"
                     aria-label={profile.name}
-                    className="focus-visible:outline-accent group inline-flex items-center justify-center rounded-sm transition-transform hover:scale-105 focus-visible:outline-2 focus-visible:outline-offset-2"
+                    className="focus-visible:outline-accent group inline-flex items-center justify-center rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2"
                 >
                     <img src={brandLogo} alt={profile.name} className="h-11 w-11" />
                 </a>
