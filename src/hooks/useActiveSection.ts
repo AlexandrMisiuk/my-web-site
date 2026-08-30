@@ -51,7 +51,7 @@ export function useActiveSection(ids: readonly string[]): string {
             },
             {
                 rootMargin: `-${headerPx}px 0px -55% 0px`,
-                threshold: [0, 0.1, 0.5],
+                threshold: [0.01, 0.1, 0.5],
             },
         );
 

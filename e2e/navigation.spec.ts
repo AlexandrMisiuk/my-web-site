@@ -32,8 +32,10 @@ test.describe('navigation', () => {
         const nav = page.getByRole('navigation', { name: 'Primary' });
 
         for (const item of desktopNav) {
-            await nav.getByRole('link', { name: item.name }).click();
+            const link = nav.getByRole('link', { name: item.name });
+            await link.click();
             await expect(page).toHaveURL(new RegExp(`${item.hash}$`));
+            await expect(link).toHaveAttribute('aria-current', 'true');
 
             const heading = page.getByRole('heading', { level: 2, name: item.heading });
             await expect(heading).toBeInViewport();

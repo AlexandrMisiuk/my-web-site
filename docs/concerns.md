@@ -12,7 +12,7 @@ This document highlights critical implementation concerns, potential pitfalls, r
 ### 2. Missing or Broken Anchor Targets
 
 - **Concern**: Navigating to sections via header or mobile menu can fail or misalign if section IDs deviate from `src/data/navigation.ts`.
-- **Mitigation**: Single source of truth in `navigation.ts` (`navItems` and `SECTION_IDS`). Use CSS `scroll-padding-top: var(--header-height)` on `html` and `scroll-mt-[var(--header-height)]` on `Section` so sticky headers never cover anchor headings.
+- **Mitigation**: Single source of truth in `navigation.ts` (`navItems` and `SECTION_IDS`). Use CSS `scroll-padding-top: var(--header-height)` on `html` so sticky headers never cover anchor headings and scroll-spy active section thresholds remain aligned.
 
 ### 3. Contrast Compliance in Both Color Schemes
 

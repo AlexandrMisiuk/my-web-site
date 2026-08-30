@@ -14,7 +14,7 @@ export interface SectionProps {
 export function Section({ id, label, variant = 'default', background, className = '', children }: SectionProps) {
     const isPlain = variant === 'plain';
     const sectionClass =
-        `${background ? 'relative isolate ' : ''}reveal min-h-(--section-min-height) flex flex-col py-section scroll-mt-(--header-height) ${className}`.trim();
+        `${background ? 'relative isolate ' : ''}reveal min-h-(--section-min-height) flex flex-col py-section ${className}`.trim();
 
     return (
         <section id={id} aria-labelledby={!isPlain ? `${id}-heading` : undefined} className={sectionClass}>
