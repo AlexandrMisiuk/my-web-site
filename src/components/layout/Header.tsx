@@ -51,15 +51,6 @@ export function Header({ activeId, items = defaultNavItems, profile = defaultPro
                                             isActive ? 'text-ink font-semibold' : 'text-ink-muted hover:text-ink'
                                         }`}
                                     >
-                                        <span
-                                            className={`text-mono-xs mr-1.5 font-mono transition-colors ${
-                                                isActive
-                                                    ? 'text-accent font-semibold'
-                                                    : 'text-ink-muted group-hover:text-ink'
-                                            }`}
-                                        >
-                                            {item.index}
-                                        </span>
                                         <span>{item.label}</span>
                                         <span
                                             className={`absolute inset-x-0 -bottom-1 h-0.5 rounded-full transition-all duration-200 ${
@@ -98,7 +89,6 @@ export function Header({ activeId, items = defaultNavItems, profile = defaultPro
                 activeId={activeId}
                 triggerRef={triggerRef}
                 items={items}
-                profile={profile}
             />
         </header>
     );

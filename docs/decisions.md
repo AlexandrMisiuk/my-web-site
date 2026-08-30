@@ -176,8 +176,8 @@ This document records the key architectural choices, technical decisions, and tr
 
 ### 35. Streamlined Header Action Area without CV ActionLink
 
-- **Decision**: Remove the desktop CV `ActionLink` button from the sticky `Header` actions container, keeping only the `ThemeToggle` and mobile menu trigger button (`md:hidden`), while retaining CV download links in dedicated contact surfaces (`MobileNav`, `Contact`, `Footer`).
-- **Rationale**: Streamlines the persistent header to primary section navigation and theme switching without visual clutter or redundant action links, while preserving CV access in appropriate context sections.
+- **Decision**: Remove the CV `ActionLink` button from the sticky `Header` actions container and the `MobileNav` navigation overlay, keeping only the `ThemeToggle` and mobile menu trigger button (`md:hidden`) in the header and primary section navigation in the mobile overlay, while retaining CV download links in dedicated contact surfaces (`Contact`, `Footer`).
+- **Rationale**: Streamlines persistent navigation headers and overlays to primary section navigation and theme switching without visual clutter or redundant action links, while preserving CV access in appropriate context sections (`Contact`, `Footer`).
 
 ### 36. Header Brand Identity SVG Asset
 
@@ -193,3 +193,18 @@ This document records the key architectural choices, technical decisions, and tr
 
 - **Decision**: Implement a decoupled, reusable `TerminalWindow` primitive (`src/components/ui/TerminalWindow.tsx`) powered by GSAP (`gsap` and `@gsap/react` `useGSAP`), featuring macOS-style window chrome (red `#ff5f56`, yellow `#ffbd2e`, green `#27c93f` controls), optional title (`Terminal - ${title}` with fallback to `Terminal`), dynamic bash prompt (`alex@${profile.role} ~ %`), typewriter text animation, and blinking cursor, styled with semantic Tailwind CSS v4 design tokens (`bg-surface`, `bg-canvas/60`, `border-hairline`, `text-ink`, `text-accent`) that dynamically adapt across light and dark modes.
 - **Rationale**: Replaces the static profile statement with an engaging retro-modern terminal display while preserving atomic modularity, WCAG AA contrast across themes, automatic animation lifecycle cleanup in React via `@gsap/react`, and instantaneous rendering when reduced motion is preferred (`prefers-reduced-motion`).
+
+### 39. Hero Section Monospace Focus and Asset Streamlining
+
+- **Decision**: Remove the decorative full-bleed background images (`hero-light.jpeg` and `hero-dark.jpeg`) and `SectionBackground` composition from the Hero section in `src/App.tsx`, rendering `<Section id="hero" variant="plain"><Hero /></Section>` without background imagery.
+- **Rationale**: Eliminates ~1.37MB of uncompressed raster image assets from the build output, reduces above-the-fold network payload and Largest Contentful Paint (LCP) overhead, and establishes immediate, distraction-free visual focus on the terminal window, status pill, and typography.
+
+### 40. Removal of Numeric Section Indexing
+
+- **Decision**: Remove numeric index prefixes (`'01'`, `'02'`, etc.) from `NavItem` data contracts, desktop `Header`, fullscreen `MobileNav`, `SectionHeader`, and `Section` component props, simplifying `SectionHeader` to render a top hairline rule divider and `<h2>` heading.
+- **Rationale**: Eliminates redundant visual repetition (such as "01 / Selected Work" rendered immediately above "Selected Work"), streamlines the `Section` and `SectionHeader` component APIs, and creates a cleaner, editorial typographic aesthetic across navigation and section landmarks.
+
+### 41. Thinner Fluid Section Padding and Full-Viewport Section Minimum Height
+
+- **Decision**: Update the fluid `--spacing-section` token in `@theme` to `clamp(2.5rem, 1.5rem + 3.5vw, 5rem)`, introduce `--section-min-height: calc(100dvh - var(--header-height))`, apply `min-h-(--section-min-height) flex flex-col` to the `Section` primitive, apply `justify-center` specifically to the Hero section while letting other sections default to top alignment, and remove redundant nested vertical padding (`py-12 sm:py-20 lg:py-28`) from `Hero`.
+- **Rationale**: Replaces excessive 10rem section padding with a compact 5rem maximum ceiling while ensuring every `<section>` occupies at least the full visible viewport height minus the header bar on desktop/tablet devices. Hero is vertically centered cleanly above the fold, content in subsequent sections aligns naturally to the top with consistent vertical rhythm, and taller sections expand without clipping.

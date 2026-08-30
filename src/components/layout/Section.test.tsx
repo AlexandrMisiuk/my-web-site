@@ -5,7 +5,7 @@ import { Section } from './Section';
 describe('Section', () => {
     it('applies the scroll-anchor id and wires aria-labelledby to its heading', () => {
         render(
-            <Section id="work" index="01" label="Selected Work">
+            <Section id="work" label="Selected Work">
                 Case studies
             </Section>,
         );
@@ -16,19 +16,8 @@ describe('Section', () => {
         expect(screen.getByRole('heading', { level: 2, name: 'Selected Work' })).toHaveAttribute('id', 'work-heading');
     });
 
-    it('skips the section header when index or label is missing', () => {
-        const { rerender } = render(
-            <Section id="work" index="01">
-                Body
-            </Section>,
-        );
-        expect(screen.queryByRole('heading', { level: 2 })).not.toBeInTheDocument();
-
-        rerender(
-            <Section id="work" label="Selected Work">
-                Body
-            </Section>,
-        );
+    it('skips the section header when label is missing', () => {
+        render(<Section id="work">Body</Section>);
         expect(screen.queryByRole('heading', { level: 2 })).not.toBeInTheDocument();
     });
 
@@ -45,7 +34,7 @@ describe('Section', () => {
 
     it('omits the decorative wrapper when background is not provided', () => {
         render(
-            <Section id="work" index="01" label="Selected Work">
+            <Section id="work" label="Selected Work">
                 Body
             </Section>,
         );
@@ -69,5 +58,27 @@ describe('Section', () => {
         expect(within(bgWrapper as HTMLElement).queryAllByRole('link', { hidden: true })).toHaveLength(0);
         expect(within(bgWrapper as HTMLElement).queryAllByRole('button', { hidden: true })).toHaveLength(0);
         expect(screen.getByRole('heading', { level: 1, name: 'Hero' })).toBeInTheDocument();
+    });
+
+    it('forwards custom className to the section element', () => {
+        render(
+            <Section id="work" label="Selected Work" className="custom-section-class">
+                Body
+            </Section>,
+        );
+
+        const section = screen.getByRole('region', { name: 'Selected Work' });
+        expect(section).toHaveClass('custom-section-class');
+    });
+
+    it('does not include justify-center in default section classes', () => {
+        render(
+            <Section id="work" label="Selected Work">
+                Body
+            </Section>,
+        );
+
+        const section = screen.getByRole('region', { name: 'Selected Work' });
+        expect(section).not.toHaveClass('justify-center');
     });
 });

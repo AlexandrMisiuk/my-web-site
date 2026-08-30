@@ -14,9 +14,11 @@ export function Hero({ profile = defaultSiteProfile, className = '' }: HeroProps
 
     return (
         <div
-            className={`flex animate-[hero-rise_0.6s_ease-out_both] flex-col gap-6 py-12 motion-reduce:animate-none sm:py-20 lg:py-28 ${className}`.trim()}
+            className={`flex animate-[hero-rise_0.6s_ease-out_both] flex-col gap-6 motion-reduce:animate-none ${className}`.trim()}
         >
-            <h1 className="text-display text-ink font-mono font-bold tracking-tight uppercase">{profile.name}</h1>
+            <h1 className="text-display text-ink text-shadow-ink-muted font-mono font-bold tracking-tight uppercase text-shadow-sm">
+                {profile.name}
+            </h1>
 
             {profile.status ? (
                 <StatusPill color="emerald" pulse variant="surface" size="md" className="self-start">
@@ -25,7 +27,7 @@ export function Hero({ profile = defaultSiteProfile, className = '' }: HeroProps
             ) : null}
 
             {profile.statement ? (
-                <TerminalWindow prompt={prompt} text={profile.statement} className="max-w-2xl" />
+                <TerminalWindow prompt={prompt} text={profile.statement} className="min-h-40 max-w-2xl" />
             ) : null}
 
             <div className="flex flex-wrap items-center gap-4 pt-2">

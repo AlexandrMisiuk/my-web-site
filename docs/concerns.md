@@ -12,7 +12,7 @@ This document highlights critical implementation concerns, potential pitfalls, r
 ### 2. Missing or Broken Anchor Targets
 
 - **Concern**: Navigating to sections via header or mobile menu can fail or misalign if section IDs deviate from `src/data/navigation.ts`.
-- **Mitigation**: Single source of truth in `navigation.ts` (`navItems` and `SECTION_IDS`). Use CSS `scroll-padding-top: var(--header-height)` on `html` and `scroll-mt-[var(--header-height)]` on `Section` so sticky headers never cover anchor headings.
+- **Mitigation**: Single source of truth in `navigation.ts` (`navItems` and `SECTION_IDS`). Use CSS `scroll-padding-top: var(--header-height)` on `html` so sticky headers never cover anchor headings and scroll-spy active section thresholds remain aligned.
 
 ### 3. Contrast Compliance in Both Color Schemes
 
@@ -72,7 +72,7 @@ This document highlights critical implementation concerns, potential pitfalls, r
 ### 14. Semantic Structure & Heading Order Across All 6 Sections
 
 - **Concern**: Integrating remaining sections (`how-i-work`, `about`, `technologies`, `contact`) could disrupt the document outline or introduce duplicate headings.
-- **Mitigation**: All 6 sections are fully implemented, standardizing on a single `<h1>` in `Hero`, `<h2>` headings inside `SectionHeader` for each numbered section, and `<h3>` tags for sub-items (principles, project cards). E2E tests validate structural roles, section IDs, and ARIA attributes.
+- **Mitigation**: All 6 sections are fully implemented, standardizing on a single `<h1>` in `Hero`, `<h2>` headings inside `SectionHeader` for each section, and `<h3>` tags for sub-items (principles, project cards). E2E tests validate structural roles, section IDs, and ARIA attributes.
 
 ### 15. Playwright Binary and Build Cost
 
@@ -96,10 +96,15 @@ This document highlights critical implementation concerns, potential pitfalls, r
 
 ### 19. Full-Bleed Section Background Contrast, Bandwidth & Stacking Isolation
 
-- **Concern**: Large above-the-fold background artwork can delay LCP, consume duplicate bandwidth across themes, slip behind canvas backgrounds in stacking contexts, clip `.reveal` animations or focus rings if `overflow-hidden` is placed on `<section>`, or reduce foreground text readability.
-- **Mitigation**: Clipping is strictly confined to the decorative background wrapper, avoiding `overflow-hidden` on the `<section>` landmark so focus rings and translate animations remain unclipped. The landmark applies `relative isolate` when a background is present to keep `-z-10` layers bounded. Background images (~116–124KB) use eager loading and high fetch priority only on hero (`priority={true}`), while defaults remain lazy. A multi-stop gradient scrim (`from-canvas/20 via-canvas/75 to-canvas`) and calibrated opacities (`0.4` light / `0.3` dark) maintain WCAG AA contrast across light and dark themes.
+- **Concern**: Large background artwork in section slots can delay LCP, consume duplicate bandwidth across themes, slip behind canvas backgrounds in stacking contexts, clip `.reveal` animations or focus rings if `overflow-hidden` is placed on `<section>`, or reduce foreground text readability.
+- **Mitigation**: The Hero section renders cleanly without raster background artwork, eliminating above-the-fold image payload. For sections utilizing the reusable `background` slot in `Section`, clipping is strictly confined to the decorative background wrapper, avoiding `overflow-hidden` on the `<section>` landmark so focus rings and translate animations remain unclipped. The landmark applies `relative isolate` when a background is present to keep `-z-10` layers bounded. The `SectionBackground` primitive supports theme switching and a multi-stop gradient scrim (`from-canvas/75 via-canvas/20 to-canvas`) to maintain WCAG AA contrast across light and dark themes.
 
 ### 20. GSAP Typewriter Animation Lifecycle & Reduced Motion Safeguards
 
 - **Concern**: JavaScript-driven typewriter and cursor animations in `TerminalWindow` could cause animation frame leaks across component unmounts, trigger React 19 strict-mode double-run stutter, or cause vestibular disorientation for motion-sensitive users.
 - **Mitigation**: Use `@gsap/react` `useGSAP` with scoped container refs (`scope: containerRef`) and `revertOnUpdate: true` to guarantee automatic cleanup and context reversion on unmount or dependency change. The component inspects `window.matchMedia('(prefers-reduced-motion: reduce)')` to render full statement text and static cursor immediately without typewriter delays or blinking animations. Decorative top bar controls are marked `aria-hidden="true"` to prevent screen reader noise.
+
+### 21. Responsive Vertical Rhythm, Short Viewports, & Section Minimum Heights
+
+- **Concern**: Enforcing full-viewport minimum section heights (`min-h-[calc(100dvh-var(--header-height))]`) could cause overflow or clipping on short laptop screens/mobile landscape modes, or trigger scroll-spy intersection observer fluttering if multiple sections intersect during rapid scrolling.
+- **Mitigation**: `Section` applies `min-height` rather than fixed `height` with `py-section` padding preserved, allowing content taller than the viewport to expand naturally without clipping. Flex column layout defaults to top alignment (`justify-start`) across content sections for natural reading flow, while the Hero section applies `justify-center` for balanced viewport centering. `useActiveSection` enforces a top offset matching `--header-height` and document-order precedence to guarantee robust, jitter-free scroll-spy navigation.
