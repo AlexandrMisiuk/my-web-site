@@ -59,4 +59,26 @@ describe('Section', () => {
         expect(within(bgWrapper as HTMLElement).queryAllByRole('button', { hidden: true })).toHaveLength(0);
         expect(screen.getByRole('heading', { level: 1, name: 'Hero' })).toBeInTheDocument();
     });
+
+    it('forwards custom className to the section element', () => {
+        render(
+            <Section id="work" label="Selected Work" className="custom-section-class">
+                Body
+            </Section>,
+        );
+
+        const section = screen.getByRole('region', { name: 'Selected Work' });
+        expect(section).toHaveClass('custom-section-class');
+    });
+
+    it('does not include justify-center in default section classes', () => {
+        render(
+            <Section id="work" label="Selected Work">
+                Body
+            </Section>,
+        );
+
+        const section = screen.getByRole('region', { name: 'Selected Work' });
+        expect(section).not.toHaveClass('justify-center');
+    });
 });

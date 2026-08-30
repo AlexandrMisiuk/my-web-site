@@ -14,7 +14,7 @@ export function Hero({ profile = defaultSiteProfile, className = '' }: HeroProps
 
     return (
         <div
-            className={`flex animate-[hero-rise_0.6s_ease-out_both] flex-col gap-6 py-12 motion-reduce:animate-none sm:py-20 lg:py-28 ${className}`.trim()}
+            className={`flex animate-[hero-rise_0.6s_ease-out_both] flex-col gap-6 motion-reduce:animate-none ${className}`.trim()}
         >
             <h1 className="text-display text-ink text-shadow-ink-muted font-mono font-bold tracking-tight uppercase text-shadow-sm">
                 {profile.name}

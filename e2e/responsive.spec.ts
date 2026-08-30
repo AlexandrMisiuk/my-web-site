@@ -57,4 +57,27 @@ test.describe('responsive layout', () => {
             await assertMinTarget(footerLinks.nth(index));
         }
     });
+
+    test('all sections satisfy the full-viewport minimum height minus header', async ({ page }) => {
+        await page.goto('/');
+
+        const sections = page.locator('section');
+        const count = await sections.count();
+        expect(count).toBeGreaterThan(0);
+
+        const header = page.getByRole('banner');
+        await expect(header).toBeVisible();
+        const headerBox = await header.boundingBox();
+        const headerHeight = headerBox?.height ?? 64;
+
+        const viewportHeight = await page.evaluate(() => window.innerHeight);
+        const expectedMinHeight = viewportHeight - headerHeight;
+
+        for (let index = 0; index < count; index += 1) {
+            const section = sections.nth(index);
+            const box = await section.boundingBox();
+            expect(box, `section ${index} should have a bounding box`).not.toBeNull();
+            expect(box?.height ?? 0).toBeGreaterThanOrEqual(expectedMinHeight - 1);
+        }
+    });
 });

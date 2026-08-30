@@ -95,4 +95,9 @@ describe('Hero', () => {
             expect(links[1]).toHaveAttribute('href', '#contact');
         }
     });
+
+    it('applies custom className when provided', () => {
+        const { container } = renderWithUser(<Hero className="custom-hero-class" />);
+        expect(container.firstChild).toHaveClass('custom-hero-class');
+    });
 });

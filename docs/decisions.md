@@ -203,3 +203,8 @@ This document records the key architectural choices, technical decisions, and tr
 
 - **Decision**: Remove numeric index prefixes (`'01'`, `'02'`, etc.) from `NavItem` data contracts, desktop `Header`, fullscreen `MobileNav`, `SectionHeader`, and `Section` component props, simplifying `SectionHeader` to render a top hairline rule divider and `<h2>` heading.
 - **Rationale**: Eliminates redundant visual repetition (such as "01 / Selected Work" rendered immediately above "Selected Work"), streamlines the `Section` and `SectionHeader` component APIs, and creates a cleaner, editorial typographic aesthetic across navigation and section landmarks.
+
+### 41. Thinner Fluid Section Padding and Full-Viewport Section Minimum Height
+
+- **Decision**: Update the fluid `--spacing-section` token in `@theme` to `clamp(2.5rem, 1.5rem + 3.5vw, 5rem)`, introduce `--section-min-height: calc(100dvh - var(--header-height))`, apply `min-h-(--section-min-height) flex flex-col` to the `Section` primitive, apply `justify-center` specifically to the Hero section while letting other sections default to top alignment, and remove redundant nested vertical padding (`py-12 sm:py-20 lg:py-28`) from `Hero`.
+- **Rationale**: Replaces excessive 10rem section padding with a compact 5rem maximum ceiling while ensuring every `<section>` occupies at least the full visible viewport height minus the header bar on desktop/tablet devices. Hero is vertically centered cleanly above the fold, content in subsequent sections aligns naturally to the top with consistent vertical rhythm, and taller sections expand without clipping.

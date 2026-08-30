@@ -21,7 +21,7 @@ export default function App() {
 
             <main id="main" tabIndex={-1} className="outline-none">
                 {/* Hero */}
-                <Section id="hero" variant="plain">
+                <Section id="hero" variant="plain" className="justify-center">
                     <Hero />
                 </Section>
 

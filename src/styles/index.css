@@ -27,8 +27,9 @@
     --text-mono-xs: 0.75rem;
 
     /* Spacing & Sizing */
-    --spacing-section: clamp(5rem, 3rem + 8vw, 10rem);
+    --spacing-section: clamp(2.5rem, 1.5rem + 3.5vw, 5rem);
     --header-height: 4rem;
+    --section-min-height: calc(100dvh - var(--header-height));
     --mobile-nav-height: calc(100dvh - var(--header-height));
     --radius-sm: 10px;
 }

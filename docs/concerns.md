@@ -103,3 +103,8 @@ This document highlights critical implementation concerns, potential pitfalls, r
 
 - **Concern**: JavaScript-driven typewriter and cursor animations in `TerminalWindow` could cause animation frame leaks across component unmounts, trigger React 19 strict-mode double-run stutter, or cause vestibular disorientation for motion-sensitive users.
 - **Mitigation**: Use `@gsap/react` `useGSAP` with scoped container refs (`scope: containerRef`) and `revertOnUpdate: true` to guarantee automatic cleanup and context reversion on unmount or dependency change. The component inspects `window.matchMedia('(prefers-reduced-motion: reduce)')` to render full statement text and static cursor immediately without typewriter delays or blinking animations. Decorative top bar controls are marked `aria-hidden="true"` to prevent screen reader noise.
+
+### 21. Responsive Vertical Rhythm, Short Viewports, & Section Minimum Heights
+
+- **Concern**: Enforcing full-viewport minimum section heights (`min-h-[calc(100dvh-var(--header-height))]`) could cause overflow or clipping on short laptop screens/mobile landscape modes, or trigger scroll-spy intersection observer fluttering if multiple sections intersect during rapid scrolling.
+- **Mitigation**: `Section` applies `min-height` rather than fixed `height` with `py-section` padding preserved, allowing content taller than the viewport to expand naturally without clipping. Flex column layout defaults to top alignment (`justify-start`) across content sections for natural reading flow, while the Hero section applies `justify-center` for balanced viewport centering. `useActiveSection` enforces a top offset matching `--header-height` and document-order precedence to guarantee robust, jitter-free scroll-spy navigation.
