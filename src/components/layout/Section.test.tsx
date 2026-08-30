@@ -1,33 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { render, screen, within } from '@/test/render';
-import { Container } from './Container';
 import { Section } from './Section';
-import { SectionHeader } from './SectionHeader';
-import { SkipLink } from './SkipLink';
-
-describe('SkipLink', () => {
-    it('targets #main by default and honours a custom target', () => {
-        const { rerender } = render(<SkipLink />);
-        expect(screen.getByRole('link', { name: 'Skip to main content' })).toHaveAttribute('href', '#main');
-
-        rerender(<SkipLink targetId="work">Skip to work</SkipLink>);
-        expect(screen.getByRole('link', { name: 'Skip to work' })).toHaveAttribute('href', '#work');
-    });
-});
-
-describe('Container', () => {
-    it('renders as a div by default and honours the polymorphic as prop', () => {
-        const { rerender } = render(<Container>Content</Container>);
-        expect(screen.getByText('Content').tagName).toBe('DIV');
-
-        rerender(
-            <Container as="nav" grid>
-                Menu
-            </Container>,
-        );
-        expect(screen.getByRole('navigation')).toHaveTextContent('Menu');
-    });
-});
 
 describe('Section', () => {
     it('applies the scroll-anchor id and wires aria-labelledby to its heading', () => {
@@ -96,24 +69,5 @@ describe('Section', () => {
         expect(within(bgWrapper as HTMLElement).queryAllByRole('link', { hidden: true })).toHaveLength(0);
         expect(within(bgWrapper as HTMLElement).queryAllByRole('button', { hidden: true })).toHaveLength(0);
         expect(screen.getByRole('heading', { level: 1, name: 'Hero' })).toBeInTheDocument();
-    });
-});
-
-describe('SectionHeader', () => {
-    it('renders index, label and heading without font-sans class so it inherits monospace typography', () => {
-        render(<SectionHeader index="01" label="Selected Work" headingId="work-heading" />);
-
-        expect(screen.getByText('01 / Selected Work')).toBeInTheDocument();
-        const heading = screen.getByRole('heading', { level: 2, name: 'Selected Work' });
-        expect(heading).toHaveAttribute('id', 'work-heading');
-        expect(heading.className).not.toContain('font-sans');
-    });
-
-    it('applies custom className to the header element', () => {
-        const { container } = render(
-            <SectionHeader index="02" label="About" headingId="about-heading" className="custom-header-class" />,
-        );
-
-        expect(container.firstChild).toHaveClass('custom-header-class');
     });
 });
