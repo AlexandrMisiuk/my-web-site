@@ -39,7 +39,7 @@ docs/testing.md         # Testing architecture, TDD workflow, coverage policy
 src/
 ├── assets/             # Static graphics, SVG artwork, and media placeholders
 ├── components/
-│   ├── layout/         # Application shell: Header, MobileNav, ThemeToggle, SkipLink, Section (and SectionBackground), SectionHeader, Container, Footer
+│   ├── layout/         # Application shell: Header, MobileNav, ThemeToggle, SkipLink, Section, SectionBackground, SectionHeader, Container, Footer
 │   ├── sections/       # Primary page sections: Hero, SelectedWork, ProjectCard, HowIWork, About, Technologies, Contact
 │   └── ui/             # Atomic primitives: ActionLink, Tag, Eyebrow, StatusPill, and SVG icon primitives (icons/)
 ├── data/               # Decoupled content data layer
