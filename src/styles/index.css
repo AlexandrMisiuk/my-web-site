@@ -30,7 +30,7 @@
     --spacing-section: clamp(5rem, 3rem + 8vw, 10rem);
     --header-height: 4rem;
     --mobile-nav-height: calc(100dvh - var(--header-height));
-    --radius-sm: 4px;
+    --radius-sm: 10px;
 }
 
 /* Dark Mode Token Overrides via Data Attribute */
