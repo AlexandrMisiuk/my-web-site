@@ -18,8 +18,8 @@ export function SectionBackground({ light, dark, priority = false }: SectionBack
                 decoding="async"
                 className={
                     dark
-                        ? 'absolute inset-0 h-full w-full object-cover object-center opacity-50 dark:hidden'
-                        : 'absolute inset-0 h-full w-full object-cover object-center opacity-50'
+                        ? 'absolute inset-0 h-full w-full object-cover object-center opacity-80 dark:hidden'
+                        : 'absolute inset-0 h-full w-full object-cover object-center opacity-80'
                 }
             />
             {dark ? (
@@ -29,7 +29,7 @@ export function SectionBackground({ light, dark, priority = false }: SectionBack
                     loading={loading}
                     fetchPriority={fetchPriority}
                     decoding="async"
-                    className="absolute inset-0 hidden h-full w-full object-cover object-center opacity-50 dark:block"
+                    className="absolute inset-0 hidden h-full w-full object-cover object-center opacity-80 dark:block"
                 />
             ) : null}
             <div className="from-canvas/75 via-canvas/20 to-canvas absolute inset-0 bg-linear-to-b" />
