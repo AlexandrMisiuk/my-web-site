@@ -99,6 +99,7 @@ A last-resort ignore is an inline `/* v8 ignore next -- reason */` on a genuinel
 - Use `user-event` (via `renderWithUser`) over raw `fireEvent` for interaction.
 - Never assert on Tailwind class strings.
 - Drive `IntersectionObserver` and `matchMedia` through `src/test/` — no inline mocks.
+- Drive GSAP animations deterministically in unit tests using `gsap.globalTimeline.seek()` and clean up active tweens with `gsap.killTweensOf('*')` in `afterEach`.
 - New runtime modules must reach 100% coverage in the same change that introduces them.
 - New components need at least a render plus an accessibility-contract test.
 

@@ -1,5 +1,6 @@
 import { ActionLink } from '@/components/ui/ActionLink';
 import { StatusPill } from '@/components/ui/StatusPill';
+import { TerminalWindow } from '@/components/ui/TerminalWindow';
 import { siteProfile as defaultSiteProfile } from '@/data/site';
 import type { SiteProfile } from '@/data/types';
 
@@ -9,7 +10,7 @@ export interface HeroProps {
 }
 
 export function Hero({ profile = defaultSiteProfile, className = '' }: HeroProps) {
-    const statementText = [profile.role, profile.statement].filter(Boolean).join(' — ');
+    const prompt = profile.role ? `alex@${profile.role} ~ %` : 'alex ~ %';
 
     return (
         <div
@@ -23,7 +24,9 @@ export function Hero({ profile = defaultSiteProfile, className = '' }: HeroProps
                 </StatusPill>
             ) : null}
 
-            {statementText ? <p className="text-lead text-ink-muted max-w-2xl">{statementText}</p> : null}
+            {profile.statement ? (
+                <TerminalWindow prompt={prompt} text={profile.statement} className="max-w-2xl" />
+            ) : null}
 
             <div className="flex flex-wrap items-center gap-4 pt-2">
                 <ActionLink href="#work" variant="primary">
