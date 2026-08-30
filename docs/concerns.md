@@ -27,7 +27,7 @@ This document highlights critical implementation concerns, potential pitfalls, r
 ### 5. Motion Sickness & Accessibility
 
 - **Concern**: Animations may cause disorientation for users sensitive to motion.
-- **Mitigation**: All transitions, index rail animations, and scroll-driven keyframes must be wrapped inside `@media (prefers-reduced-motion: no-preference)` with `motion-reduce:transition-none`.
+- **Mitigation**: All transitions and scroll-driven keyframes must be wrapped inside `@media (prefers-reduced-motion: no-preference)` with `motion-reduce:transition-none`.
 
 ### 6. Unpopulated Placeholders & Empty Anchor Links
 
@@ -54,47 +54,52 @@ This document highlights critical implementation concerns, potential pitfalls, r
 - **Concern**: Small adjacent sections or rapid viewport scrolling could cause scroll-spy index fluttering or empty intersecting sets.
 - **Mitigation**: `useActiveSection` evaluates intersections against `SECTION_IDS` in strict document order (first matching ID wins), maintains a persistent Set of visible IDs in a ref, and provides edge guards for top of document (`scrollY < 100` -> `hero`) and bottom of page (`window.innerHeight + scrollY >= scrollHeight - 50` -> last section).
 
-### 11. Index Rail Viewport Overlap at `xl+`
-
-- **Concern**: Fixed `IndexRail` markers on wide screens could overlap main container content on intermediate viewport widths near 1280px.
-- **Mitigation**: `IndexRail` is hidden below `xl` (1280px), positioned in the left margin (`left-6`) outside the `Container` max-width (`80rem` / 1280px), and styled with `pointer-events-none` so it never obstructs clicks or interactive targets.
-
-### 12. jsdom Browser API Gaps
+### 11. jsdom Browser API Gaps
 
 - **Concern**: jsdom has no `IntersectionObserver` / `matchMedia`, and `getComputedStyle` returns empty custom properties, so `--header-height` silently exercises only the 64px fallback.
 - **Mitigation**: Centralized doubles in `src/test/` plus tests that explicitly set `--header-height` (or stub `getComputedStyle`) to cover rem, px, invalid, and fallback branches.
 
-### 13. E2E Flakiness from Scroll-Driven Animation
+### 12. E2E Flakiness from Scroll-Driven Animation
 
 - **Concern**: `animation-timeline: view()` reveals and transitions make scroll assertions flake.
 - **Mitigation**: Global Playwright `reducedMotion: 'reduce'`, web-first attribute assertions, and a lint-enforced ban on `waitForTimeout`.
 
-### 14. Test State Leakage
+### 13. Test State Leakage
 
 - **Concern**: `sessionStorage`, `data-theme`, and `body.style.overflow` are process-global in jsdom.
 - **Mitigation**: A global `afterEach` in `src/test/setup.ts` resets all three, plus both browser-API doubles.
 
-### 15. Semantic Structure & Heading Order Across All 6 Sections
+### 14. Semantic Structure & Heading Order Across All 6 Sections
 
 - **Concern**: Integrating remaining sections (`how-i-work`, `about`, `technologies`, `contact`) could disrupt the document outline or introduce duplicate headings.
 - **Mitigation**: All 6 sections are fully implemented, standardizing on a single `<h1>` in `Hero`, `<h2>` headings inside `SectionHeader` for each numbered section, and `<h3>` tags for sub-items (principles, project cards). E2E tests validate structural roles, section IDs, and ARIA attributes.
 
-### 16. Playwright Binary and Build Cost
+### 15. Playwright Binary and Build Cost
 
 - **Concern**: E2E rebuilds the bundle per run and needs a Chromium download.
 - **Mitigation**: `reuseExistingServer`, Chromium-only projects, and documenting `npx playwright install chromium` as a one-off.
 
-### 17. 100% Coverage Can Incentivise Hollow Tests
+### 16. 100% Coverage Can Incentivise Hollow Tests
 
 - **Concern**: A numeric target invites assertion-free renders and creeping exclusions.
 - **Mitigation**: Role-based behavioural assertions, a closed exclusion list enumerated in `vite.config.ts`, and the rule in `docs/testing.md` that any new exclusion needs written justification.
 
-### 18. Coverage Gate Friction as the Codebase Grows
+### 17. Coverage Gate Friction as the Codebase Grows
 
 - **Concern**: Once `src/components/sections/` is built, holding 100% costs real effort.
 - **Mitigation**: Accepted deliberately. TDD means the test exists first, so the gate is never met in a red state at commit time.
 
-### 19. Media Accessibility & Video Element Captions
+### 18. Media Accessibility & Video Element Captions
 
 - **Concern**: Video previews in `ProjectCard` may trigger accessibility audits if missing controls, labels, or captions tracks.
 - **Mitigation**: `<video>` elements include explicit `aria-label` mapped from `media.alt`, `controls`, `preload="none"`, and empty `<track kind="captions">` tags for valid WCAG AA compliance.
+
+### 19. Full-Bleed Section Background Contrast, Bandwidth & Stacking Isolation
+
+- **Concern**: Large above-the-fold background artwork can delay LCP, consume duplicate bandwidth across themes, slip behind canvas backgrounds in stacking contexts, clip `.reveal` animations or focus rings if `overflow-hidden` is placed on `<section>`, or reduce foreground text readability.
+- **Mitigation**: Clipping is strictly confined to the decorative background wrapper, avoiding `overflow-hidden` on the `<section>` landmark so focus rings and translate animations remain unclipped. The landmark applies `relative isolate` when a background is present to keep `-z-10` layers bounded. Background images (~116–124KB) use eager loading and high fetch priority only on hero (`priority={true}`), while defaults remain lazy. A multi-stop gradient scrim (`from-canvas/20 via-canvas/75 to-canvas`) and calibrated opacities (`0.4` light / `0.3` dark) maintain WCAG AA contrast across light and dark themes.
+
+### 20. GSAP Typewriter Animation Lifecycle & Reduced Motion Safeguards
+
+- **Concern**: JavaScript-driven typewriter and cursor animations in `TerminalWindow` could cause animation frame leaks across component unmounts, trigger React 19 strict-mode double-run stutter, or cause vestibular disorientation for motion-sensitive users.
+- **Mitigation**: Use `@gsap/react` `useGSAP` with scoped container refs (`scope: containerRef`) and `revertOnUpdate: true` to guarantee automatic cleanup and context reversion on unmount or dependency change. The component inspects `window.matchMedia('(prefers-reduced-motion: reduce)')` to render full statement text and static cursor immediately without typewriter delays or blinking animations. Decorative top bar controls are marked `aria-hidden="true"` to prevent screen reader noise.

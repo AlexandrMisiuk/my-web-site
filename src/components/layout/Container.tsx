@@ -11,9 +11,7 @@ export function Container({ as: Component = 'div', grid = false, className = '',
     const gridClasses = grid ? 'lg:grid lg:grid-cols-12 lg:gap-x-6 xl:gap-x-8' : '';
 
     return (
-        <Component
-            className={`mx-auto max-w-[80rem] px-5 sm:px-8 lg:px-12 xl:px-16 ${gridClasses} ${className}`.trim()}
-        >
+        <Component className={`mx-auto max-w-7xl px-5 sm:px-8 lg:px-12 xl:px-16 ${gridClasses} ${className}`.trim()}>
             {children}
         </Component>
     );

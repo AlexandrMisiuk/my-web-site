@@ -3,8 +3,8 @@
         .bg { fill: #0d0f12; }
         .fg { fill: #e9eaee; }
         @media (prefers-color-scheme: dark) {
-        .bg { fill: #f4f5f7; }
-        .fg { fill: #14161a; }
+            .bg { fill: #f4f5f7; }
+            .fg { fill: #14161a; }
         }
     </style>
     <rect class="bg" width="512" height="512" rx="112" fill="#f4f5f7" />

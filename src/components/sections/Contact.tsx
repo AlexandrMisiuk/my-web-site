@@ -26,25 +26,25 @@ export function Contact({ profile = defaultSiteProfile, className = '' }: Contac
                 <div className="flex flex-wrap items-center gap-4">
                     {hasEmail ? (
                         <ActionLink href={`mailto:${profile.links.email}`} variant="primary">
-                            <MailIcon size={18} className="shrink-0" />
+                            <MailIcon size={18} className="shrink-0 font-mono" />
                             <span>Email</span>
                         </ActionLink>
                     ) : null}
                     {hasLinkedIn ? (
                         <ActionLink href={profile.links.linkedin} variant="ghost" isExternal>
-                            <LinkedInIcon size={18} className="shrink-0" />
+                            <LinkedInIcon size={18} className="shrink-0 font-mono" />
                             <span>LinkedIn</span>
                         </ActionLink>
                     ) : null}
                     {hasGitHub ? (
                         <ActionLink href={profile.links.github} variant="ghost" isExternal>
-                            <GitHubIcon size={18} className="shrink-0" />
+                            <GitHubIcon size={18} className="shrink-0 font-mono" />
                             <span>GitHub</span>
                         </ActionLink>
                     ) : null}
                     {hasCv ? (
                         <ActionLink href={profile.links.cv} variant="ghost" download>
-                            <DocumentIcon size={18} className="shrink-0" />
+                            <DocumentIcon size={18} className="shrink-0 font-mono" />
                             <span>Download CV</span>
                         </ActionLink>
                     ) : null}

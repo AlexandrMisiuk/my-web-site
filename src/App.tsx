@@ -1,7 +1,9 @@
+import heroLightBg from '@/assets/hero-light.jpeg';
+import heroDarkBg from '@/assets/hero-dark.jpeg';
 import { Footer } from '@/components/layout/Footer';
 import { Header } from '@/components/layout/Header';
-import { IndexRail } from '@/components/layout/IndexRail';
 import { Section } from '@/components/layout/Section';
+import { SectionBackground } from '@/components/layout/SectionBackground';
 import { SkipLink } from '@/components/layout/SkipLink';
 import { About } from '@/components/sections/About';
 import { Contact } from '@/components/sections/Contact';
@@ -19,11 +21,14 @@ export default function App() {
         <div className="bg-canvas text-ink relative min-h-screen antialiased">
             <SkipLink />
             <Header activeId={activeId} />
-            <IndexRail activeId={activeId} />
 
             <main id="main" tabIndex={-1} className="outline-none">
                 {/* 00 / Hero */}
-                <Section id="hero" variant="plain">
+                <Section
+                    id="hero"
+                    variant="plain"
+                    background={<SectionBackground light={heroLightBg} dark={heroDarkBg} priority />}
+                >
                     <Hero />
                 </Section>
 

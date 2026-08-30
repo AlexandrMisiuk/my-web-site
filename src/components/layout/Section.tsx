@@ -7,19 +7,23 @@ export interface SectionProps {
     index?: string;
     label?: string;
     variant?: 'default' | 'plain';
+    background?: React.ReactNode;
     className?: string;
     children: React.ReactNode;
 }
 
-export function Section({ id, index, label, variant = 'default', className = '', children }: SectionProps) {
+export function Section({ id, index, label, variant = 'default', background, className = '', children }: SectionProps) {
     const isPlain = variant === 'plain';
+    const sectionClass =
+        `${background ? 'relative isolate ' : ''}reveal py-section scroll-mt-(--header-height) ${className}`.trim();
 
     return (
-        <section
-            id={id}
-            aria-labelledby={!isPlain ? `${id}-heading` : undefined}
-            className={`reveal scroll-mt-[var(--header-height)] py-[var(--spacing-section)] ${className}`.trim()}
-        >
+        <section id={id} aria-labelledby={!isPlain ? `${id}-heading` : undefined} className={sectionClass}>
+            {background ? (
+                <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
+                    {background}
+                </div>
+            ) : null}
             {isPlain ? (
                 <Container>{children}</Container>
             ) : (

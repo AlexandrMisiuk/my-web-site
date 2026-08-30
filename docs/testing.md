@@ -26,7 +26,7 @@ graph TD
         SU --> IO[IntersectionObserver double]
         SU --> JD[jest-dom matchers]
         VT --> RTL[React Testing Library and user-event]
-        RTL --> SRC["src/hooks, src/components, src/data"]
+        RTL --> SRC["src/hooks, src/components"]
         VT --> COV["V8 coverage to coverage/"]
     end
 
@@ -52,7 +52,7 @@ graph TD
     GATES --> BUILD[build]
 ```
 
-- **Unit / component tier** owns hooks, presentational contracts, data invariants, and jsdom-level interaction. Fast, no network, no browser binary.
+- **Unit / component tier** owns hooks, presentational contracts, and jsdom-level interaction. Fast, hermetic, no real network/API calls, no data layer coupling, and no browser binary.
 - **E2E tier** owns real-browser journeys against the production bundle (`vite build` + `vite preview`): hash navigation, theme persistence, mobile disclosure, WCAG scans, and the viewport matrix.
 - Put a test in the unit tier when the behaviour can be driven through React Testing Library or a hook. Put it in e2e when it depends on CSS layout, real `IntersectionObserver`, the pre-paint theme script, or a multi-page user journey.
 
@@ -81,6 +81,7 @@ The exclusion list is closed. Adding an entry requires a one-line justification 
 | `src/main.tsx` | Bootstrap only: `createRoot(...).render(<App />)` |
 | `src/test/**` | The harness itself |
 | `src/data/types.ts` | Type-only module, no runtime output |
+| `src/data/**` | Static content data layer; decoupled from unit tests so content edits never break test suites |
 | `src/**/*.d.ts` | Ambient declarations |
 | `src/**/*.{test,spec}.{ts,tsx}` | The tests themselves |
 
@@ -92,10 +93,13 @@ A last-resort ignore is an inline `/* v8 ignore next -- reason */` on a genuinel
 
 - Co-locate as `*.test.ts(x)` beside the source module.
 - Import `describe` / `it` / `expect` from `vitest` — no `globals: true`.
+- Never make real API or network calls: unit tests run hermetically in `jsdom` with centralized test doubles.
+- Never import runtime data from `@/data`: unit tests must not import runtime data from `@/data` or depend on literal copy/links; pass mock fixtures or props directly to components and hooks. Type imports (`import type { ... } from '@/data/types'`) remain permitted.
 - Query by accessible role and name (`getByRole`) before test IDs.
 - Use `user-event` (via `renderWithUser`) over raw `fireEvent` for interaction.
 - Never assert on Tailwind class strings.
 - Drive `IntersectionObserver` and `matchMedia` through `src/test/` — no inline mocks.
+- Drive GSAP animations deterministically in unit tests using `gsap.globalTimeline.seek()` and clean up active tweens with `gsap.killTweensOf('*')` in `afterEach`.
 - New runtime modules must reach 100% coverage in the same change that introduces them.
 - New components need at least a render plus an accessibility-contract test.
 
@@ -130,7 +134,7 @@ jsdom `getComputedStyle` returns empty custom properties. Tests that exercise `-
 - Assert on landmarks, roles, IDs, and `aria-*` state — never on placeholder section copy.
 - Projects: `desktop-1440`, `tablet-768`, `mobile-320`. Skip viewport-specific cases with `test.skip` keyed to `viewport.width`.
 - Global `contextOptions.reducedMotion: 'reduce'` neutralises CSS scroll-driven animation flake.
-- `e2e/fixtures/axe.ts` exposes `makeAxeBuilder()` scoped to `wcag2a`, `wcag2aa`, `wcag21a`, `wcag21aa`, excluding `[aria-hidden="true"]` so the decorative IndexRail does not fail colour-contrast.
+- `e2e/fixtures/axe.ts` exposes `makeAxeBuilder()` scoped to `wcag2a`, `wcag2aa`, `wcag21a`, `wcag21aa`, excluding `[aria-hidden="true"]` so decorative elements do not fail colour-contrast.
 - Dedicated touch controls (theme toggle, hamburger, `ActionLink`) must be ≥ 44×44. Compact desktop text nav is held to WCAG 2.5.8 AA (24×24).
 
 ## Troubleshooting
@@ -139,5 +143,4 @@ jsdom `getComputedStyle` returns empty custom properties. Tests that exercise `-
 - **Flaky e2e scroll-spy** — assert after hash navigation or after scrolling to the deterministic top/bottom edge; never sleep. Confirm `reducedMotion` is still `'reduce'`.
 - **`--header-height` only hits the 64px fallback** — jsdom does not resolve CSS custom properties. Set the property in the test before rendering the hook.
 - **Playwright cannot find Chromium** — run `npx playwright install chromium` once.
-- **Axe colour-contrast on IndexRail** — inactive rail labels use `text-ink-muted/50` and are `aria-hidden`. They are excluded from the scan; do not "fix" them by asserting on decorative contrast.
 - **Diagnosing a failed `verify`** — the chain is `typecheck → lint → format:check → test:coverage → build`. The first non-zero step is the one to fix; `test:coverage` failing is a missing unit test, not an e2e issue.

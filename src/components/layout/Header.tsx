@@ -1,17 +1,20 @@
 import { useState, useRef } from 'react';
+import brandLogo from '@/assets/brand-logo.svg';
 import { Container } from '@/components/layout/Container';
 import { MobileNav } from '@/components/layout/MobileNav';
 import { ThemeToggle } from '@/components/layout/ThemeToggle';
-import { ActionLink } from '@/components/ui/ActionLink';
 import { CloseIcon, MenuIcon } from '@/components/ui/icons';
-import { navItems } from '@/data/navigation';
-import { siteProfile } from '@/data/site';
+import { navItems as defaultNavItems } from '@/data/navigation';
+import { siteProfile as defaultProfile } from '@/data/site';
+import type { NavItem, SiteProfile } from '@/data/types';
 
 export interface HeaderProps {
     activeId: string;
+    items?: readonly NavItem[];
+    profile?: SiteProfile;
 }
 
-export function Header({ activeId }: HeaderProps) {
+export function Header({ activeId, items = defaultNavItems, profile = defaultProfile }: HeaderProps) {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const triggerRef = useRef<HTMLButtonElement>(null);
 
@@ -28,15 +31,16 @@ export function Header({ activeId }: HeaderProps) {
             <Container as="div" className="flex h-full items-center justify-between">
                 <a
                     href="#hero"
-                    className="group text-ink hover:text-accent focus-visible:outline-accent flex items-center gap-2 font-mono text-sm font-semibold tracking-tight transition-colors focus-visible:outline-2 focus-visible:outline-offset-2"
+                    aria-label={profile.name}
+                    className="focus-visible:outline-accent group inline-flex items-center justify-center rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2"
                 >
-                    <span>{siteProfile.name}</span>
+                    <img src={brandLogo} alt={profile.name} className="h-11 w-11" />
                 </a>
 
                 {/* Desktop navigation */}
                 <nav aria-label="Primary" className="hidden items-center gap-6 md:flex lg:gap-8">
                     <ul className="flex items-center gap-6 lg:gap-8">
-                        {navItems.map((item) => {
+                        {items.map((item) => {
                             const isActive = activeId === item.id;
                             return (
                                 <li key={item.id}>
@@ -71,18 +75,8 @@ export function Header({ activeId }: HeaderProps) {
                     </ul>
                 </nav>
 
-                {/* Header actions: CV + ThemeToggle + Hamburger */}
+                {/* Header actions: ThemeToggle + Hamburger */}
                 <div className="flex items-center gap-2 sm:gap-3">
-                    {siteProfile.links.cv ? (
-                        <ActionLink
-                            href={siteProfile.links.cv}
-                            variant="ghost"
-                            download
-                            className="hidden min-h-9 px-3 py-1.5 font-mono text-xs sm:inline-flex"
-                        >
-                            CV
-                        </ActionLink>
-                    ) : null}
                     <ThemeToggle />
                     <button
                         ref={triggerRef}
@@ -98,7 +92,14 @@ export function Header({ activeId }: HeaderProps) {
                 </div>
             </Container>
 
-            <MobileNav isOpen={isMenuOpen} onClose={closeMenu} activeId={activeId} triggerRef={triggerRef} />
+            <MobileNav
+                isOpen={isMenuOpen}
+                onClose={closeMenu}
+                activeId={activeId}
+                triggerRef={triggerRef}
+                items={items}
+                profile={profile}
+            />
         </header>
     );
 }

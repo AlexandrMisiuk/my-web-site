@@ -1,6 +1,5 @@
 import { act, renderHook } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { SECTION_IDS } from '@/data/navigation';
 import {
     emitIntersections,
     getObservedIds,
@@ -38,10 +37,11 @@ afterEach(() => {
 });
 
 describe('useActiveSection', () => {
-    it('observes every resolvable SECTION_IDS element and skips missing ids', () => {
+    it('observes every resolvable section element and skips missing ids', () => {
+        const testSectionIds = ['hero', 'work', 'how-i-work', 'about', 'technologies', 'contact'];
         mountSections(['hero', 'work', 'contact']);
 
-        const { result } = renderHook(() => useActiveSection(SECTION_IDS));
+        const { result } = renderHook(() => useActiveSection(testSectionIds));
 
         expect(result.current).toBe('hero');
         expect(getObservedIds()).toEqual(['hero', 'work', 'contact']);

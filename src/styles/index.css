@@ -14,7 +14,9 @@
 
     /* Typography */
     --font-sans: 'Instrument Sans Variable', system-ui, -apple-system, sans-serif;
-    --font-mono: 'JetBrains Mono Variable', ui-monospace, monospace;
+    --font-mono:
+        'JetBrains Mono Variable', 'Instrument Sans Variable', ui-monospace, system-ui, -apple-system, monospace,
+        sans-serif;
 
     /* Fluid Type Scale */
     --text-display: clamp(2.75rem, 1.6rem + 5.2vw, 6.5rem);
@@ -28,7 +30,7 @@
     --spacing-section: clamp(5rem, 3rem + 8vw, 10rem);
     --header-height: 4rem;
     --mobile-nav-height: calc(100dvh - var(--header-height));
-    --radius-sm: 4px;
+    --radius-sm: 10px;
 }
 
 /* Dark Mode Token Overrides via Data Attribute */
@@ -49,7 +51,7 @@
     }
 
     body {
-        @apply bg-canvas text-ink font-sans antialiased;
+        @apply bg-canvas text-ink font-mono antialiased;
         min-height: 100vh;
     }
 

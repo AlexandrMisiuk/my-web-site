@@ -10,7 +10,7 @@ export function About({ content = defaultAboutContent, className = '' }: AboutPr
     if (!content.paragraphs || content.paragraphs.length === 0) {
         return (
             <div
-                className={`border-hairline rounded-[var(--radius-sm)] border border-dashed p-8 text-center sm:p-12 ${className}`.trim()}
+                className={`border-hairline rounded-sm border border-dashed p-8 text-center sm:p-12 ${className}`.trim()}
             >
                 <p className="text-body text-ink-muted">Biography will be published soon.</p>
             </div>

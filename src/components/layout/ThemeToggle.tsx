@@ -14,7 +14,7 @@ export function ThemeToggle({ className = '' }: ThemeToggleProps) {
             onClick={toggle}
             aria-pressed={isDark}
             aria-label="Toggle color scheme"
-            className={`text-ink-muted hover:border-hairline hover:bg-surface hover:text-ink focus-visible:outline-accent inline-flex min-h-[44px] min-w-[44px] items-center justify-center rounded-[var(--radius-sm)] border border-transparent p-2.5 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 ${className}`}
+            className={`text-ink-muted hover:border-hairline hover:bg-surface hover:text-ink focus-visible:outline-accent inline-flex min-h-11 min-w-11 cursor-pointer items-center justify-center rounded-sm border border-transparent p-2.5 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 ${className}`}
         >
             {isDark ? (
                 <SunIcon size={20} className="transition-transform duration-200" />
