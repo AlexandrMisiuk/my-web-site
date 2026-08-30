@@ -89,7 +89,6 @@ export function Header({ activeId, items = defaultNavItems, profile = defaultPro
                 activeId={activeId}
                 triggerRef={triggerRef}
                 items={items}
-                profile={profile}
             />
         </header>
     );

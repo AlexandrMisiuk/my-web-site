@@ -1,7 +1,7 @@
 import { createRef, type ComponentProps } from 'react';
 import { act, fireEvent } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
-import type { NavItem, SiteProfile } from '@/data/types';
+import type { NavItem } from '@/data/types';
 import { mockMatchMedia, setMediaMatches } from '@/test/matchMedia';
 import { renderWithUser, screen, within } from '@/test/render';
 import { MobileNav } from './MobileNav';
@@ -13,19 +13,6 @@ const mockNavItems: readonly NavItem[] = [
     { id: 'technologies', label: 'Technologies' },
     { id: 'contact', label: 'Contact' },
 ];
-
-const mockProfile: SiteProfile = {
-    name: 'Alex Developer',
-    role: 'Software Engineer',
-    statement: 'Building software.',
-    status: 'Available',
-    links: {
-        linkedin: 'https://linkedin.com/in/example',
-        github: 'https://github.com/example',
-        email: 'hello@example.com',
-        cv: '/cv/test.pdf',
-    },
-};
 
 function renderOpenNav(overrides?: Partial<ComponentProps<typeof MobileNav>>) {
     const triggerRef = createRef<HTMLButtonElement>();
@@ -43,7 +30,6 @@ function renderOpenNav(overrides?: Partial<ComponentProps<typeof MobileNav>>) {
             activeId="work"
             triggerRef={triggerRef}
             items={mockNavItems}
-            profile={mockProfile}
             {...overrides}
         />,
     );
@@ -149,25 +135,9 @@ describe('MobileNav', () => {
         expect(onClose).toHaveBeenCalledOnce();
     });
 
-    it('renders the CV action inside the overlay when a cv link is provided', () => {
-        renderOpenNav({
-            profile: {
-                ...mockProfile,
-                links: { ...mockProfile.links, cv: '/cv/test.pdf' },
-            },
-        });
+    it('does not render a Download CV action link within the dialog', () => {
+        renderOpenNav();
 
-        expect(screen.getByRole('link', { name: 'Download CV' })).toHaveAttribute('href', '/cv/test.pdf');
-    });
-
-    it('omits the CV action inside the overlay when cv link is empty', () => {
-        renderOpenNav({
-            profile: {
-                ...mockProfile,
-                links: { ...mockProfile.links, cv: '' },
-            },
-        });
-
-        expect(screen.queryByRole('link', { name: 'Download CV' })).not.toBeInTheDocument();
+        expect(screen.queryByRole('link', { name: /Download CV/i })).not.toBeInTheDocument();
     });
 });
