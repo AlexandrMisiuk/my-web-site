@@ -25,7 +25,7 @@ export function Hero({ profile = defaultSiteProfile, className = '' }: HeroProps
             ) : null}
 
             {profile.statement ? (
-                <TerminalWindow prompt={prompt} text={profile.statement} className="max-w-2xl" />
+                <TerminalWindow prompt={prompt} text={profile.statement} className="min-h-40 max-w-2xl" />
             ) : null}
 
             <div className="flex flex-wrap items-center gap-4 pt-2">
