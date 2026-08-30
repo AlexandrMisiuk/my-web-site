@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { render, screen, within } from '@/test/render';
 import { Container } from './Container';
 import { Section, SectionBackground } from './Section';
+import { SectionHeader } from './SectionHeader';
 import { SkipLink } from './SkipLink';
 
 describe('SkipLink', () => {
@@ -132,5 +133,24 @@ describe('SectionBackground', () => {
         expect(darkImg).toHaveAttribute('loading', 'eager');
         expect(darkImg).toHaveAttribute('fetchpriority', 'high');
         expect(darkImg).toHaveAttribute('decoding', 'async');
+    });
+});
+
+describe('SectionHeader', () => {
+    it('renders index, label and heading without font-sans class so it inherits monospace typography', () => {
+        render(<SectionHeader index="01" label="Selected Work" headingId="work-heading" />);
+
+        expect(screen.getByText('01 / Selected Work')).toBeInTheDocument();
+        const heading = screen.getByRole('heading', { level: 2, name: 'Selected Work' });
+        expect(heading).toHaveAttribute('id', 'work-heading');
+        expect(heading.className).not.toContain('font-sans');
+    });
+
+    it('applies custom className to the header element', () => {
+        const { container } = render(
+            <SectionHeader index="02" label="About" headingId="about-heading" className="custom-header-class" />,
+        );
+
+        expect(container.firstChild).toHaveClass('custom-header-class');
     });
 });

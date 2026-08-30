@@ -14,7 +14,7 @@ export function SectionHeader({ index, label, headingId, className = '' }: Secti
                 {index} / {label}
             </Eyebrow>
             <div className="border-hairline border-t" />
-            <h2 id={headingId} className="text-h2 text-ink font-sans font-semibold tracking-tight">
+            <h2 id={headingId} className="text-h2 text-ink font-semibold tracking-tight">
                 {label}
             </h2>
         </header>

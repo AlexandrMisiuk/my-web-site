@@ -183,3 +183,8 @@ This document records the key architectural choices, technical decisions, and tr
 
 - **Decision**: Render the SVG brand logo (`src/assets/brand-logo.svg`) inside the `#hero` anchor in `Header` with `aria-label={profile.name}` and decorative `alt=""` on the `<img>` tag with explicit `32x32px` dimensions.
 - **Rationale**: Replaces plain text brand name with vector monogram asset to reinforce visual identity while preserving accessible naming for assistive technologies and preventing Cumulative Layout Shift (CLS).
+
+### 37. Default Monospace Typography with Proportional Sans-Serif Fallback
+
+- **Decision**: Configure `--font-mono` (`JetBrains Mono Variable`) as the global default typography applied to `body` in `@layer base` within `src/styles/index.css`, establish `--font-sans` (`Instrument Sans Variable` / system sans-serif stack) strictly as a fallback within the `--font-mono` token definition, and eliminate explicit `font-sans` overrides from `SectionHeader`.
+- **Rationale**: Establishes a cohesive editorial monospace identity across all headers, body prose, navigation elements, and UI controls. Retaining `Instrument Sans Variable` in the fallback chain ensures graceful visual degradation without layout shifts if variable monospace font loading is interrupted.
