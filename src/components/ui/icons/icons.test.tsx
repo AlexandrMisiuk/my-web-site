@@ -1,6 +1,5 @@
 import { describe, expect, it } from 'vitest';
 import { render, screen } from '@/test/render';
-import { Eyebrow } from './Eyebrow';
 import {
     ArrowRightIcon,
     ArrowUpRightIcon,
@@ -12,25 +11,7 @@ import {
     MenuIcon,
     MoonIcon,
     SunIcon,
-} from './icons';
-import { Tag } from './Tag';
-
-describe('Tag', () => {
-    it('renders its children as a note', () => {
-        render(<Tag>TypeScript</Tag>);
-        expect(screen.getByText('TypeScript')).toBeInTheDocument();
-    });
-});
-
-describe('Eyebrow', () => {
-    it('renders children as a paragraph by default and honours the as prop', () => {
-        const { rerender } = render(<Eyebrow>01 / Work</Eyebrow>);
-        expect(screen.getByText('01 / Work').tagName).toBe('P');
-
-        rerender(<Eyebrow as="h2">Section</Eyebrow>);
-        expect(screen.getByRole('heading', { level: 2, name: 'Section' })).toBeInTheDocument();
-    });
-});
+} from './index';
 
 describe('icons', () => {
     it.each([
@@ -45,8 +26,10 @@ describe('icons', () => {
         ['Menu', MenuIcon],
         ['Close', CloseIcon],
     ] as const)('renders the %s icon as a decorative svg that accepts a label override', (_name, Icon) => {
-        const { rerender } = render(<Icon />);
-        expect(document.querySelector('svg')).toHaveAttribute('aria-hidden', 'true');
+        const { rerender } = render(<Icon className="custom-icon" />);
+        const svg = document.querySelector('svg');
+        expect(svg).toHaveAttribute('aria-hidden', 'true');
+        expect(svg).toHaveClass('custom-icon');
 
         rerender(<Icon size={32} role="img" aria-label={`${_name} icon`} aria-hidden={false} />);
         const icon = screen.getByRole('img', { name: `${_name} icon` });
