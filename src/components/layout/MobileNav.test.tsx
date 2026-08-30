@@ -7,11 +7,11 @@ import { renderWithUser, screen, within } from '@/test/render';
 import { MobileNav } from './MobileNav';
 
 const mockNavItems: readonly NavItem[] = [
-    { id: 'work', label: 'Selected Work', index: '01' },
-    { id: 'how-i-work', label: 'How I Work', index: '02' },
-    { id: 'about', label: 'About', index: '03' },
-    { id: 'technologies', label: 'Technologies', index: '04' },
-    { id: 'contact', label: 'Contact', index: '05' },
+    { id: 'work', label: 'Selected Work' },
+    { id: 'how-i-work', label: 'How I Work' },
+    { id: 'about', label: 'About' },
+    { id: 'technologies', label: 'Technologies' },
+    { id: 'contact', label: 'Contact' },
 ];
 
 const mockProfile: SiteProfile = {

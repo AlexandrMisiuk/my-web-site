@@ -4,7 +4,6 @@ import { SectionHeader } from '@/components/layout/SectionHeader';
 
 export interface SectionProps {
     id: string;
-    index?: string;
     label?: string;
     variant?: 'default' | 'plain';
     background?: React.ReactNode;
@@ -12,7 +11,7 @@ export interface SectionProps {
     children: React.ReactNode;
 }
 
-export function Section({ id, index, label, variant = 'default', background, className = '', children }: SectionProps) {
+export function Section({ id, label, variant = 'default', background, className = '', children }: SectionProps) {
     const isPlain = variant === 'plain';
     const sectionClass =
         `${background ? 'relative isolate ' : ''}reveal py-section scroll-mt-(--header-height) ${className}`.trim();
@@ -29,7 +28,7 @@ export function Section({ id, index, label, variant = 'default', background, cla
             ) : (
                 <Container grid>
                     <div className="mb-8 lg:col-span-3 lg:mb-0">
-                        {index && label && <SectionHeader index={index} label={label} headingId={`${id}-heading`} />}
+                        {label && <SectionHeader label={label} headingId={`${id}-heading`} />}
                     </div>
                     <div className="lg:col-span-8 lg:col-start-5">{children}</div>
                 </Container>

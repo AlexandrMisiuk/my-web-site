@@ -198,3 +198,8 @@ This document records the key architectural choices, technical decisions, and tr
 
 - **Decision**: Remove the decorative full-bleed background images (`hero-light.jpeg` and `hero-dark.jpeg`) and `SectionBackground` composition from the Hero section in `src/App.tsx`, rendering `<Section id="hero" variant="plain"><Hero /></Section>` without background imagery.
 - **Rationale**: Eliminates ~1.37MB of uncompressed raster image assets from the build output, reduces above-the-fold network payload and Largest Contentful Paint (LCP) overhead, and establishes immediate, distraction-free visual focus on the terminal window, status pill, and typography.
+
+### 40. Removal of Numeric Section Indexing
+
+- **Decision**: Remove numeric index prefixes (`'01'`, `'02'`, etc.) from `NavItem` data contracts, desktop `Header`, fullscreen `MobileNav`, `SectionHeader`, and `Section` component props, simplifying `SectionHeader` to render a top hairline rule divider and `<h2>` heading.
+- **Rationale**: Eliminates redundant visual repetition (such as "01 / Selected Work" rendered immediately above "Selected Work"), streamlines the `Section` and `SectionHeader` component APIs, and creates a cleaner, editorial typographic aesthetic across navigation and section landmarks.

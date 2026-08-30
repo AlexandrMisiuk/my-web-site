@@ -122,11 +122,10 @@ export function MobileNav({
                                         href={`#${item.id}`}
                                         onClick={onClose}
                                         aria-current={isActive ? 'true' : undefined}
-                                        className={`flex min-h-11 items-center gap-4 text-[32px] transition-colors ${
+                                        className={`flex min-h-11 items-center text-[32px] transition-colors ${
                                             isActive ? 'text-accent font-semibold' : 'text-ink-muted hover:text-ink'
                                         }`}
                                     >
-                                        <span className="text-mono-xs font-mono">{item.index}</span>
                                         <span>{item.label}</span>
                                     </a>
                                 </li>

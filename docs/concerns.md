@@ -72,7 +72,7 @@ This document highlights critical implementation concerns, potential pitfalls, r
 ### 14. Semantic Structure & Heading Order Across All 6 Sections
 
 - **Concern**: Integrating remaining sections (`how-i-work`, `about`, `technologies`, `contact`) could disrupt the document outline or introduce duplicate headings.
-- **Mitigation**: All 6 sections are fully implemented, standardizing on a single `<h1>` in `Hero`, `<h2>` headings inside `SectionHeader` for each numbered section, and `<h3>` tags for sub-items (principles, project cards). E2E tests validate structural roles, section IDs, and ARIA attributes.
+- **Mitigation**: All 6 sections are fully implemented, standardizing on a single `<h1>` in `Hero`, `<h2>` headings inside `SectionHeader` for each section, and `<h3>` tags for sub-items (principles, project cards). E2E tests validate structural roles, section IDs, and ARIA attributes.
 
 ### 15. Playwright Binary and Build Cost
 

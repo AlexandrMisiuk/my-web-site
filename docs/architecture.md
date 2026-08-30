@@ -10,7 +10,7 @@ This document provides a condensed overview of the architecture, key concepts, a
 - **Zero-Flash `data-theme` Theming**: Initial color scheme (dark or light) is applied before first paint via an inline `<head>` script inspecting `sessionStorage.getItem('theme')` with OS `prefers-color-scheme` fallback. Theme overrides target `[data-theme="dark"]` on `document.documentElement` without modifying root class names.
 - **Per-Tab Theme Persistence**: The user's manual color scheme choice is stored in `sessionStorage` (persisting across page reloads in the active tab), while new tabs or windows open cleanly with system defaults.
 - **Unified Layout Grid Primitive (`Container`)**: A shared `layout/Container` primitive centralizes max-width (`80rem`), responsive gutters (`px-5 sm:px-8 lg:px-12 xl:px-16`), and optional 12-column grid (`lg:grid lg:grid-cols-12 lg:gap-x-6 xl:gap-x-8`) across `Header`, `Section`, and `Footer`.
-- **Anchored Asymmetrical Sections (`Section`, `SectionBackground`, & `SectionHeader`)**: Every section standardizes vertical rhythm (`py-[var(--spacing-section)]`), scroll anchor offset (`scroll-mt-[var(--header-height)]`), and CSS `.reveal` animations. `Section` supports an optional full-bleed `background?: React.ReactNode` slot rendered in a decorative `aria-hidden="true"` wrapper with `relative isolate` and `-z-10`. `SectionBackground` provides a theme-aware dual-image helper with CSS switching (`dark:hidden` / `hidden dark:block`), priority loading controls, and a gradient scrim. Non-hero sections split into 3-column sticky headers (`Eyebrow` + index + hairline rule + `h2`) and 8-column content bodies.
+- **Anchored Asymmetrical Sections (`Section`, `SectionBackground`, & `SectionHeader`)**: Every section standardizes vertical rhythm (`py-[var(--spacing-section)]`), scroll anchor offset (`scroll-mt-[var(--header-height)]`), and CSS `.reveal` animations. `Section` supports an optional full-bleed `background?: React.ReactNode` slot rendered in a decorative `aria-hidden="true"` wrapper with `relative isolate` and `-z-10`. `SectionBackground` provides a theme-aware dual-image helper with CSS switching (`dark:hidden` / `hidden dark:block`), priority loading controls, and a gradient scrim. Non-hero sections split into 3-column headers (hairline rule + `h2`) and 8-column content bodies.
 - **Section Component Presentation (`Hero`, `SelectedWork`, `ProjectCard`, `HowIWork`, `About`, `Technologies`, `Contact`)**:
   - `Hero`: Renders above-the-fold profile statement within an interactive `TerminalWindow` UI primitive with a unix bash prompt, availability status indicator, and CTA links, rendered inside a clean, plain `Section` landmark without full-bleed background artwork.
   - `SelectedWork`: Renders project case study articles (`ProjectCard`) with CLS-safe aspect ratio media containers, status pills, tech tags, and conditional action links with graceful empty-state handling.
@@ -45,7 +45,7 @@ src/
 ├── data/               # Decoupled content data layer
 │   ├── types.ts        # TypeScript data contracts & interfaces
 │   ├── site.ts         # Profile identity, status, role, and social links
-│   ├── navigation.ts   # 5 indexed sections (01-05) and 6 section IDs
+│   ├── navigation.ts   # 5 navigation sections and 6 section IDs
 │   ├── projects.ts     # Showcase projects & case study models
 │   ├── principles.ts   # 4 core engineering principles
 │   ├── technologies.ts # 10 core technical stack skills
@@ -74,11 +74,11 @@ graph TD
     HEADER --> MOBILE[MobileNav (overlay, md:hidden)]
 
     MAIN --> S_HERO[Section id='hero' variant='plain']
-    MAIN --> S_WORK[Section id='work' 01 / Selected Work]
-    MAIN --> S_HOW[Section id='how-i-work' 02 / How I Work]
-    MAIN --> S_ABOUT[Section id='about' 03 / About]
-    MAIN --> S_TECH[Section id='technologies' 04 / Technologies]
-    MAIN --> S_CONTACT[Section id='contact' 05 / Contact]
+    MAIN --> S_WORK[Section id='work' label='Selected Work']
+    MAIN --> S_HOW[Section id='how-i-work' label='How I Work']
+    MAIN --> S_ABOUT[Section id='about' label='About']
+    MAIN --> S_TECH[Section id='technologies' label='Technologies']
+    MAIN --> S_CONTACT[Section id='contact' label='Contact']
 
     S_HERO --> HERO[Hero]
     HERO --> TERM[TerminalWindow]

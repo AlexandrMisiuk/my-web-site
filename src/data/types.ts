@@ -30,7 +30,6 @@ export interface Principle {
 export interface NavItem {
     id: string;
     label: string;
-    index: string;
 }
 
 export interface SiteProfile {
