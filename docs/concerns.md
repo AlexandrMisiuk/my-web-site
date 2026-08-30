@@ -96,8 +96,8 @@ This document highlights critical implementation concerns, potential pitfalls, r
 
 ### 19. Full-Bleed Section Background Contrast, Bandwidth & Stacking Isolation
 
-- **Concern**: Large above-the-fold background artwork can delay LCP, consume duplicate bandwidth across themes, slip behind canvas backgrounds in stacking contexts, clip `.reveal` animations or focus rings if `overflow-hidden` is placed on `<section>`, or reduce foreground text readability.
-- **Mitigation**: Clipping is strictly confined to the decorative background wrapper, avoiding `overflow-hidden` on the `<section>` landmark so focus rings and translate animations remain unclipped. The landmark applies `relative isolate` when a background is present to keep `-z-10` layers bounded. Background images (~116–124KB) use eager loading and high fetch priority only on hero (`priority={true}`), while defaults remain lazy. A multi-stop gradient scrim (`from-canvas/20 via-canvas/75 to-canvas`) and calibrated opacities (`0.4` light / `0.3` dark) maintain WCAG AA contrast across light and dark themes.
+- **Concern**: Large background artwork in section slots can delay LCP, consume duplicate bandwidth across themes, slip behind canvas backgrounds in stacking contexts, clip `.reveal` animations or focus rings if `overflow-hidden` is placed on `<section>`, or reduce foreground text readability.
+- **Mitigation**: The Hero section renders cleanly without raster background artwork, eliminating above-the-fold image payload. For sections utilizing the reusable `background` slot in `Section`, clipping is strictly confined to the decorative background wrapper, avoiding `overflow-hidden` on the `<section>` landmark so focus rings and translate animations remain unclipped. The landmark applies `relative isolate` when a background is present to keep `-z-10` layers bounded. The `SectionBackground` primitive supports theme switching and a multi-stop gradient scrim (`from-canvas/75 via-canvas/20 to-canvas`) to maintain WCAG AA contrast across light and dark themes.
 
 ### 20. GSAP Typewriter Animation Lifecycle & Reduced Motion Safeguards
 

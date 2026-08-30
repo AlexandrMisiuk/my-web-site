@@ -39,26 +39,6 @@ test.describe('theme toggle', () => {
         );
         await context.close();
     });
-
-    test('hero section switches background image visibility on theme toggle', async ({ page }) => {
-        await page.goto('/');
-
-        const hero = page.locator('#hero');
-        const heroBgImages = hero.locator('[aria-hidden="true"] img');
-        await expect(heroBgImages).toHaveCount(2);
-
-        const lightImage = heroBgImages.first();
-        const darkImage = heroBgImages.nth(1);
-
-        await expect(lightImage).toBeVisible();
-        await expect(darkImage).toBeHidden();
-
-        await page.getByRole('button', { name: 'Toggle color scheme' }).click();
-
-        await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
-        await expect(lightImage).toBeHidden();
-        await expect(darkImage).toBeVisible();
-    });
 });
 
 test.describe('pre-paint dark preference', () => {
@@ -69,15 +49,5 @@ test.describe('pre-paint dark preference', () => {
 
         await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
         await expect(page.getByRole('button', { name: 'Toggle color scheme' })).toHaveAttribute('aria-pressed', 'true');
-    });
-
-    test('displays dark hero background image on first paint in dark scheme', async ({ page }) => {
-        await page.goto('/');
-
-        await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
-        const hero = page.locator('#hero');
-        const heroBgImages = hero.locator('[aria-hidden="true"] img');
-        await expect(heroBgImages.first()).toBeHidden();
-        await expect(heroBgImages.nth(1)).toBeVisible();
     });
 });

@@ -193,3 +193,8 @@ This document records the key architectural choices, technical decisions, and tr
 
 - **Decision**: Implement a decoupled, reusable `TerminalWindow` primitive (`src/components/ui/TerminalWindow.tsx`) powered by GSAP (`gsap` and `@gsap/react` `useGSAP`), featuring macOS-style window chrome (red `#ff5f56`, yellow `#ffbd2e`, green `#27c93f` controls), optional title (`Terminal - ${title}` with fallback to `Terminal`), dynamic bash prompt (`alex@${profile.role} ~ %`), typewriter text animation, and blinking cursor, styled with semantic Tailwind CSS v4 design tokens (`bg-surface`, `bg-canvas/60`, `border-hairline`, `text-ink`, `text-accent`) that dynamically adapt across light and dark modes.
 - **Rationale**: Replaces the static profile statement with an engaging retro-modern terminal display while preserving atomic modularity, WCAG AA contrast across themes, automatic animation lifecycle cleanup in React via `@gsap/react`, and instantaneous rendering when reduced motion is preferred (`prefers-reduced-motion`).
+
+### 39. Hero Section Monospace Focus and Asset Streamlining
+
+- **Decision**: Remove the decorative full-bleed background images (`hero-light.jpeg` and `hero-dark.jpeg`) and `SectionBackground` composition from the Hero section in `src/App.tsx`, rendering `<Section id="hero" variant="plain"><Hero /></Section>` without background imagery.
+- **Rationale**: Eliminates ~1.37MB of uncompressed raster image assets from the build output, reduces above-the-fold network payload and Largest Contentful Paint (LCP) overhead, and establishes immediate, distraction-free visual focus on the terminal window, status pill, and typography.
