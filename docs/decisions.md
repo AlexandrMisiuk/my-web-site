@@ -154,10 +154,10 @@ This document records the key architectural choices, technical decisions, and tr
 - **Decision**: Implement `HowIWork`, `About`, `Technologies`, and `Contact` section components accepting optional typed props defaulted to imports from `src/data/`, with accessible empty-state fallbacks.
 - **Rationale**: Keeps all section components purely presentational and decoupled from runtime state, allowing frictionless consumption in `App.tsx` and deterministic unit testing across mock data fixtures and edge cases.
 
-### 31. Semantic Monospace Technology Chips
+### 31. Interactive Categorized Technology Showcase & Responsive Card Grid
 
-- **Decision**: Render the `Technologies` skill matrix as a semantic `<ul>`/`<li>` list of `Tag` components with JetBrains Mono styling, wrapping cleanly at all screen widths without proficiency meters, percentages, or third-party logos.
-- **Rationale**: Conforms to the editorial, low-temperature aesthetic while preserving proper accessibility tree semantics for assistive technologies.
+- **Decision**: Render the `Technologies` section with accessible category filter pills (`role="tablist"` / `role="tab"`) and a responsive multi-column card grid (`grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6`) featuring authentic multi-color SVG technology logos, monospace typography labels, subtle border highlights, and hover micro-interactions.
+- **Rationale**: Elevates visual engagement and UX for prospective employers and clients by pairing authentic brand iconography with organized domain filters (`Frontend`, `Mobile`, `Backend`, `Real-Time & APIs`), while preserving strict accessibility semantics and keyboard navigability.
 
 ### 32. Resilient Contact Action Dispatcher
 
@@ -218,3 +218,8 @@ This document records the key architectural choices, technical decisions, and tr
 
 - **Decision**: Remove numeric index badges (`'01'`, `'02'`, etc.) from principle cards in `HowIWork.tsx` and streamline mapping callback signature to `(principle)`.
 - **Rationale**: Creates a consistent, uncluttered editorial aesthetic across portfolio cards and sections, eliminating redundant visual index clutter and focusing attention directly on principle titles and descriptions.
+
+### 44. Self-Contained Branded SVG Icon Primitives & Dispatcher Pattern
+
+- **Decision**: Implement all technology brand icons as handcrafted React SVG components in `src/components/ui/icons/tech/` resolved through a type-safe `TechIcon` dispatcher component with graceful fallback rendering.
+- **Rationale**: Respects the zero-external-UI-library constraint, eliminates network latency, guarantees 100% build-time tree shaking and zero layout shift, and ensures brand icons are rendered with authentic colors and accessibility attributes (`aria-hidden="true"`).

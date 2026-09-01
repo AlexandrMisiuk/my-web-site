@@ -48,3 +48,17 @@ export interface SiteProfile {
 export interface AboutContent {
     paragraphs: readonly string[];
 }
+
+export type TechnologyCategory = 'frontend' | 'mobile' | 'backend' | 'realtime-apis';
+
+export interface TechnologyItem {
+    readonly id: string;
+    readonly name: string;
+    readonly category: TechnologyCategory;
+    readonly icon: string;
+}
+
+export interface TechnologyCategoryOption {
+    readonly id: 'all' | TechnologyCategory;
+    readonly label: string;
+}
