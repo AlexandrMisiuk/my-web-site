@@ -13,7 +13,7 @@ export function Footer({ className = '', profile = defaultProfile }: FooterProps
     return (
         <footer className={`border-hairline bg-canvas border-t py-12 ${className}`.trim()}>
             <Container as="div">
-                <div className="flex flex-col gap-1">
+                <div className="flex flex-col items-center gap-1">
                     <p className="text-mono-xs text-ink font-mono font-semibold tracking-wider uppercase">
                         {profile.name}
                     </p>
