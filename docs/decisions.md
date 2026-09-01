@@ -219,7 +219,7 @@ This document records the key architectural choices, technical decisions, and tr
 - **Decision**: Remove numeric index badges (`'01'`, `'02'`, etc.) from principle cards in `HowIWork.tsx` and streamline mapping callback signature to `(principle)`.
 - **Rationale**: Creates a consistent, uncluttered editorial aesthetic across portfolio cards and sections, eliminating redundant visual index clutter and focusing attention directly on principle titles and descriptions.
 
-### 44. Self-Contained Branded SVG Icon Primitives & Dispatcher Pattern
+### 44. Direct Branded SVG Vector Asset Consumption & `TechIcon` Dispatcher
 
-- **Decision**: Implement all technology brand icons as handcrafted React SVG components in `src/components/ui/icons/tech/` resolved through a type-safe `TechIcon` dispatcher component with graceful fallback rendering.
-- **Rationale**: Respects the zero-external-UI-library constraint, eliminates network latency, guarantees 100% build-time tree shaking and zero layout shift, and ensures brand icons are rendered with authentic colors and accessibility attributes (`aria-hidden="true"`).
+- **Decision**: Consume official technology brand SVG assets directly from `src/assets/tech/` through the type-safe `TechIcon` component with responsive dimensions, dark theme handling, and graceful fallback rendering.
+- **Rationale**: Eliminates redundant TSX vector wrappers and markup copying, guarantees 100% build-time tree shaking and zero layout shift, and ensures brand icons are rendered directly from their source vector assets with authentic colors and accessibility attributes (`aria-hidden="true"`).
