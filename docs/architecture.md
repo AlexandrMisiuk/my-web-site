@@ -17,7 +17,7 @@ This document provides a condensed overview of the architecture, key concepts, a
   - `HowIWork`: Arranges 4 core engineering principles in an asymmetric responsive grid with mono indices, semantic `<h3>` titles, and body descriptions.
   - `About`: Renders biographical background paragraphs constrained to readable measure (`max-w-[62ch]`).
   - `Technologies`: Renders interactive category filter pills (`All`, `Frontend`, `Mobile`, `Backend`, `Real-Time & APIs`) and a responsive grid of dark-styled cards featuring centered, authentic multi-color SVG brand icons, monospace titles, subtle borders, and smooth hover micro-interactions, complete with fallback icon and empty-state handling.
-  - `Contact`: Renders closing statement ("Let's build something great."), status indicator, and interactive `ActionLink` CTAs (Email, LinkedIn, GitHub, CV) conditionally omitting unsupplied links.
+  - `Contact`: Renders closing statement ("Let's build something great."), invitation and collaboration prose paragraphs (`max-w-[62ch]`), and interactive `ActionLink` CTAs (Email, LinkedIn, GitHub, CV) with single-line horizontal alignment, conditionally omitting unsupplied links.
 - **Sticky Header with SVG Brand Identity (`Header`)**: Anchors top-level navigation with the SVG brand logo (`src/assets/brand-logo.svg`) linked to `#hero` and labeled via `aria-label={profile.name}` with explicit dimensions to prevent CLS, desktop navigation links with active indicator underlines driven by `useActiveSection`, `ThemeToggle`, and the mobile menu disclosure button.
 - **Single-IntersectionObserver Scroll-Spy (`useActiveSection`)**: Exactly one `IntersectionObserver` instance watches `SECTION_IDS`, dynamically calculating its top root margin from the `--header-height` CSS token. It drives `aria-current` in header/mobile navigation.
 - **Accessible Full-Screen Mobile Disclosure (`MobileNav`)**: Below the `md` (768px) breakpoint, a 44×44px hamburger trigger opens a full-screen overlay with focus trapping, Escape-to-close, body scroll lock with cleanup restoration, and auto-close upon expanding beyond `md`.
@@ -50,6 +50,7 @@ src/
 │   ├── principles.ts   # 4 core engineering principles
 │   ├── technologies.ts # 18 categorized technology items and filter options
 │   ├── about.ts        # Biographical prose copy
+│   ├── contact.ts      # Contact invitation and collaboration prose copy
 │   ├── index.ts        # Unified barrel export
 │   └── README.md       # Content maintainer guide
 ├── hooks/              # Custom hooks: useColorScheme, useActiveSection

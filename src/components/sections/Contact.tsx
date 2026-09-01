@@ -1,25 +1,39 @@
 import { ActionLink } from '@/components/ui/ActionLink';
 import { DocumentIcon, GitHubIcon, LinkedInIcon, MailIcon } from '@/components/ui/icons';
+import { contactContent as defaultContactContent } from '@/data/contact';
 import { siteProfile as defaultSiteProfile } from '@/data/site';
-import type { SiteProfile } from '@/data/types';
+import type { ContactContent, SiteProfile } from '@/data/types';
 
 export interface ContactProps {
     profile?: SiteProfile;
+    content?: ContactContent;
     className?: string;
 }
 
-export function Contact({ profile = defaultSiteProfile, className = '' }: ContactProps) {
+export function Contact({
+    profile = defaultSiteProfile,
+    content = defaultContactContent,
+    className = '',
+}: ContactProps) {
     const hasEmail = Boolean(profile.links?.email);
     const hasLinkedIn = Boolean(profile.links?.linkedin);
     const hasGitHub = Boolean(profile.links?.github);
     const hasCv = Boolean(profile.links?.cv);
     const hasAnyLink = hasEmail || hasLinkedIn || hasGitHub || hasCv;
+    const hasParagraphs = Boolean(content.paragraphs && content.paragraphs.length > 0);
 
     return (
         <div className={`space-y-8 ${className}`.trim()}>
-            <div className="space-y-3">
+            <div className="space-y-4 sm:space-y-6">
                 <p className="text-lead text-ink sm:text-h3 font-medium">Let's build something great.</p>
-                {profile.status ? <p className="text-body text-ink-muted">{profile.status}</p> : null}
+
+                {hasParagraphs ? (
+                    <div className="text-body text-ink-muted max-w-[62ch] space-y-4 leading-relaxed sm:space-y-6">
+                        {content.paragraphs.map((paragraph, index) => (
+                            <p key={index}>{paragraph}</p>
+                        ))}
+                    </div>
+                ) : null}
             </div>
 
             {hasAnyLink ? (

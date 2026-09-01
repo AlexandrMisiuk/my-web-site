@@ -49,6 +49,10 @@ export interface AboutContent {
     paragraphs: readonly string[];
 }
 
+export interface ContactContent {
+    paragraphs: readonly string[];
+}
+
 export type TechnologyCategory = 'frontend' | 'mobile' | 'backend' | 'realtime-apis';
 
 export interface TechnologyItem {

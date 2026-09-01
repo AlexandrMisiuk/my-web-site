@@ -228,3 +228,8 @@ This document records the key architectural choices, technical decisions, and tr
 
 - **Decision**: Remove action and social links (`ActionLink`s for Email, LinkedIn, GitHub, CV) from `Footer`, retaining only the data-driven identity name and copyright notice.
 - **Rationale**: Eliminates redundant link clusters in the footer since primary contact methods and CV downloads are prominently accessible in the dedicated `Contact` section directly above it. Streamlines the footer footprint to an understated copyright landmark.
+
+### 46. Contact Section Copy Modernization & ActionLink Layout Normalization
+
+- **Decision**: Replace redundant `profile.status` display in `Contact` with four invitation and collaboration prose paragraphs structured in `src/data/contact.ts` (`ContactContent`), styled with the same readable measure and typography as `About` (`max-w-[62ch] space-y-4 leading-relaxed sm:space-y-6`). Remove the unnecessary inner `<span>` wrapper in `ActionLink` so that child SVG icons and text render directly as flex items alongside external tab indicators in a unified horizontal line (`inline-flex items-center gap-2`).
+- **Rationale**: Elevates the Contact section with thoughtful, welcoming prose encouraging collaboration while removing uninformative status duplication. Eliminates awkward vertical stacking of icons above text labels in `ActionLink` caused by block-display SVG children within inline spans.

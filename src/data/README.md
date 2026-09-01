@@ -27,6 +27,7 @@ All personal profile information, navigation structures, project case studies, e
 | `principles.ts`   | 4 senior engineering principles & philosophy copy                    | `principles`                                                                                                                                                          |
 | `technologies.ts` | 18 categorized technology skills & filter category options           | `technologies`, `TECHNOLOGY_CATEGORIES`                                                                                                                               |
 | `about.ts`        | Biographical prose paragraphs                                        | `aboutContent`                                                                                                                                                        |
+| `contact.ts`      | Contact invitation and collaboration prose paragraphs                | `contactContent`                                                                                                                                                      |
 | `index.ts`        | Barrel export consolidating all data modules and types               | All of the above                                                                                                                                                      |
 
 ---
@@ -160,7 +161,24 @@ export const aboutContent: AboutContent = {
 
 ---
 
-### 6. Modifying Navigation Anchors (`navigation.ts`)
+### 6. Updating Contact Paragraphs (`contact.ts`)
+
+Open `src/data/contact.ts` to modify the invitation and collaboration prose paragraphs:
+
+```typescript
+export const contactContent: ContactContent = {
+    paragraphs: [
+        'Thanks for making it this far and taking the time to look through my work.',
+        "Maybe you have a question. Maybe you have an idea. Maybe you don't have either yet — and that's okay.",
+        "If you're looking for someone to help build a product, solve a difficult problem, improve an existing system, or simply explore an idea, I'd be happy to talk.",
+        "I'm open to new opportunities and interesting collaborations. If you think there might be something worth building together, let's talk.",
+    ],
+};
+```
+
+---
+
+### 7. Modifying Navigation Anchors (`navigation.ts`)
 
 The navigation items in `src/data/navigation.ts` define the indexed rail and mobile menu:
 
