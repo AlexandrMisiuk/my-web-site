@@ -176,8 +176,8 @@ This document records the key architectural choices, technical decisions, and tr
 
 ### 35. Streamlined Header Action Area without CV ActionLink
 
-- **Decision**: Remove the CV `ActionLink` button from the sticky `Header` actions container and the `MobileNav` navigation overlay, keeping only the `ThemeToggle` and mobile menu trigger button (`md:hidden`) in the header and primary section navigation in the mobile overlay, while retaining CV download links in dedicated contact surfaces (`Contact`, `Footer`).
-- **Rationale**: Streamlines persistent navigation headers and overlays to primary section navigation and theme switching without visual clutter or redundant action links, while preserving CV access in appropriate context sections (`Contact`, `Footer`).
+- **Decision**: Remove the CV `ActionLink` button from the sticky `Header` actions container and the `MobileNav` navigation overlay, keeping only the `ThemeToggle` and mobile menu trigger button (`md:hidden`) in the header and primary section navigation in the mobile overlay, while retaining CV download links in dedicated contact surfaces (`Contact`).
+- **Rationale**: Streamlines persistent navigation headers and overlays to primary section navigation and theme switching without visual clutter or redundant action links, while preserving CV access in appropriate context sections (`Contact`).
 
 ### 36. Header Brand Identity SVG Asset
 
@@ -223,3 +223,8 @@ This document records the key architectural choices, technical decisions, and tr
 
 - **Decision**: Consume official technology brand SVG assets directly from `src/assets/tech/` through the type-safe `TechIcon` component with responsive dimensions, dark theme handling, and graceful fallback rendering.
 - **Rationale**: Eliminates redundant TSX vector wrappers and markup copying, guarantees 100% build-time tree shaking and zero layout shift, and ensures brand icons are rendered directly from their source vector assets with authentic colors and accessibility attributes (`aria-hidden="true"`).
+
+### 45. Streamlined Footer Area without Redundant Action Links
+
+- **Decision**: Remove action and social links (`ActionLink`s for Email, LinkedIn, GitHub, CV) from `Footer`, retaining only the data-driven identity name and copyright notice.
+- **Rationale**: Eliminates redundant link clusters in the footer since primary contact methods and CV downloads are prominently accessible in the dedicated `Contact` section directly above it. Streamlines the footer footprint to an understated copyright landmark.
