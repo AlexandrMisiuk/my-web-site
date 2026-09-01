@@ -117,7 +117,7 @@ describe('ProjectCard', () => {
     });
 
     describe('action links', () => {
-        it('renders Live Demo, GitHub, and Case Study links when supplied', () => {
+        it('renders Visit Website, GitHub, and Case Study links when supplied', () => {
             const fullyLinkedProject: Project = {
                 ...baseProject,
                 externalUrl: 'https://demo.example.com',
@@ -127,9 +127,9 @@ describe('ProjectCard', () => {
 
             renderWithUser(<ProjectCard project={fullyLinkedProject} />);
 
-            const liveDemoLink = screen.getByRole('link', { name: /Live Demo/i });
-            expect(liveDemoLink).toHaveAttribute('href', 'https://demo.example.com');
-            expect(liveDemoLink).toHaveAttribute('target', '_blank');
+            const websiteLink = screen.getByRole('link', { name: /Visit Website/i });
+            expect(websiteLink).toHaveAttribute('href', 'https://demo.example.com');
+            expect(websiteLink).toHaveAttribute('target', '_blank');
 
             const githubLink = screen.getByRole('link', { name: /GitHub/i });
             expect(githubLink).toHaveAttribute('href', 'https://github.com/example/analytics');
@@ -148,7 +148,7 @@ describe('ProjectCard', () => {
 
             renderWithUser(<ProjectCard project={partiallyLinkedProject} />);
 
-            expect(screen.queryByRole('link', { name: /Live Demo/i })).not.toBeInTheDocument();
+            expect(screen.queryByRole('link', { name: /Visit Website/i })).not.toBeInTheDocument();
             expect(screen.queryByRole('link', { name: 'Case Study' })).not.toBeInTheDocument();
             expect(screen.getByRole('link', { name: /GitHub/i })).toHaveAttribute(
                 'href',
@@ -156,7 +156,7 @@ describe('ProjectCard', () => {
             );
         });
 
-        it('renders only Live Demo when other URLs are missing', () => {
+        it('renders only Visit Website when other URLs are missing', () => {
             const liveOnlyProject: Project = {
                 ...baseProject,
                 externalUrl: 'https://demo.example.com',
@@ -166,7 +166,7 @@ describe('ProjectCard', () => {
 
             renderWithUser(<ProjectCard project={liveOnlyProject} />);
 
-            expect(screen.getByRole('link', { name: /Live Demo/i })).toBeInTheDocument();
+            expect(screen.getByRole('link', { name: /Visit Website/i })).toBeInTheDocument();
             expect(screen.queryByRole('link', { name: /GitHub/i })).not.toBeInTheDocument();
             expect(screen.queryByRole('link', { name: 'Case Study' })).not.toBeInTheDocument();
         });
@@ -181,7 +181,7 @@ describe('ProjectCard', () => {
 
             renderWithUser(<ProjectCard project={caseOnlyProject} />);
 
-            expect(screen.queryByRole('link', { name: /Live Demo/i })).not.toBeInTheDocument();
+            expect(screen.queryByRole('link', { name: /Visit Website/i })).not.toBeInTheDocument();
             expect(screen.queryByRole('link', { name: /GitHub/i })).not.toBeInTheDocument();
             expect(screen.getByRole('link', { name: 'Case Study' })).toBeInTheDocument();
         });

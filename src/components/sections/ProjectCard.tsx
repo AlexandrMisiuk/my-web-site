@@ -25,10 +25,10 @@ const STATUS_CONFIG: Record<ProjectStatus, { label: string; color: StatusPillCol
 
 export function ProjectCard({ project, className = '' }: ProjectCardProps) {
     const statusInfo = STATUS_CONFIG[project.status];
-    const hasLiveDemo = Boolean(project.externalUrl);
+    const hasWebsite = Boolean(project.externalUrl);
     const hasRepo = Boolean(project.repoUrl);
     const hasCaseStudy = Boolean(project.caseStudyUrl);
-    const hasAnyLink = hasLiveDemo || hasRepo || hasCaseStudy;
+    const hasAnyLink = hasWebsite || hasRepo || hasCaseStudy;
 
     return (
         <article
@@ -85,9 +85,9 @@ export function ProjectCard({ project, className = '' }: ProjectCardProps) {
 
             {hasAnyLink ? (
                 <div className="flex flex-wrap items-center gap-3 pt-2">
-                    {hasLiveDemo ? (
+                    {hasWebsite ? (
                         <ActionLink href={project.externalUrl} variant="ghost" isExternal>
-                            Live Demo
+                            Visit Website
                         </ActionLink>
                     ) : null}
                     {hasRepo ? (
