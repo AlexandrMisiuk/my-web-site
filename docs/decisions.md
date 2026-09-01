@@ -213,3 +213,8 @@ This document records the key architectural choices, technical decisions, and tr
 
 - **Decision**: Scale down the primary `<h1>` heading in `Hero` from `text-display` to a balanced fluid scale (`text-4xl sm:text-5xl lg:text-6xl`), introduce a conditional semantic `<h2>` heading displaying `profile.role` (`text-lead sm:text-h3 text-ink-muted font-mono font-medium tracking-tight`), and pass a static `prompt="alex ~ %"` to `TerminalWindow` rather than dynamically interpolating `profile.role`.
 - **Rationale**: Refines the above-the-fold typographic hierarchy, improves editorial readability on desktop and mobile viewports, establishes a proper document heading outline for screen readers (`<h1>` author name followed by `<h2>` professional title), and eliminates redundant repetition of the role string between the heading and terminal prompt.
+
+### 43. Removal of Principle Card Index Badges
+
+- **Decision**: Remove numeric index badges (`'01'`, `'02'`, etc.) from principle cards in `HowIWork.tsx` and streamline mapping callback signature to `(principle)`.
+- **Rationale**: Creates a consistent, uncluttered editorial aesthetic across portfolio cards and sections, eliminating redundant visual index clutter and focusing attention directly on principle titles and descriptions.

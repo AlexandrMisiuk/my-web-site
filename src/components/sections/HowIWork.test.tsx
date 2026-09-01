@@ -27,8 +27,8 @@ describe('HowIWork', () => {
 
         expect(screen.getByRole('heading', { level: 3, name: 'Clarity over cleverness' })).toBeInTheDocument();
         expect(screen.getByRole('heading', { level: 3, name: 'Automated safety nets' })).toBeInTheDocument();
-        expect(screen.getByText('01')).toBeInTheDocument();
-        expect(screen.getByText('02')).toBeInTheDocument();
+        expect(screen.queryByText('01')).not.toBeInTheDocument();
+        expect(screen.queryByText('02')).not.toBeInTheDocument();
 
         expect(screen.getAllByRole('article')).toHaveLength(customPrinciples.length);
     });

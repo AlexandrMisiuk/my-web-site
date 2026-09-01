@@ -19,15 +19,12 @@ export function HowIWork({ principles = defaultPrinciples, className = '' }: How
 
     return (
         <div className={`grid grid-cols-1 gap-8 md:grid-cols-2 lg:gap-10 ${className}`.trim()}>
-            {principles.map((principle, index) => (
+            {principles.map((principle) => (
                 <article
                     key={principle.id}
                     aria-labelledby={`${principle.id}-title`}
                     className="border-hairline bg-surface flex flex-col gap-3 rounded-sm border p-6 transition-colors sm:p-8"
                 >
-                    <span className="text-mono-xs text-ink-muted font-mono tracking-wider" aria-hidden="true">
-                        {String(index + 1).padStart(2, '0')}
-                    </span>
                     <h3 id={`${principle.id}-title`} className="text-h3 text-ink font-semibold tracking-tight">
                         {principle.title}
                     </h3>
