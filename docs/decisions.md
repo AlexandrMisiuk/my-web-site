@@ -154,10 +154,10 @@ This document records the key architectural choices, technical decisions, and tr
 - **Decision**: Implement `HowIWork`, `About`, `Technologies`, and `Contact` section components accepting optional typed props defaulted to imports from `src/data/`, with accessible empty-state fallbacks.
 - **Rationale**: Keeps all section components purely presentational and decoupled from runtime state, allowing frictionless consumption in `App.tsx` and deterministic unit testing across mock data fixtures and edge cases.
 
-### 31. Semantic Monospace Technology Chips
+### 31. Interactive Categorized Technology Showcase & Responsive Card Grid
 
-- **Decision**: Render the `Technologies` skill matrix as a semantic `<ul>`/`<li>` list of `Tag` components with JetBrains Mono styling, wrapping cleanly at all screen widths without proficiency meters, percentages, or third-party logos.
-- **Rationale**: Conforms to the editorial, low-temperature aesthetic while preserving proper accessibility tree semantics for assistive technologies.
+- **Decision**: Render the `Technologies` section with accessible category filter pills (`role="tablist"` / `role="tab"`) and a responsive multi-column card grid (`grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6`) featuring authentic multi-color SVG technology logos, monospace typography labels, subtle border highlights, and hover micro-interactions.
+- **Rationale**: Elevates visual engagement and UX for prospective employers and clients by pairing authentic brand iconography with organized domain filters (`Frontend`, `Mobile`, `Backend`, `Real-Time & APIs`), while preserving strict accessibility semantics and keyboard navigability.
 
 ### 32. Resilient Contact Action Dispatcher
 
@@ -176,8 +176,8 @@ This document records the key architectural choices, technical decisions, and tr
 
 ### 35. Streamlined Header Action Area without CV ActionLink
 
-- **Decision**: Remove the CV `ActionLink` button from the sticky `Header` actions container and the `MobileNav` navigation overlay, keeping only the `ThemeToggle` and mobile menu trigger button (`md:hidden`) in the header and primary section navigation in the mobile overlay, while retaining CV download links in dedicated contact surfaces (`Contact`, `Footer`).
-- **Rationale**: Streamlines persistent navigation headers and overlays to primary section navigation and theme switching without visual clutter or redundant action links, while preserving CV access in appropriate context sections (`Contact`, `Footer`).
+- **Decision**: Remove the CV `ActionLink` button from the sticky `Header` actions container and the `MobileNav` navigation overlay, keeping only the `ThemeToggle` and mobile menu trigger button (`md:hidden`) in the header and primary section navigation in the mobile overlay, while retaining CV download links in dedicated contact surfaces (`Contact`).
+- **Rationale**: Streamlines persistent navigation headers and overlays to primary section navigation and theme switching without visual clutter or redundant action links, while preserving CV access in appropriate context sections (`Contact`).
 
 ### 36. Header Brand Identity SVG Asset
 
@@ -208,3 +208,28 @@ This document records the key architectural choices, technical decisions, and tr
 
 - **Decision**: Update the fluid `--spacing-section` token in `@theme` to `clamp(2.5rem, 1.5rem + 3.5vw, 5rem)`, introduce `--section-min-height: calc(100dvh - var(--header-height))`, apply `min-h-(--section-min-height) flex flex-col` to the `Section` primitive, apply `justify-center` specifically to the Hero section while letting other sections default to top alignment, and remove redundant nested vertical padding (`py-12 sm:py-20 lg:py-28`) from `Hero`.
 - **Rationale**: Replaces excessive 10rem section padding with a compact 5rem maximum ceiling while ensuring every `<section>` occupies at least the full visible viewport height minus the header bar on desktop/tablet devices. Hero is vertically centered cleanly above the fold, content in subsequent sections aligns naturally to the top with consistent vertical rhythm, and taller sections expand without clipping.
+
+### 42. Hero Heading Hierarchy Scale and Decoupled Static Terminal Prompt
+
+- **Decision**: Scale down the primary `<h1>` heading in `Hero` from `text-display` to a balanced fluid scale (`text-4xl sm:text-5xl lg:text-6xl`), introduce a conditional semantic `<h2>` heading displaying `profile.role` (`text-lead sm:text-h3 text-ink-muted font-mono font-medium tracking-tight`), and pass a static `prompt="alex ~ %"` to `TerminalWindow` rather than dynamically interpolating `profile.role`.
+- **Rationale**: Refines the above-the-fold typographic hierarchy, improves editorial readability on desktop and mobile viewports, establishes a proper document heading outline for screen readers (`<h1>` author name followed by `<h2>` professional title), and eliminates redundant repetition of the role string between the heading and terminal prompt.
+
+### 43. Removal of Principle Card Index Badges
+
+- **Decision**: Remove numeric index badges (`'01'`, `'02'`, etc.) from principle cards in `HowIWork.tsx` and streamline mapping callback signature to `(principle)`.
+- **Rationale**: Creates a consistent, uncluttered editorial aesthetic across portfolio cards and sections, eliminating redundant visual index clutter and focusing attention directly on principle titles and descriptions.
+
+### 44. Direct Branded SVG Vector Asset Consumption & `TechIcon` Dispatcher
+
+- **Decision**: Consume official technology brand SVG assets directly from `src/assets/tech/` through the type-safe `TechIcon` component with responsive dimensions, dark theme handling, and graceful fallback rendering.
+- **Rationale**: Eliminates redundant TSX vector wrappers and markup copying, guarantees 100% build-time tree shaking and zero layout shift, and ensures brand icons are rendered directly from their source vector assets with authentic colors and accessibility attributes (`aria-hidden="true"`).
+
+### 45. Streamlined Footer Area without Redundant Action Links
+
+- **Decision**: Remove action and social links (`ActionLink`s for Email, LinkedIn, GitHub, CV) from `Footer`, retaining only the data-driven identity name and copyright notice.
+- **Rationale**: Eliminates redundant link clusters in the footer since primary contact methods and CV downloads are prominently accessible in the dedicated `Contact` section directly above it. Streamlines the footer footprint to an understated copyright landmark.
+
+### 46. Contact Section Copy Modernization & ActionLink Layout Normalization
+
+- **Decision**: Replace redundant `profile.status` display in `Contact` with four invitation and collaboration prose paragraphs structured in `src/data/contact.ts` (`ContactContent`), styled with the same readable measure and typography as `About` (`max-w-[62ch] space-y-4 leading-relaxed sm:space-y-6`). Remove the unnecessary inner `<span>` wrapper in `ActionLink` so that child SVG icons and text render directly as flex items alongside external tab indicators in a unified horizontal line (`inline-flex items-center gap-2`).
+- **Rationale**: Elevates the Contact section with thoughtful, welcoming prose encouraging collaboration while removing uninformative status duplication. Eliminates awkward vertical stacking of icons above text labels in `ActionLink` caused by block-display SVG children within inline spans.

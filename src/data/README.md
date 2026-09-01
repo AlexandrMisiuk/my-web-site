@@ -18,16 +18,17 @@ All personal profile information, navigation structures, project case studies, e
 
 ## File Structure & Module Reference
 
-| File              | Purpose                                                              | Key Exports                                                                                       |
-| ----------------- | -------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
-| `types.ts`        | TypeScript interfaces and union types                                | `SiteProfile`, `NavItem`, `Project`, `ProjectStatus`, `ProjectMedia`, `Principle`, `AboutContent` |
-| `site.ts`         | Personal identity, statement, status, and social links               | `siteProfile`                                                                                     |
-| `navigation.ts`   | 5 indexed sections (`01`–`05`) and active section tracking IDs       | `navItems`, `SECTION_IDS`                                                                         |
-| `projects.ts`     | Showcase projects (active product & enterprise platform placeholder) | `projects`                                                                                        |
-| `principles.ts`   | 4 senior engineering principles & philosophy copy                    | `principles`                                                                                      |
-| `technologies.ts` | 10 core frontend technologies and tools                              | `technologies`                                                                                    |
-| `about.ts`        | Biographical prose paragraphs                                        | `aboutContent`                                                                                    |
-| `index.ts`        | Barrel export consolidating all data modules and types               | All of the above                                                                                  |
+| File              | Purpose                                                              | Key Exports                                                                                                                                                           |
+| ----------------- | -------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `types.ts`        | TypeScript interfaces and union types                                | `SiteProfile`, `NavItem`, `Project`, `ProjectStatus`, `ProjectMedia`, `Principle`, `AboutContent`, `TechnologyCategory`, `TechnologyItem`, `TechnologyCategoryOption` |
+| `site.ts`         | Personal identity, statement, status, and social links               | `siteProfile`                                                                                                                                                         |
+| `navigation.ts`   | 5 indexed sections (`01`–`05`) and active section tracking IDs       | `navItems`, `SECTION_IDS`                                                                                                                                             |
+| `projects.ts`     | Showcase projects (active product & enterprise platform placeholder) | `projects`                                                                                                                                                            |
+| `principles.ts`   | 4 senior engineering principles & philosophy copy                    | `principles`                                                                                                                                                          |
+| `technologies.ts` | 18 categorized technology skills & filter category options           | `technologies`, `TECHNOLOGY_CATEGORIES`                                                                                                                               |
+| `about.ts`        | Biographical prose paragraphs                                        | `aboutContent`                                                                                                                                                        |
+| `contact.ts`      | Contact invitation and collaboration prose paragraphs                | `contactContent`                                                                                                                                                      |
+| `index.ts`        | Barrel export consolidating all data modules and types               | All of the above                                                                                                                                                      |
 
 ---
 
@@ -115,22 +116,32 @@ export const principles: readonly Principle[] = [
 
 ### 4. Updating Technologies (`technologies.ts`)
 
-Open `src/data/technologies.ts` to add or modify technology tags rendered in the technologies section:
+Open `src/data/technologies.ts` to add or modify structured technology cards or filter categories:
 
 ```typescript
-export const technologies: readonly string[] = [
-    'TypeScript',
-    'React',
-    'React Native',
-    'Angular',
-    'JavaScript',
-    'HTML',
-    'CSS',
-    'RxJS',
-    'REST APIs',
-    'Git',
+export const TECHNOLOGY_CATEGORIES: readonly TechnologyCategoryOption[] = [
+    { id: 'all', label: 'All' },
+    { id: 'frontend', label: 'Frontend' },
+    { id: 'mobile', label: 'Mobile' },
+    { id: 'backend', label: 'Backend' },
+    { id: 'realtime-apis', label: 'Real-Time & APIs' },
+] as const;
+
+export const technologies: readonly TechnologyItem[] = [
+    { id: 'typescript', name: 'TypeScript', category: 'frontend', icon: 'typescript' },
+    { id: 'flutter', name: 'Flutter', category: 'mobile', icon: 'flutter' },
+    { id: 'dotnet', name: '.NET', category: 'backend', icon: 'dotnet' },
+    { id: 'webrtc', name: 'WebRTC', category: 'realtime-apis', icon: 'webrtc' },
+    // ...
 ] as const;
 ```
+
+#### Field Specifications (`TechnologyItem`):
+
+- `id` _(string, required)_: Unique identifier (e.g. `'typescript'`).
+- `name` _(string, required)_: Display name in monospace card label.
+- `category` _(`'frontend' | 'mobile' | 'backend' | 'realtime-apis'`, required)_: Engineering category taxonomy.
+- `icon` _(string, required)_: Icon identifier resolved by `TechIcon` to branded SVG primitives in `src/components/ui/icons/tech/`.
 
 ---
 
@@ -150,7 +161,24 @@ export const aboutContent: AboutContent = {
 
 ---
 
-### 6. Modifying Navigation Anchors (`navigation.ts`)
+### 6. Updating Contact Paragraphs (`contact.ts`)
+
+Open `src/data/contact.ts` to modify the invitation and collaboration prose paragraphs:
+
+```typescript
+export const contactContent: ContactContent = {
+    paragraphs: [
+        'Thanks for making it this far and taking the time to look through my work.',
+        "Maybe you have a question. Maybe you have an idea. Maybe you don't have either yet — and that's okay.",
+        "If you're looking for someone to help build a product, solve a difficult problem, improve an existing system, or simply explore an idea, I'd be happy to talk.",
+        "I'm open to new opportunities and interesting collaborations. If you think there might be something worth building together, let's talk.",
+    ],
+};
+```
+
+---
+
+### 7. Modifying Navigation Anchors (`navigation.ts`)
 
 The navigation items in `src/data/navigation.ts` define the indexed rail and mobile menu:
 

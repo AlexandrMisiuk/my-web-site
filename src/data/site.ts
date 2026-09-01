@@ -3,7 +3,9 @@ import type { SiteProfile } from './types';
 export const siteProfile: SiteProfile = {
     name: 'Oleksandr Misiuk',
     role: 'Software Engineer',
-    statement: "I care about the details that make software feel simple, even when what's underneath isn't.",
+    statement: `Hi, and welcome! 👋
+        This is my little corner of the internet — a place to learn more about me, my work, and what I’ve been up to over the years.
+        Feel free to have a look around. I’m glad you’re here!`,
     status: 'Open to new opportunities',
     links: {
         linkedin: 'https://linkedin.com/in/alexandr-misiuk',

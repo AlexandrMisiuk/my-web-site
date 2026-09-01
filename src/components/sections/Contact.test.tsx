@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import type { SiteProfile } from '@/data/types';
+import { contactContent } from '@/data/contact';
+import type { ContactContent, SiteProfile } from '@/data/types';
 import { renderWithUser, screen } from '@/test/render';
 import { Contact } from './Contact';
 
@@ -56,8 +57,34 @@ const emptyLinksProfile: SiteProfile = {
 };
 
 describe('Contact', () => {
-    it('renders without crashing when no prop is provided', () => {
+    it('renders without crashing when no prop is provided and displays default copy', () => {
         renderWithUser(<Contact />);
+
+        expect(screen.getByText("Let's build something great.")).toBeInTheDocument();
+        for (const paragraph of contactContent.paragraphs) {
+            expect(screen.getByText(paragraph)).toBeInTheDocument();
+        }
+    });
+
+    it('does not render profile.status in the Contact section', () => {
+        renderWithUser(<Contact profile={fullProfile} />);
+
+        expect(screen.queryByText(fullProfile.status)).not.toBeInTheDocument();
+    });
+
+    it('renders custom content when content prop is provided', () => {
+        const customContent: ContactContent = {
+            paragraphs: ['Custom paragraph 1', 'Custom paragraph 2'],
+        };
+
+        renderWithUser(<Contact content={customContent} />);
+
+        expect(screen.getByText('Custom paragraph 1')).toBeInTheDocument();
+        expect(screen.getByText('Custom paragraph 2')).toBeInTheDocument();
+    });
+
+    it('handles empty or missing paragraphs gracefully', () => {
+        renderWithUser(<Contact content={{ paragraphs: [] }} />);
 
         expect(screen.getByText("Let's build something great.")).toBeInTheDocument();
     });

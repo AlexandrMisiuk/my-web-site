@@ -55,7 +55,7 @@ export function ActionLink({
                 onClick={onClick as React.MouseEventHandler<HTMLAnchorElement>}
                 aria-label={ariaLabel}
             >
-                <span>{children}</span>
+                {children}
                 {isExt && (
                     <>
                         <ArrowUpRightIcon
@@ -76,7 +76,7 @@ export function ActionLink({
             onClick={onClick as React.MouseEventHandler<HTMLButtonElement>}
             aria-label={ariaLabel}
         >
-            <span>{children}</span>
+            {children}
         </button>
     );
 }

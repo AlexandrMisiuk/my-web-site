@@ -47,14 +47,14 @@ test.describe('responsive layout', () => {
         }
     });
 
-    test('footer action links meet a 44px tap target', async ({ page }) => {
+    test('contact action links meet a 44px tap target', async ({ page }) => {
         await page.goto('/');
 
-        const footerLinks = page.getByRole('contentinfo').getByRole('link');
-        await expect(footerLinks.first()).toBeVisible();
-        const footerCount = await footerLinks.count();
-        for (let index = 0; index < footerCount; index += 1) {
-            await assertMinTarget(footerLinks.nth(index));
+        const contactLinks = page.locator('#contact').getByRole('link');
+        await expect(contactLinks.first()).toBeVisible();
+        const contactCount = await contactLinks.count();
+        for (let index = 0; index < contactCount; index += 1) {
+            await assertMinTarget(contactLinks.nth(index));
         }
     });
 

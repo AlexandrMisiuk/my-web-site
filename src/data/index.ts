@@ -5,3 +5,4 @@ export * from './projects';
 export * from './principles';
 export * from './technologies';
 export * from './about';
+export * from './contact';

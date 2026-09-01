@@ -25,52 +25,19 @@ describe('Footer', () => {
         expect(footer).toHaveTextContent(`© ${new Date().getFullYear()} · All rights reserved`);
     });
 
-    it('emits every non-empty profile link and omits empty-string ones', () => {
-        const profileWithLinkedInOnly: SiteProfile = {
-            ...mockProfile,
-            links: {
-                linkedin: 'https://linkedin.com/in/example',
-                github: '',
-                email: '',
-                cv: '',
-            },
-        };
+    it('does not render any profile links or action links', () => {
+        render(<Footer profile={mockProfile} />);
 
-        render(<Footer profile={profileWithLinkedInOnly} />);
-
-        expect(screen.getByRole('link', { name: 'LinkedIn profile' })).toHaveAttribute(
-            'href',
-            'https://linkedin.com/in/example',
-        );
-        expect(screen.queryByRole('link', { name: 'GitHub profile' })).not.toBeInTheDocument();
-        expect(screen.queryByRole('link', { name: 'Send email' })).not.toBeInTheDocument();
-        expect(screen.queryByRole('link', { name: 'Download CV' })).not.toBeInTheDocument();
-    });
-
-    it('renders github, email, and cv actions when those links are supplied', () => {
-        const profileWithoutLinkedIn: SiteProfile = {
-            ...mockProfile,
-            links: {
-                linkedin: '',
-                github: 'https://github.com/example',
-                email: 'hello@example.com',
-                cv: '/cv.pdf',
-            },
-        };
-
-        render(<Footer profile={profileWithoutLinkedIn} />);
-
-        expect(screen.getByRole('link', { name: 'GitHub profile' })).toHaveAttribute(
-            'href',
-            'https://github.com/example',
-        );
-        expect(screen.getByRole('link', { name: 'Send email' })).toHaveAttribute('href', 'mailto:hello@example.com');
-        expect(screen.getByRole('link', { name: 'Download CV' })).toHaveAttribute('href', '/cv.pdf');
-        expect(screen.queryByRole('link', { name: 'LinkedIn profile' })).not.toBeInTheDocument();
+        expect(screen.queryByRole('link')).not.toBeInTheDocument();
     });
 
     it('renders without crashing when no profile prop is supplied', () => {
         render(<Footer />);
         expect(screen.getByRole('contentinfo')).toBeInTheDocument();
+    });
+
+    it('merges custom className when provided', () => {
+        render(<Footer className="custom-footer" />);
+        expect(screen.getByRole('contentinfo')).toHaveClass('custom-footer');
     });
 });

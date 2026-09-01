@@ -26,6 +26,7 @@ This repository follows **strict TDD**: write the failing test first, then the m
 ├── e2e/                    # Playwright specs and axe fixture
 ├── public/
 │   ├── cv/                 # Curated CV documents
+│   ├── projects/           # Project assets
 │   └── favicon.svg         # Site favicon
 ├── src/
 │   ├── assets/             # Media and static graphics

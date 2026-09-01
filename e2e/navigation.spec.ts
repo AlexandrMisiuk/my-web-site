@@ -83,4 +83,33 @@ test.describe('navigation', () => {
         const svgBody = await res.text();
         expect(svgBody).toContain('<svg');
     });
+
+    test('technologies category filter switches visible cards dynamically', async ({ page }) => {
+        await page.goto('/#technologies');
+
+        const technologiesSection = page.locator('#technologies');
+        await expect(technologiesSection).toBeVisible();
+
+        const tablist = technologiesSection.getByRole('tablist', { name: 'Technology categories' });
+        await expect(tablist).toBeVisible();
+
+        // Default: TypeScript and Flutter visible
+        await expect(technologiesSection.getByText('TypeScript')).toBeVisible();
+        await expect(technologiesSection.getByText('Flutter')).toBeVisible();
+
+        // Filter to Frontend
+        await tablist.getByRole('tab', { name: 'Frontend' }).click();
+        await expect(technologiesSection.getByText('TypeScript')).toBeVisible();
+        await expect(technologiesSection.getByText('Flutter')).toBeHidden();
+
+        // Filter to Mobile
+        await tablist.getByRole('tab', { name: 'Mobile' }).click();
+        await expect(technologiesSection.getByText('Flutter')).toBeVisible();
+        await expect(technologiesSection.getByText('TypeScript')).toBeHidden();
+
+        // Reset to All
+        await tablist.getByRole('tab', { name: 'All' }).click();
+        await expect(technologiesSection.getByText('TypeScript')).toBeVisible();
+        await expect(technologiesSection.getByText('Flutter')).toBeVisible();
+    });
 });

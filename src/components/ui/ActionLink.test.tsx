@@ -84,4 +84,30 @@ describe('ActionLink', () => {
         );
         expect(screen.getByRole('button', { name: 'Submit form' })).toHaveAttribute('type', 'submit');
     });
+
+    it('renders compound children directly as flex items for both link and button', () => {
+        const { rerender } = renderWithUser(
+            <ActionLink href="mailto:test@example.com">
+                <span data-testid="icon">icon</span>
+                <span>Email</span>
+            </ActionLink>,
+        );
+
+        const link = screen.getByRole('link', { name: /email/i });
+        expect(link).toHaveTextContent('Email');
+        expect(screen.getByTestId('icon')).toBeInTheDocument();
+        expect(screen.getByTestId('icon').parentElement).toBe(link);
+
+        rerender(
+            <ActionLink>
+                <span data-testid="icon-btn">icon</span>
+                <span>Click</span>
+            </ActionLink>,
+        );
+
+        const button = screen.getByRole('button', { name: /click/i });
+        expect(button).toHaveTextContent('Click');
+        expect(screen.getByTestId('icon-btn')).toBeInTheDocument();
+        expect(screen.getByTestId('icon-btn').parentElement).toBe(button);
+    });
 });

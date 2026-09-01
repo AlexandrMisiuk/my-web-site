@@ -22,6 +22,7 @@ describe('Hero', () => {
 
         const heading = screen.getByRole('heading', { level: 1 });
         expect(heading).toBeInTheDocument();
+        expect(screen.getByRole('heading', { level: 2, name: 'Software Engineer' })).toBeInTheDocument();
 
         const workCta = screen.getByRole('link', { name: 'View Work' });
         expect(workCta).toHaveAttribute('href', '#work');
@@ -34,7 +35,8 @@ describe('Hero', () => {
         renderWithUser(<Hero profile={mockProfile} />);
 
         expect(screen.getByRole('heading', { level: 1, name: 'Jane Doe' })).toBeInTheDocument();
-        expect(screen.getByText('alex@Staff UI Engineer ~ %')).toBeInTheDocument();
+        expect(screen.getByRole('heading', { level: 2, name: 'Staff UI Engineer' })).toBeInTheDocument();
+        expect(screen.getByText('alex ~ %')).toBeInTheDocument();
         expect(screen.getByText('Crafting resilient design systems and accessible frontends.')).toBeInTheDocument();
         expect(screen.getByText('San Francisco, CA · open to consulting')).toBeInTheDocument();
     });
@@ -46,7 +48,8 @@ describe('Hero', () => {
         };
 
         const { rerender } = renderWithUser(<Hero profile={partialProfile} />);
-        expect(screen.queryByText(/alex@/)).not.toBeInTheDocument();
+        expect(screen.getByRole('heading', { level: 2, name: 'Staff UI Engineer' })).toBeInTheDocument();
+        expect(screen.queryByText('alex ~ %')).not.toBeInTheDocument();
 
         rerender(
             <Hero
@@ -57,6 +60,7 @@ describe('Hero', () => {
                 }}
             />,
         );
+        expect(screen.queryByRole('heading', { level: 2 })).not.toBeInTheDocument();
         expect(screen.getByText('alex ~ %')).toBeInTheDocument();
         expect(screen.getByText('Solo statement only.')).toBeInTheDocument();
 
@@ -69,7 +73,8 @@ describe('Hero', () => {
                 }}
             />,
         );
-        expect(screen.queryByText(/alex/)).not.toBeInTheDocument();
+        expect(screen.queryByRole('heading', { level: 2 })).not.toBeInTheDocument();
+        expect(screen.queryByText('alex ~ %')).not.toBeInTheDocument();
     });
 
     it('omits the status badge when status is empty', () => {
