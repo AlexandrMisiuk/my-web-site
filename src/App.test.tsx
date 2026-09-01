@@ -16,7 +16,8 @@ describe('App', () => {
         const h1Headings = screen.getAllByRole('heading', { level: 1 });
         expect(h1Headings).toHaveLength(1);
 
-        // All 5 section headers render h2 headings
+        // Hero role heading and all 5 section headers render h2 headings
+        expect(screen.getByRole('heading', { level: 2, name: 'Software Engineer' })).toBeInTheDocument();
         expect(screen.getByRole('heading', { level: 2, name: 'Selected Work' })).toBeInTheDocument();
         expect(screen.getByRole('heading', { level: 2, name: 'How I Work' })).toBeInTheDocument();
         expect(screen.getByRole('heading', { level: 2, name: 'About' })).toBeInTheDocument();

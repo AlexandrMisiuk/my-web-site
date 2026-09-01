@@ -10,15 +10,20 @@ export interface HeroProps {
 }
 
 export function Hero({ profile = defaultSiteProfile, className = '' }: HeroProps) {
-    const prompt = profile.role ? `alex@${profile.role} ~ %` : 'alex ~ %';
-
     return (
         <div
             className={`flex animate-[hero-rise_0.6s_ease-out_both] flex-col gap-6 motion-reduce:animate-none ${className}`.trim()}
         >
-            <h1 className="text-display text-ink text-shadow-ink-muted font-mono font-bold tracking-tight uppercase text-shadow-sm">
-                {profile.name}
-            </h1>
+            <div className="flex flex-col gap-2">
+                <h1 className="text-ink font-mono text-4xl font-bold tracking-tight uppercase sm:text-5xl lg:text-6xl">
+                    {profile.name}
+                </h1>
+                {profile.role ? (
+                    <h2 className="text-lead sm:text-h3 text-ink-muted font-mono font-medium tracking-tight">
+                        {profile.role}
+                    </h2>
+                ) : null}
+            </div>
 
             {profile.status ? (
                 <StatusPill color="emerald" pulse variant="surface" size="md" className="self-start">
@@ -27,7 +32,11 @@ export function Hero({ profile = defaultSiteProfile, className = '' }: HeroProps
             ) : null}
 
             {profile.statement ? (
-                <TerminalWindow prompt={prompt} text={profile.statement} className="min-h-40 max-w-2xl" />
+                <TerminalWindow
+                    prompt="alex ~ %"
+                    text={profile.statement}
+                    className="min-h-40 sm:max-w-xl md:max-w-2xl md:min-w-2xl"
+                />
             ) : null}
 
             <div className="flex flex-wrap items-center gap-4 pt-2">
