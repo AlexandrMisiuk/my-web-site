@@ -3,9 +3,11 @@ import {
     CLOUD_BASE_DURATION,
     CLOUD_DURATION_STEP,
     CLOUD_NIGHT_OPACITY,
+    CLOUD_WRAP_MARGIN,
     CLOUD_WRAP_SPAN,
     DAY_NIGHT_DURATION,
     ENV,
+    ENV_VIEWBOX_WIDTH,
     MOON_RISE_TRAVEL,
     SUN_SET_DRIFT,
     SUN_GLOW_BASE_OPACITY,
@@ -79,6 +81,16 @@ export function buildAmbientTimeline(scope: HTMLElement, budget: AmbientBudget):
     const timeline = gsap.timeline();
 
     // Clouds drift in viewBox units and wrap seamlessly — no layout reads.
+    //
+    // GSAP folds a cloud's authored `transform="translate(x y)"` into its own
+    // transform, so the tweened `x` IS the absolute scene position, not an
+    // offset on top of it. The wrap window is therefore the same for every
+    // cloud: the scene width plus one off-screen margin at each edge. Biasing
+    // it by the authored x would shift each cloud's window by its own position
+    // and pop it out of existence mid-sky.
+    const minX = -CLOUD_WRAP_MARGIN;
+    const maxX = ENV_VIEWBOX_WIDTH + CLOUD_WRAP_MARGIN;
+
     q(envSelector(ENV.cloud)).forEach((cloud, index) => {
         timeline.to(
             cloud,
@@ -88,9 +100,7 @@ export function buildAmbientTimeline(scope: HTMLElement, budget: AmbientBudget):
                 ease: 'none',
                 repeat: -1,
                 modifiers: {
-                    x: gsap.utils.unitize((value: number) =>
-                        gsap.utils.wrap(-CLOUD_WRAP_SPAN / 2, CLOUD_WRAP_SPAN / 2, value),
-                    ),
+                    x: gsap.utils.unitize((value: number) => gsap.utils.wrap(minX, maxX, value)),
                 },
             },
             0,

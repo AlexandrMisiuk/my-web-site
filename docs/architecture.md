@@ -45,7 +45,7 @@ src/
 ├── components/
 │   ├── environment/    # Animated day/night landscape: AnimatedEnvironment, Sky, Sun, Moon, Stars, Clouds, Landscape, Scrim,
 │   │                   # timeline.ts (master + ambient builders), motion.ts, environment.constants.ts,
-│   │                   # random.ts / starField.ts / bladeField.ts (deterministic scenery generators)
+│   │                   # random.ts / starField.ts / bladeField.ts / cloudField.ts (scenery data + generators)
 │   ├── layout/         # Application shell: Header, MobileNav, ThemeToggle, SkipLink, Section, SectionBackground, SectionHeader, Container, Footer
 │   ├── sections/       # Primary page sections: Hero, SelectedWork, ProjectCard, HowIWork, About, Technologies, Contact
 │   └── ui/             # Atomic primitives: TerminalWindow, ActionLink, Tag, Eyebrow, StatusPill, and SVG icon primitives (icons/)

@@ -11,7 +11,8 @@ import { Scrim } from './Scrim';
 import { Sky } from './Sky';
 import { Stars } from './Stars';
 import { Sun } from './Sun';
-import { BLADE_COUNT, CLOUD_COUNT, ENV, STAR_COUNT, envSelector } from './environment.constants';
+import { BLADE_COUNT, ENV, STAR_COUNT, envSelector } from './environment.constants';
+import { CLOUDS } from './cloudField';
 
 function renderSvg(node: React.ReactElement) {
     return render(<svg viewBox="0 0 1600 900">{node}</svg>);
@@ -73,7 +74,16 @@ describe('Clouds', () => {
         const band = container.querySelector(envSelector(ENV.cloudBand));
 
         expect(band).not.toBeNull();
-        expect(band!.querySelectorAll(envSelector(ENV.cloud))).toHaveLength(CLOUD_COUNT);
+        expect(band!.querySelectorAll(envSelector(ENV.cloud))).toHaveLength(CLOUDS.length);
+    });
+
+    it('starts every cloud inside the sky at its authored position', () => {
+        const { container } = renderSvg(<Clouds />);
+        const rendered = [...container.querySelectorAll(envSelector(ENV.cloud))];
+
+        rendered.forEach((cloud, index) => {
+            expect(cloud.getAttribute('transform')).toBe(`translate(${CLOUDS[index].x} ${CLOUDS[index].y})`);
+        });
     });
 });
 

@@ -20,8 +20,6 @@ export const BLADE_COUNT = 52;
 export const BLADE_SEED = 1312;
 export const BLADE_BASE_Y = 884;
 
-export const CLOUD_COUNT = 6;
-
 /**
  * Master arc, in viewport units.
  *
@@ -39,8 +37,16 @@ export const SUN_GLOW_BASE_OPACITY = 0.55;
 /** Wall-clock length of a full sunset (and, reversed, a full sunrise). */
 export const DAY_NIGHT_DURATION = 3.2;
 
-/** Cloud drift is expressed in viewBox units so no layout is read per frame. */
-export const CLOUD_WRAP_SPAN = 1900;
+/**
+ * Cloud drift is expressed in viewBox units so no layout is read per frame.
+ *
+ * `slice` scaling always leaves the visible x-range a subset of 0..1600 (when
+ * width drives the scale there is no horizontal crop at all), so a cloud parked
+ * one margin beyond either edge is off-screen at every viewport. The margin
+ * only has to clear the widest cloud's half-width (~133 units at scale 1.25).
+ */
+export const CLOUD_WRAP_MARGIN = 200;
+export const CLOUD_WRAP_SPAN = ENV_VIEWBOX_WIDTH + 2 * CLOUD_WRAP_MARGIN;
 export const CLOUD_BASE_DURATION = 78;
 export const CLOUD_DURATION_STEP = 14;
 

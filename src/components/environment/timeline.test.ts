@@ -1,7 +1,16 @@
 import { afterEach, describe, expect, it } from 'vitest';
 import gsap from 'gsap';
 import { buildAmbientTimeline, buildDayNightTimeline } from './timeline';
-import { AMBIENT_DESKTOP, AMBIENT_MOBILE, DAY_NIGHT_DURATION, ENV, envSelector } from './environment.constants';
+import { CLOUDS } from './cloudField';
+import {
+    AMBIENT_DESKTOP,
+    AMBIENT_MOBILE,
+    CLOUD_WRAP_MARGIN,
+    DAY_NIGHT_DURATION,
+    ENV,
+    ENV_VIEWBOX_WIDTH,
+    envSelector,
+} from './environment.constants';
 
 function createScene(): HTMLDivElement {
     const scope = document.createElement('div');
@@ -23,8 +32,7 @@ function createScene(): HTMLDivElement {
                 <circle data-env="${ENV.star}"></circle>
             </g>
             <g data-env="${ENV.cloudBand}">
-                <g data-env="${ENV.cloud}"></g>
-                <g data-env="${ENV.cloud}"></g>
+                ${CLOUDS.map((cloud) => `<g data-env="${ENV.cloud}" transform="translate(${cloud.x} ${cloud.y})"></g>`).join('')}
             </g>
             <g data-env="${ENV.fieldNight}"></g>
             <path data-env="${ENV.blade}"></path>
@@ -33,6 +41,15 @@ function createScene(): HTMLDivElement {
         <div data-env="${ENV.scrimNight}"></div>
     `;
     document.body.appendChild(scope);
+
+    // jsdom cannot resolve SVG transform attributes, so GSAP starts every cloud
+    // at x=0 here. A real browser parses `translate(x y)` and folds it into the
+    // tween, making GSAP's `x` the absolute scene position. Seed that explicitly
+    // so the wrap window is exercised against the geometry the browser sees.
+    CLOUDS.forEach((cloud, index) => {
+        gsap.set(scope.querySelectorAll(envSelector(ENV.cloud))[index], { x: cloud.x });
+    });
+
     return scope;
 }
 
@@ -54,6 +71,32 @@ function ownedProperties(timeline: gsap.core.Timeline): Set<string> {
     }
 
     return owned;
+}
+
+const CLOUD_SAMPLES = 200;
+
+/**
+ * Walks each cloud through one full drift cycle and reports its absolute scene
+ * position (authored x plus the animated offset) at every sample.
+ */
+function sampleCloudPaths(
+    scope: HTMLElement,
+    timeline: gsap.core.Timeline,
+): { authoredX: number; positions: number[] }[] {
+    const tweens = timeline.getChildren(true, true, false) as gsap.core.Tween[];
+
+    return [...scope.querySelectorAll(envSelector(ENV.cloud))].map((cloud, index) => {
+        const tween = tweens.find((child) => (child.targets() as Element[])[0] === cloud)!;
+        const positions: number[] = [];
+
+        for (let step = 0; step <= CLOUD_SAMPLES; step += 1) {
+            tween.progress(step / CLOUD_SAMPLES);
+            // GSAP's x is the absolute scene position, not an offset.
+            positions.push(Number(gsap.getProperty(cloud, 'x')));
+        }
+
+        return { authoredX: CLOUDS[index].x, positions };
+    });
 }
 
 function opacityOf(scope: HTMLElement, part: string): number {
@@ -139,9 +182,50 @@ describe('buildAmbientTimeline', () => {
             .getChildren(true, true, false)
             .filter((child) => (child.targets() as Element[])[0]?.getAttribute('data-env') === ENV.cloud);
 
-        expect(clouds).toHaveLength(2);
+        expect(clouds).toHaveLength(CLOUDS.length);
         for (const cloud of clouds) {
             expect(cloud.repeat()).toBe(-1);
+        }
+    });
+
+    it('carries every cloud clean across the sky and off both edges', () => {
+        const scope = createScene();
+        const timeline = buildAmbientTimeline(scope, AMBIENT_DESKTOP);
+
+        for (const { authoredX, positions } of sampleCloudPaths(scope, timeline)) {
+            // A cloud that only wandered mid-sky would never reach either edge.
+            expect(Math.min(...positions)).toBeLessThanOrEqual(0);
+            expect(Math.max(...positions)).toBeGreaterThanOrEqual(ENV_VIEWBOX_WIDTH);
+            expect(authoredX).toBeGreaterThan(0);
+        }
+    });
+
+    it('never teleports a cloud into the middle of the sky', () => {
+        const scope = createScene();
+        const timeline = buildAmbientTimeline(scope, AMBIENT_DESKTOP);
+
+        for (const { positions } of sampleCloudPaths(scope, timeline)) {
+            // Exactly one backward step per cycle: the wrap itself.
+            const jumps = positions
+                .slice(1)
+                .map((value, index) => ({ from: positions[index], to: value }))
+                .filter(({ from, to }) => to < from);
+
+            expect(jumps).toHaveLength(1);
+            expect(jumps[0].from).toBeGreaterThan(ENV_VIEWBOX_WIDTH);
+            expect(jumps[0].to).toBeLessThan(0);
+        }
+    });
+
+    it('keeps every cloud within one margin of the scene at all times', () => {
+        const scope = createScene();
+        const timeline = buildAmbientTimeline(scope, AMBIENT_DESKTOP);
+
+        for (const { positions } of sampleCloudPaths(scope, timeline)) {
+            for (const position of positions) {
+                expect(position).toBeGreaterThanOrEqual(-CLOUD_WRAP_MARGIN - 1);
+                expect(position).toBeLessThanOrEqual(ENV_VIEWBOX_WIDTH + CLOUD_WRAP_MARGIN + 1);
+            }
         }
     });
 
