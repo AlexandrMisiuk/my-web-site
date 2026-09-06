@@ -11,6 +11,7 @@ import {
     MOON_RISE_TRAVEL,
     SUN_SET_DRIFT,
     SUN_GLOW_BASE_OPACITY,
+    SUN_GLOW_PEAK_SCALE,
     SUN_SET_TRAVEL,
     envSelector,
     type AmbientBudget,
@@ -50,7 +51,18 @@ export function buildDayNightTimeline(scope: HTMLElement): gsap.core.Timeline {
         // Sun: falls towards the ridge, glow swells then dies, disc snuffs out.
         .to(q(envSelector(ENV.sunGroup)), { y: SUN_SET_TRAVEL, x: SUN_SET_DRIFT, duration: 0.8, ease: 'power1.in' }, 0)
         .to(q(envSelector(ENV.sunGroup)), { opacity: 0, duration: 0.25 }, 0.55)
-        .to(q(envSelector(ENV.sunGlow)), { opacity: 0.9, scale: 1.25, duration: 0.5, ease: 'sine.out' }, 0)
+        .to(
+            q(envSelector(ENV.sunGlow)),
+            {
+                opacity: 0.9,
+                scale: SUN_GLOW_PEAK_SCALE,
+                translateX: -25,
+                translateY: -25,
+                duration: 0.5,
+                ease: 'sine.out',
+            },
+            0,
+        )
         .to(q(envSelector(ENV.sunGlow)), { opacity: 0, duration: 0.35 }, 0.6)
         // Landscape and readability scrim mute into the dark palette.
         .to(q(envSelector(ENV.fieldNight)), { opacity: 1, duration: 0.7 }, 0.25)

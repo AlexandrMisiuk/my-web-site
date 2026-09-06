@@ -34,6 +34,19 @@ export const MOON_RISE_TRAVEL = '6vh';
 export const CLOUD_NIGHT_OPACITY = 0.22;
 export const SUN_GLOW_BASE_OPACITY = 0.55;
 
+/**
+ * Sun artwork geometry, in its own 200x200 viewBox.
+ *
+ * The sunset scales the glow to `SUN_GLOW_PEAK_SCALE`, and an `<svg>` clips to
+ * its viewport, so the glow's *scaled* radius has to stay inside half the
+ * viewBox. Otherwise the swell is cut off square and the sun appears to rise
+ * and set inside a visible box. `scene.test.tsx` asserts the headroom.
+ */
+export const SUN_VIEWBOX = 200;
+export const SUN_GLOW_RADIUS = 78;
+export const SUN_CORE_RADIUS = 38;
+export const SUN_GLOW_PEAK_SCALE = 1.25;
+
 /** Wall-clock length of a full sunset (and, reversed, a full sunrise). */
 export const DAY_NIGHT_DURATION = 3.2;
 

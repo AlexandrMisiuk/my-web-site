@@ -11,7 +11,16 @@ import { Scrim } from './Scrim';
 import { Sky } from './Sky';
 import { Stars } from './Stars';
 import { Sun } from './Sun';
-import { BLADE_COUNT, ENV, STAR_COUNT, envSelector } from './environment.constants';
+import {
+    BLADE_COUNT,
+    ENV,
+    STAR_COUNT,
+    SUN_CORE_RADIUS,
+    SUN_GLOW_PEAK_SCALE,
+    SUN_GLOW_RADIUS,
+    SUN_VIEWBOX,
+    envSelector,
+} from './environment.constants';
 import { CLOUDS } from './cloudField';
 
 function renderSvg(node: React.ReactElement) {
@@ -40,6 +49,19 @@ describe('Sun', () => {
         expect(group).not.toBeNull();
         expect(group!.querySelector(envSelector(ENV.sunGlow))).not.toBeNull();
         expect(group!.querySelector(envSelector(ENV.sunCore))).not.toBeNull();
+    });
+});
+
+describe('Sun glow headroom', () => {
+    it('keeps the glow inside its own viewBox at peak swell', () => {
+        // The sunset scales the glow up. If the scaled radius reaches past the
+        // SVG viewport the browser clips it to the viewport, and the sun rises
+        // and sets inside a visible square.
+        expect(SUN_GLOW_RADIUS * SUN_GLOW_PEAK_SCALE).toBeLessThanOrEqual(SUN_VIEWBOX / 2);
+    });
+
+    it('leaves the core well clear of the edge', () => {
+        expect(SUN_CORE_RADIUS).toBeLessThan(SUN_GLOW_RADIUS);
     });
 });
 
