@@ -35,6 +35,15 @@ describe('About', () => {
         expect(container.firstChild).toHaveClass('custom-about-class');
     });
 
+    it('renders every paragraph inside a single container', () => {
+        renderWithUser(<About content={customAboutContent} />);
+
+        const first = screen.getByText('First custom paragraph about engineering experience.');
+        const second = screen.getByText('Second custom paragraph about frontend architecture.');
+
+        expect(first.parentElement).toBe(second.parentElement);
+    });
+
     it('applies custom className to empty state container', () => {
         const { container } = renderWithUser(
             <About content={{ paragraphs: [] }} className="custom-about-empty-class" />,
