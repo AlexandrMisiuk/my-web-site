@@ -233,3 +233,8 @@ This document records the key architectural choices, technical decisions, and tr
 
 - **Decision**: Replace redundant `profile.status` display in `Contact` with four invitation and collaboration prose paragraphs structured in `src/data/contact.ts` (`ContactContent`), styled with the same readable measure and typography as `About` (`max-w-[62ch] space-y-4 leading-relaxed sm:space-y-6`). Remove the unnecessary inner `<span>` wrapper in `ActionLink` so that child SVG icons and text render directly as flex items alongside external tab indicators in a unified horizontal line (`inline-flex items-center gap-2`).
 - **Rationale**: Elevates the Contact section with thoughtful, welcoming prose encouraging collaboration while removing uninformative status duplication. Eliminates awkward vertical stacking of icons above text labels in `ActionLink` caused by block-display SVG children within inline spans.
+
+### 47. Privacy-Preserving Web Analytics via `@vercel/analytics`
+
+- **Decision**: Integrate `@vercel/analytics` using the React component wrapper (`import { Analytics } from '@vercel/analytics/react'`) mounted inside the root `App.tsx` shell.
+- **Rationale**: Provides zero-configuration visitor and page view telemetry on Vercel deployments without setting cookies, tracking cross-site user identities, or triggering GDPR/CCPA consent banner mandates. The component renders `null` in the React virtual DOM tree, introducing zero Cumulative Layout Shift (CLS), zero visual footprint, and zero accessibility tree clutter, while automatically staying inert during local development and test runs (`NODE_ENV !== 'production'`).

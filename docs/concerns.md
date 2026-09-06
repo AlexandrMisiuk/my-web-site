@@ -113,3 +113,8 @@ This document highlights critical implementation concerns, potential pitfalls, r
 
 - **Concern**: Branded SVG technology icons might encounter contrast issues against varying theme backgrounds, missing icon keys for future additions, or produce broken UI layouts if a category filter yields zero matches.
 - **Mitigation**: All technology cards utilize semantic `bg-surface` and `border-hairline` tokens ensuring strong contrast for multi-color brand SVGs across light and dark modes. The `TechIcon` dispatcher component includes an accessible terminal/code fallback SVG primitive when unmapped icon identifiers are encountered. The `Technologies` component renders explicit, accessible empty-state feedback if the entire technologies dataset is empty or if no technologies match an active category filter.
+
+### 23. Analytics Environment Gating, Test Isolation, & Privacy Safeguards
+
+- **Concern**: Integrating third-party analytics telemetry could pollute local development and automated test runs with network requests, leak user personal identifiers, require cookie consent banners, or introduce Cumulative Layout Shift (CLS).
+- **Mitigation**: `@vercel/analytics` operates completely cookie-free and anonymized out of the box, fulfilling GDPR and CCPA privacy standards without consent banners. The SDK defaults to inert mode in non-production environments (`NODE_ENV === 'development'` and `NODE_ENV === 'test'`), preventing outbound beacons during unit tests, Playwright runs, or local development. The `<Analytics />` component renders `null` in the DOM tree, guaranteeing zero layout shift and zero impact on accessibility tree scanning or landmark hierarchies.

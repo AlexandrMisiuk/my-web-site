@@ -29,6 +29,7 @@ This document provides a condensed overview of the architecture, key concepts, a
 - **Two-Tier Testing Architecture**: Vitest 4 + jsdom + React Testing Library share the Vite pipeline for unit/component tests; Playwright exercises the built artifact via `vite preview` across 320 / 768 / 1440. Detail lives in `docs/testing.md`.
 - **Centralized Browser API Doubles**: `src/test/` owns controllable `matchMedia` and `IntersectionObserver` fakes so unit tests drive intersections and media-query changes instead of asserting on mock internals.
 - **Accessibility-as-a-Gate**: `@axe-core/playwright` runs WCAG 2.1 AA scans in both color schemes across the viewport matrix, making the WCAG AA commitment executable.
+- **Privacy-Preserving Web Analytics (`@vercel/analytics`)**: Integrated via `@vercel/analytics/react` in the root `App.tsx` shell to collect anonymous page view telemetry when deployed on Vercel, remaining completely cookie-free, GDPR/CCPA compliant, inert in development and test environments, and rendering `null` in the DOM for zero layout shift or accessibility interference.
 
 ## Directory Layout & Responsibilities
 
@@ -69,6 +70,7 @@ graph TD
     APP --> HEADER[Header (sticky)]
     APP --> MAIN[main#main]
     APP --> FOOTER[Footer]
+    APP --> VA["Analytics (@vercel/analytics/react)"]
 
     HEADER --> CONT_H[Container]
     HEADER --> THEME[ThemeToggle]
