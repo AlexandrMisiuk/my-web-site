@@ -1,3 +1,5 @@
+import { Analytics } from '@vercel/analytics/react';
+import { AnimatedEnvironment } from '@/components/environment/AnimatedEnvironment';
 import { Footer } from '@/components/layout/Footer';
 import { Header } from '@/components/layout/Header';
 import { Section } from '@/components/layout/Section';
@@ -15,7 +17,8 @@ export default function App() {
     const activeId = useActiveSection(SECTION_IDS);
 
     return (
-        <div className="bg-canvas text-ink relative min-h-screen antialiased">
+        <div className="text-ink relative min-h-screen antialiased">
+            <AnimatedEnvironment />
             <SkipLink />
             <Header activeId={activeId} />
 
@@ -52,6 +55,7 @@ export default function App() {
             </main>
 
             <Footer />
+            <Analytics />
         </div>
     );
 }

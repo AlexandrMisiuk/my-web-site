@@ -7,7 +7,8 @@ This document defines core architectural constraints, coding standards, quality 
 1. **Static SPA Only**: The application is a static, single-page React application bundled via Vite. Do not introduce server-side frameworks (Next.js, Remix, Astro), server runtimes, backends, databases, CMS integrations, or authentication systems.
 2. **Zero External UI & State Libraries**:
     - Do NOT introduce external UI component libraries (shadcn, Radix, MUI, Chakra, Headless UI, etc.) unless explicitly instructed by the user.
-    - Do NOT introduce state management libraries (Redux, Zustand, MobX, Jotai) or animation libraries (Framer Motion, GSAP). State must remain minimal, leveraging React built-in hooks and native CSS animations.
+    - Do NOT introduce state management libraries (Redux, Zustand, MobX, Jotai). State must remain minimal, leveraging React built-in hooks.
+    - **GSAP (`gsap` + `@gsap/react`) is the sanctioned animation engine**, in the same way Vitest and Playwright are the sanctioned test runners. It drives the `TerminalWindow` typewriter and the `AnimatedEnvironment` day/night scene. Do NOT introduce any other animation library (Framer Motion, Lottie, Three.js, anime.js, React Spring). Prefer native CSS animation where it suffices; reach for GSAP when a timeline, a reversible transition, or coordinated multi-element choreography is required.
     - Do NOT introduce third-party icon libraries (Lucide, React Icons, FontAwesome). Keep icons as small, self-contained SVG primitives in `src/components/ui/icons/` or `src/components/ui/`.
 3. **Decoupled Data Layer**:
     - All portfolio content (personal details, project descriptions, principles, tech lists, contact links) must be structured inside `src/data/`.

@@ -32,6 +32,25 @@
     --section-min-height: calc(100dvh - var(--header-height));
     --mobile-nav-height: calc(100dvh - var(--header-height));
     --radius-sm: 10px;
+
+    /*
+     * Animated environment palette.
+     *
+     * These are deliberately NOT redefined under [data-theme='dark']. The scene
+     * cross-fades between its day and night layers under GSAP control, so a
+     * token that flipped with the attribute would snap the colours mid-sunset.
+     */
+    --color-env-day-top: #5aa5e8;
+    --color-env-day-mid: #a3d2f2;
+    --color-env-day-horizon: #e4f1fb;
+    --color-env-dusk-top: #5b4a86;
+    --color-env-dusk-mid: #f08a5d;
+    --color-env-dusk-low: #ffd08a;
+    --color-env-night-top: #0d0f12;
+    --color-env-night-mid: #131c33;
+    --color-env-night-horizon: #2b4068;
+    --color-env-scrim-day: 244 245 247;
+    --color-env-scrim-night: 13 15 18;
 }
 
 /* Dark Mode Token Overrides via Data Attribute */
@@ -43,6 +62,62 @@
     --color-hairline: #232830;
     --color-accent: #7d95ff;
     --color-accent-hover: #9bb0ff;
+}
+
+/* Animated Environment Layers */
+@layer components {
+    /*
+     * Night-only layers start hidden in CSS as well as in the timeline, so the
+     * scene cannot flash stars or a dark sky before the first frame runs.
+     */
+    .env-night-layer {
+        opacity: 0;
+    }
+
+    .env-sky-day {
+        background: linear-gradient(
+            to bottom,
+            var(--color-env-day-top) 0%,
+            var(--color-env-day-mid) 52%,
+            var(--color-env-day-horizon) 100%
+        );
+    }
+
+    .env-sky-dusk {
+        background: linear-gradient(
+            to bottom,
+            var(--color-env-dusk-top) 0%,
+            var(--color-env-dusk-mid) 58%,
+            var(--color-env-dusk-low) 100%
+        );
+    }
+
+    .env-sky-night {
+        background: linear-gradient(
+            to bottom,
+            var(--color-env-night-top) 0%,
+            var(--color-env-night-mid) 55%,
+            var(--color-env-night-horizon) 100%
+        );
+    }
+
+    .env-scrim-base {
+        background: linear-gradient(
+            to bottom,
+            rgb(var(--color-env-scrim-day) / 0.5) 0%,
+            rgb(var(--color-env-scrim-day) / 0.24) 45%,
+            rgb(var(--color-env-scrim-day) / 0.42) 100%
+        );
+    }
+
+    .env-scrim-night {
+        background: linear-gradient(
+            to bottom,
+            rgb(var(--color-env-scrim-night) / 0.62) 0%,
+            rgb(var(--color-env-scrim-night) / 0.38) 45%,
+            rgb(var(--color-env-scrim-night) / 0.55) 100%
+        );
+    }
 }
 
 /* Base Layer Defaults */

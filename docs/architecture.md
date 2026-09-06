@@ -15,9 +15,9 @@ This document provides a condensed overview of the architecture, key concepts, a
   - `Hero`: Renders above-the-fold identity with a scaled fluid `<h1>` name heading, a semantic `<h2>` role heading (`profile.role`), an interactive `TerminalWindow` UI primitive with a static unix bash prompt (`alex ~ %`), availability status indicator, and CTA links, rendered inside a clean, plain `Section` landmark without full-bleed background artwork.
   - `SelectedWork`: Renders project case study articles (`ProjectCard`) with CLS-safe aspect ratio media containers, status pills, tech tags, and conditional action links with graceful empty-state handling.
   - `HowIWork`: Arranges 4 core engineering principles in an asymmetric responsive grid with mono indices, semantic `<h3>` titles, and body descriptions.
-  - `About`: Renders biographical background paragraphs constrained to readable measure (`max-w-[62ch]`).
+  - `About`: Renders all biographical background paragraphs inside a single surface card sharing the `HowIWork` card shell (`border-hairline bg-surface rounded-sm border p-6 transition-colors sm:p-8`), with uniform typography throughout (`text-body text-ink-muted leading-relaxed`) matching the `Contact` prose. Paragraphs stay constrained to readable measure (`max-w-[62ch]`) while the card fills the 8-column content track.
   - `Technologies`: Renders interactive category filter pills (`All`, `Frontend`, `Mobile`, `Backend`, `Real-Time & APIs`) and a responsive grid of dark-styled cards featuring centered, authentic multi-color SVG brand icons, monospace titles, subtle borders, and smooth hover micro-interactions, complete with fallback icon and empty-state handling.
-  - `Contact`: Renders closing statement ("Let's build something great."), invitation and collaboration prose paragraphs (`max-w-[62ch]`), and interactive `ActionLink` CTAs (Email, LinkedIn, GitHub, CV) with single-line horizontal alignment, conditionally omitting unsupplied links.
+  - `Contact`: Renders a single surface card sharing the `HowIWork` card shell, holding the closing statement ("Let's build something great.", styled `text-h3 text-ink font-semibold tracking-tight`), invitation and collaboration prose paragraphs (`max-w-[62ch]`), a hairline divider, and interactive `ActionLink` CTAs (Email, LinkedIn, GitHub, CV) with single-line horizontal alignment, conditionally omitting unsupplied links. The divider renders inside the link branch so it never appears above an empty footer.
 - **Sticky Header with SVG Brand Identity (`Header`)**: Anchors top-level navigation with the SVG brand logo (`src/assets/brand-logo.svg`) linked to `#hero` and labeled via `aria-label={profile.name}` with explicit dimensions to prevent CLS, desktop navigation links with active indicator underlines driven by `useActiveSection`, `ThemeToggle`, and the mobile menu disclosure button.
 - **Single-IntersectionObserver Scroll-Spy (`useActiveSection`)**: Exactly one `IntersectionObserver` instance watches `SECTION_IDS`, dynamically calculating its top root margin from the `--header-height` CSS token. It drives `aria-current` in header/mobile navigation.
 - **Accessible Full-Screen Mobile Disclosure (`MobileNav`)**: Below the `md` (768px) breakpoint, a 44×44px hamburger trigger opens a full-screen overlay with focus trapping, Escape-to-close, body scroll lock with cleanup restoration, and auto-close upon expanding beyond `md`.
@@ -25,10 +25,14 @@ This document provides a condensed overview of the architecture, key concepts, a
 - **Bespoke Atomic UI Primitives & SVG Icons**: Handcrafted, accessible UI primitives (`TerminalWindow`, `ActionLink`, `Tag`, `Eyebrow`, `StatusPill`) and self-contained SVG icons (`SunIcon`, `MoonIcon`, `MenuIcon`, `CloseIcon`, `ArrowUpRightIcon`, `ArrowRightIcon`, `GitHubIcon`, `LinkedInIcon`, `MailIcon`, `DocumentIcon`, `TechIcon`) consuming direct vector assets from `src/assets/tech/` without heavy external icon or UI libraries. `TerminalWindow` provides macOS-style window chrome (red, yellow, green controls), optional title (`Terminal - ${title}`), customizable unix bash prompt (`alex ~ %`), and GSAP-powered typewriter and cursor animation with `prefers-reduced-motion` instant display.
 - **Decoupled Data Layer**: All portfolio content (personal profile, navigation items, projects, principles, technologies, about text) is structured as type-safe TypeScript modules in `src/data/`. Components remain strictly presentational and consume data via `@/data`.
 - **Empty String Omission Pattern**: Unsupplied contact or social links use empty strings (`''`) with `// TODO: replace` comments, enabling presentational components to conditionally omit anchor tags rather than rendering broken `#` links.
+- **Persistent Animated Environment (`AnimatedEnvironment`)**: A decorative landscape lives permanently behind the site — a sunny green field under blue sky by day, the same field under stars and a moon by night — mounted once as the first child of the `App` shell (`fixed inset-0 -z-10 pointer-events-none`, `aria-hidden="true"`). The sky is three stacked CSS-gradient layers (`Sky`); the scenery is inline SVG in a `0 0 1600 900` viewBox with `preserveAspectRatio="xMidYMax slice"`, split into a background `Stars` layer and a foreground `Clouds` + `Landscape` layer, with the viewport-positioned `Sun` and `Moon` boxes between them; `Scrim` carries contrast. GSAP owns the visual state: one paused master timeline runs `progress(0)` = day → `progress(1)` = night and is driven purely by `play()` / `reverse()`, so the theme toggle becomes a real sunset or sunrise and mid-transition flips reverse from the current playhead. A separate persistent timeline supplies ambient motion (cloud drift, grass sway, star twinkle), armed via `gsap.matchMedia()` with desktop and mobile budgets and absent entirely under `prefers-reduced-motion: reduce`. A **one property, one owner, one layer** invariant keeps the two timelines from ever writing the same property.
+- **Attribute-Driven Theme Subscription (`useThemeObserver`)**: The environment reads the `data-theme` attribute on `document.documentElement` — the genuine cross-application source of truth — through a `MutationObserver`, rather than a second theme system or a context refactor of the instance-local `useColorScheme`. The hook returns no state, so a theme change drives GSAP imperatively at zero React re-renders.
+- **Frosted Content Surfaces**: The `App` root is transparent (`body` retains `bg-canvas` as the pre-hydration paint) and content surfaces are translucent (`bg-surface/75 backdrop-blur-sm` on cards, `bg-canvas/70 backdrop-blur-md` on `Footer`) so the landscape reads through the page while prose stays on a near-opaque plate. Environment palette tokens (`--color-env-*`) are declared unconditionally and are never redefined under `[data-theme='dark']`, so CSS cannot snap the scene's colours mid-transition.
 - **Native Scroll & Animation**: Scroll reveals leverage CSS scroll-driven animations (`animation-timeline: view()`) gated behind `@supports` with full `prefers-reduced-motion` fallbacks.
 - **Two-Tier Testing Architecture**: Vitest 4 + jsdom + React Testing Library share the Vite pipeline for unit/component tests; Playwright exercises the built artifact via `vite preview` across 320 / 768 / 1440. Detail lives in `docs/testing.md`.
 - **Centralized Browser API Doubles**: `src/test/` owns controllable `matchMedia` and `IntersectionObserver` fakes so unit tests drive intersections and media-query changes instead of asserting on mock internals.
 - **Accessibility-as-a-Gate**: `@axe-core/playwright` runs WCAG 2.1 AA scans in both color schemes across the viewport matrix, making the WCAG AA commitment executable.
+- **Privacy-Preserving Web Analytics (`@vercel/analytics`)**: Integrated via `@vercel/analytics/react` in the root `App.tsx` shell to collect anonymous page view telemetry when deployed on Vercel, remaining completely cookie-free, GDPR/CCPA compliant, inert in development and test environments, and rendering `null` in the DOM for zero layout shift or accessibility interference.
 
 ## Directory Layout & Responsibilities
 
@@ -39,6 +43,9 @@ docs/testing.md         # Testing architecture, TDD workflow, coverage policy
 src/
 ├── assets/             # Static graphics, SVG artwork, and media placeholders
 ├── components/
+│   ├── environment/    # Animated day/night landscape: AnimatedEnvironment, Sky, Sun, Moon, Stars, Clouds, Landscape, Scrim,
+│   │                   # timeline.ts (master + ambient builders), motion.ts, environment.constants.ts,
+│   │                   # random.ts / starField.ts / bladeField.ts / cloudField.ts (scenery data + generators)
 │   ├── layout/         # Application shell: Header, MobileNav, ThemeToggle, SkipLink, Section, SectionBackground, SectionHeader, Container, Footer
 │   ├── sections/       # Primary page sections: Hero, SelectedWork, ProjectCard, HowIWork, About, Technologies, Contact
 │   └── ui/             # Atomic primitives: TerminalWindow, ActionLink, Tag, Eyebrow, StatusPill, and SVG icon primitives (icons/)
@@ -53,7 +60,7 @@ src/
 │   ├── contact.ts      # Contact invitation and collaboration prose copy
 │   ├── index.ts        # Unified barrel export
 │   └── README.md       # Content maintainer guide
-├── hooks/              # Custom hooks: useColorScheme, useActiveSection
+├── hooks/              # Custom hooks: useColorScheme, useActiveSection, useThemeObserver
 ├── test/               # Unit harness: setup, matchMedia / IntersectionObserver doubles, renderWithUser
 ├── styles/             # Global styles: index.css (Tailwind CSS v4 `@theme`, `[data-theme="dark"]`, `@layer base`, keyframes)
 ├── App.tsx             # Root application shell assembling layout and sections
@@ -65,10 +72,21 @@ src/
 
 ```mermaid
 graph TD
-    APP[App.tsx] --> SKIP[SkipLink (#main)]
+    APP[App.tsx] --> ENV["AnimatedEnvironment (fixed, -z-10, aria-hidden)"]
+    APP --> SKIP[SkipLink (#main)]
+
+    ENV --> SKY[Sky - day / dusk / night gradients]
+    ENV --> STARS["svg: Stars (star-field)"]
+    ENV --> SUN[Sun]
+    ENV --> MOON[Moon]
+    ENV --> SCENERY["svg: Clouds + Landscape"]
+    ENV --> SCRIM[Scrim - base + night]
+    ENV -.drives.-> TL["timeline.ts: master (paused) + ambient"]
+    ENV -.observes.-> TOBS["useThemeObserver -> html[data-theme]"]
     APP --> HEADER[Header (sticky)]
     APP --> MAIN[main#main]
     APP --> FOOTER[Footer]
+    APP --> VA["Analytics (@vercel/analytics/react)"]
 
     HEADER --> CONT_H[Container]
     HEADER --> THEME[ThemeToggle]

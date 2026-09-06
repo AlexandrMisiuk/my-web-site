@@ -1,5 +1,10 @@
+/* eslint-disable testing-library/no-container, testing-library/no-node-access --
+   The animated environment is decorative `aria-hidden` SVG. It is deliberately
+   absent from the accessibility tree, so role- and label-based queries cannot
+   reach it; its `data-env` animation hooks are the only stable handles. */
 import { act } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
+import { ENV, envSelector } from '@/components/environment/environment.constants';
 import { emitIntersections } from '@/test/intersectionObserver';
 import { renderWithUser, screen, within } from '@/test/render';
 import App from './App';
@@ -29,6 +34,14 @@ describe('App', () => {
 
         // Contact section static copy
         expect(screen.getByText("Let's build something great.")).toBeInTheDocument();
+    });
+
+    it('mounts exactly one decorative environment layer behind the content', () => {
+        const { container } = renderWithUser(<App />);
+        const layers = container.querySelectorAll(envSelector(ENV.layer));
+
+        expect(layers).toHaveLength(1);
+        expect(layers[0]).toHaveAttribute('aria-hidden', 'true');
     });
 
     it('wires the active section into the primary navigation', () => {

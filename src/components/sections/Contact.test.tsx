@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { contactContent } from '@/data/contact';
 import type { ContactContent, SiteProfile } from '@/data/types';
-import { renderWithUser, screen } from '@/test/render';
+import { renderWithUser, screen, within } from '@/test/render';
 import { Contact } from './Contact';
 
 const fullProfile: SiteProfile = {
@@ -129,6 +129,16 @@ describe('Contact', () => {
 
         expect(screen.getByText("Let's build something great.")).toBeInTheDocument();
         expect(screen.queryAllByRole('link')).toHaveLength(0);
+    });
+
+    it('renders the closing statement and the action links inside a single container', () => {
+        const { container } = renderWithUser(<Contact profile={fullProfile} />);
+
+        const card = container.firstElementChild as HTMLElement;
+
+        expect(within(card).getByText("Let's build something great.")).toBeInTheDocument();
+        expect(within(card).getByRole('link', { name: /email/i })).toBeInTheDocument();
+        expect(within(card).getByRole('link', { name: /cv/i })).toBeInTheDocument();
     });
 
     it('applies custom className when provided', () => {

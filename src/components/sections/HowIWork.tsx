@@ -23,7 +23,7 @@ export function HowIWork({ principles = defaultPrinciples, className = '' }: How
                 <article
                     key={principle.id}
                     aria-labelledby={`${principle.id}-title`}
-                    className="border-hairline bg-surface flex flex-col gap-3 rounded-sm border p-6 transition-colors sm:p-8"
+                    className="border-hairline bg-surface/75 flex flex-col gap-3 rounded-sm border p-6 backdrop-blur-sm transition-colors sm:p-8"
                 >
                     <h3 id={`${principle.id}-title`} className="text-h3 text-ink font-semibold tracking-tight">
                         {principle.title}
