@@ -68,7 +68,7 @@ export function Technologies({
                 >
                     {filteredTechnologies.map((tech) => (
                         <li key={tech.id} className="h-full">
-                            <article className="group border-hairline bg-surface hover:border-accent flex h-full flex-col items-center justify-center gap-3 rounded-sm border p-4 text-center transition-all duration-200 hover:-translate-y-0.5 sm:p-5">
+                            <article className="group border-hairline bg-surface/75 hover:border-accent flex h-full flex-col items-center justify-center gap-3 rounded-sm border p-4 text-center backdrop-blur-sm transition-all duration-200 hover:-translate-y-0.5 sm:p-5">
                                 <div className="flex h-10 w-10 items-center justify-center transition-transform duration-200 group-hover:scale-110">
                                     <TechIcon name={tech.icon} size={32} />
                                 </div>

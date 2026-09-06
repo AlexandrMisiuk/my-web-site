@@ -24,7 +24,7 @@ export function Contact({
 
     return (
         <div
-            className={`border-hairline bg-surface flex flex-col gap-6 rounded-sm border p-6 transition-colors sm:gap-8 sm:p-8 ${className}`.trim()}
+            className={`border-hairline bg-surface/75 flex flex-col gap-6 rounded-sm border p-6 backdrop-blur-sm transition-colors sm:gap-8 sm:p-8 ${className}`.trim()}
         >
             <div className="flex flex-col gap-4 sm:gap-6">
                 <p className="text-h3 text-ink font-semibold tracking-tight">Let's build something great.</p>

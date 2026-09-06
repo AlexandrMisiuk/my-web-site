@@ -19,7 +19,7 @@ export function About({ content = defaultAboutContent, className = '' }: AboutPr
 
     return (
         <div
-            className={`border-hairline bg-surface flex flex-col gap-4 rounded-sm border p-6 transition-colors sm:gap-6 sm:p-8 ${className}`.trim()}
+            className={`border-hairline bg-surface/75 flex flex-col gap-4 rounded-sm border p-6 backdrop-blur-sm transition-colors sm:gap-6 sm:p-8 ${className}`.trim()}
         >
             {content.paragraphs.map((paragraph, index) => (
                 <p key={index} className="text-body text-ink-muted max-w-[62ch] leading-relaxed">

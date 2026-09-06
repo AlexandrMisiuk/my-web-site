@@ -11,7 +11,7 @@ export function Footer({ className = '', profile = defaultProfile }: FooterProps
     const currentYear = new Date().getFullYear();
 
     return (
-        <footer className={`border-hairline bg-canvas border-t py-12 ${className}`.trim()}>
+        <footer className={`border-hairline bg-canvas/70 border-t py-12 backdrop-blur-md ${className}`.trim()}>
             <Container as="div">
                 <div className="flex flex-col items-center gap-1">
                     <p className="text-mono-xs text-ink font-mono font-semibold tracking-wider uppercase">

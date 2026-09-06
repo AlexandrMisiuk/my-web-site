@@ -71,7 +71,7 @@ export function TerminalWindow({
         <div
             ref={containerRef}
             data-testid={dataTestId}
-            className={`border-hairline bg-surface text-ink overflow-hidden rounded-sm border font-mono shadow-lg sm:shadow-sm ${className}`.trim()}
+            className={`border-hairline bg-surface/75 text-ink overflow-hidden rounded-sm border font-mono shadow-lg backdrop-blur-sm sm:shadow-sm ${className}`.trim()}
         >
             <div className="bg-canvas/60 border-hairline flex items-center justify-between border-b px-4 py-2.5">
                 <div className="flex items-center gap-2" aria-hidden="true">

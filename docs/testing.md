@@ -99,7 +99,9 @@ A last-resort ignore is an inline `/* v8 ignore next -- reason */` on a genuinel
 - Use `user-event` (via `renderWithUser`) over raw `fireEvent` for interaction.
 - Never assert on Tailwind class strings.
 - Drive `IntersectionObserver` and `matchMedia` through `src/test/` — no inline mocks.
-- Drive GSAP animations deterministically in unit tests using `gsap.globalTimeline.seek()` and clean up active tweens with `gsap.killTweensOf('*')` in `afterEach`.
+- Drive GSAP animations deterministically in unit tests using `gsap.globalTimeline.seek()` and clean up active tweens with `gsap.killTweensOf('*')` in `afterEach`. A *paused* timeline (the day/night master) is driven directly with `timeline.progress(...)`; it only advances with `globalTimeline` once `play()` / `reverse()` has been called.
+- `gsap.matchMedia()` branches only run when a test explicitly registers the exact query string with `setMediaMatches(...)` — the `matchMedia` double defaults every unseen query to `false`. `AnimatedEnvironment` has three motion branches (desktop, mobile, reduced), so each needs its own test to hold the 100% branch threshold. See `armMotion()` in `AnimatedEnvironment.test.tsx`.
+- The animated environment is decorative `aria-hidden` SVG, deliberately absent from the accessibility tree, so role- and label-based queries cannot reach it. Its test files carry a documented file-level `eslint-disable` for `testing-library/no-container` and `no-node-access` and query the `data-env` animation hooks instead. This waiver is scoped to the environment scene and `App.test.tsx`'s single layer-presence assertion — it is not a general licence to reach into the DOM.
 - New runtime modules must reach 100% coverage in the same change that introduces them.
 - New components need at least a render plus an accessibility-contract test.
 

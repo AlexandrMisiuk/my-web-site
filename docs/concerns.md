@@ -118,3 +118,23 @@ This document highlights critical implementation concerns, potential pitfalls, r
 
 - **Concern**: Integrating third-party analytics telemetry could pollute local development and automated test runs with network requests, leak user personal identifiers, require cookie consent banners, or introduce Cumulative Layout Shift (CLS).
 - **Mitigation**: `@vercel/analytics` operates completely cookie-free and anonymized out of the box, fulfilling GDPR and CCPA privacy standards without consent banners. The SDK defaults to inert mode in non-production environments (`NODE_ENV === 'development'` and `NODE_ENV === 'test'`), preventing outbound beacons during unit tests, Playwright runs, or local development. The `<Analytics />` component renders `null` in the DOM tree, guaranteeing zero layout shift and zero impact on accessibility tree scanning or landmark hierarchies.
+
+### 24. Content Readability Over a Live Animated Background
+
+- **Concern**: A permanently animated landscape behind every section could reduce text contrast below WCAG AA, particularly where the bright day field or the sun's glow sits behind body copy, and could make the page feel busy rather than calm.
+- **Mitigation**: Contrast is carried by two independent layers. `Scrim` renders a fixed base gradient plus a night gradient that GSAP fades in, both authored from theme-independent tokens so they never snap. On top of that, every content surface is frosted (`bg-surface/75 backdrop-blur-sm`, `bg-canvas/70 backdrop-blur-md` for the footer), which keeps prose sitting on a near-opaque plate regardless of what is behind it. The `@axe-core/playwright` WCAG 2.1 AA scan runs in both colour schemes across 320 / 768 / 1440 and gates the change. The `MobileNav` overlay stays fully opaque so the disclosure panel is never competing with the scene.
+
+### 25. Competing GSAP Timelines Animating the Same Property
+
+- **Concern**: Two independent timelines (the day/night arc and the persistent ambient loop) writing the same property of the same element would fight each frame, producing flicker or values that snap when one timeline restarts.
+- **Mitigation**: A strict **one property, one owner, one layer** invariant. The master timeline owns group-level properties (`star-field` opacity, `cloud-band` opacity, `sun-group` transform, `field-night` opacity); the ambient timeline owns the individual children (`star` opacity, `cloud` x, `blade` rotation, `sun-core` scale). `timeline.test.ts` asserts the intersection of the two timelines' `(element, property)` sets is empty, so the invariant cannot silently rot.
+
+### 26. Mobile Animation Budget and Fixed-Layer Scroll Cost
+
+- **Concern**: A full-viewport fixed layer with ~130 SVG nodes and several always-running tweens could regress scroll performance or drain battery on phones, and a responsive design that reduced the node count would force React re-renders on resize.
+- **Mitigation**: Every tween animates only `transform` and `opacity`; cloud drift works in SVG user units with a `modifiers` wrap, so no layout is read per frame. `gsap.matchMedia()` arms a reduced `AMBIENT_MOBILE` budget below 768px — fewer twinkling stars, no grass sway, slower cloud drift — while the **rendered markup stays identical at every breakpoint**, so responsiveness costs no React state and no re-render. Measured at a sustained 60 fps through a full-page scroll plus a theme transition, with CLS 0.00.
+
+### 27. First-Paint Flash and Mid-Transition Theme Toggling
+
+- **Concern**: The environment could play a spurious sunrise or sunset on load, flash night-only layers before the first animation frame, or stack conflicting animations if the theme is toggled repeatedly during a transition.
+- **Mitigation**: On mount the master timeline is posed with `progress(readThemeAttribute() === 'dark' ? 1 : 0).pause()` inside `useGSAP`'s layout effect, before any motion is armed, so the initial state is correct without animating. Night-only layers carry the `.env-night-layer` class (`opacity: 0`) in CSS *and* are set to zero by the timeline builder, so they cannot appear before the first frame. Rapid toggling is safe by construction: there is exactly one timeline instance and the handler only calls `play()` / `reverse()`, which resume from the current playhead. Under reduced motion the handler jumps to `progress(target).pause()` instead.
