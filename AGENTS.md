@@ -27,6 +27,16 @@ All development from this point forward is test-driven. Write a failing test fir
 - Never lower a threshold, never add a blanket ignore, and never write assertion-free tests to inflate coverage.
 - Read `docs/testing.md` before writing any test.
 
+## Plan Governance (`docs/plans/`)
+
+`docs/plans/` is the single canonical home for every implementation plan, no matter which agent produced it.
+
+- **Agent-native plan directories are scratch.** Claude Code drafts to `~/.claude/plans/`, Junie to `.junie/plans/`. Both are git-ignored and machine-local. Keep using your agent's own plan mode as-is — no agent configuration changes are required or wanted.
+- **Mandatory rule**: once a plan is approved, the **first** implementation step — before any production code changes — is to write a copy of it to `docs/plans/<NNN>-<task-title>.md`.
+- **Copy verbatim.** The committed file must be byte-identical to the agent-native plan, including any front matter (Junie's `sessionId`, for example). This preserves backward compatibility: a repository restored on a fresh machine still carries plans its originating agent can read and resume. Never reformat, summarize, or strip metadata from a plan on the way into `docs/plans/`.
+- **Naming**: `<NNN>` is the next free zero-padded 3-digit number (`ls docs/plans | tail -1`); `<task-title>` is a short kebab-case description of the task. Lexical order therefore matches chronological order.
+- **Plans are append-only history.** Never renumber or delete an existing plan. If a plan changes materially mid-flight, update that same numbered file rather than adding a second one.
+
 ## Documentation Governance (`docs/`)
 
 The repository contains a dedicated `docs/` directory housing condensed, high-signal project documentation:
@@ -35,6 +45,7 @@ The repository contains a dedicated `docs/` directory housing condensed, high-si
 - `docs/decisions.md`: Architectural decisions, technical choices, and rationales.
 - `docs/concerns.md`: Critical technical concerns, responsive/accessibility pitfalls, and performance guards.
 - `docs/testing.md`: Testing architecture, TDD workflow, coverage policy, harness API, and troubleshooting.
+- `docs/plans/`: Numbered implementation plans, one file per task (see Plan Governance above).
 
 ### Mandatory Documentation Maintenance Rule
 

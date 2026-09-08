@@ -22,7 +22,8 @@ This repository follows **strict TDD**: write the failing test first, then the m
 │   ├── architecture.md     # Architectural overview
 │   ├── decisions.md        # Key technical decisions
 │   ├── concerns.md         # Risks and mitigations
-│   └── testing.md          # Testing architecture, TDD, coverage policy
+│   ├── testing.md          # Testing architecture, TDD, coverage policy
+│   └── plans/              # Numbered implementation plans, one per task
 ├── e2e/                    # Playwright specs and axe fixture
 ├── public/
 │   ├── cv/                 # Curated CV documents
@@ -82,6 +83,7 @@ Reports land in `coverage/` and `playwright-report/` (git-ignored). First e2e ru
 2. **Static-First & Lightweight**: Avoid unnecessary runtime dependencies, state libraries, or heavy external UI packages.
 3. **Data-Driven Content**: Content, copy, and links reside in `src/data/` to keep presentation components cleanly decoupled from data.
 4. **Quality Gates**: All commits and PRs must pass `npm run verify` (including `test:coverage` at 100%) and `npm run test:e2e`.
+5. **Plan Archive**: Every implementation plan is committed to `docs/plans/` as `<NNN>-<task-title>.md` — a verbatim copy of the agent-native plan, front matter included. Agent-local plan dirs (`~/.claude/plans/`, `.junie/plans/`) are git-ignored scratch; the repository copy is the source of truth.
 
 ## Documentation
 
@@ -89,3 +91,4 @@ Reports land in `coverage/` and `playwright-report/` (git-ignored). First e2e ru
 - [docs/decisions.md](docs/decisions.md) — technical choices and rationales.
 - [docs/concerns.md](docs/concerns.md) — risks, a11y/responsive pitfalls, performance guards.
 - [docs/testing.md](docs/testing.md) — TDD mandate, two-tier architecture, coverage policy, harness API.
+- [docs/plans/](docs/plans/) — numbered implementation plans, one file per task, in chronological order.
