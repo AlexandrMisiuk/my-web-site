@@ -29,9 +29,16 @@ dist-ssr
 .claude/skills/*
 .junie/skills/*
 
+# Agent-native plan scratch dirs (canonical copies live in docs/plans/)
+.junie/plans/
+.claude/plans/
+
 # Test artifacts
 coverage
 playwright-report
 test-results
 /blob-report
 .playwright
+
+# Env
+.env*
