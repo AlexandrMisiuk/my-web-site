@@ -12,7 +12,6 @@ const mockProfile: SiteProfile = {
         linkedin: 'https://linkedin.com/in/example',
         github: 'https://github.com/example',
         email: 'hello@example.com',
-        cv: '/cv.pdf',
     },
 };
 

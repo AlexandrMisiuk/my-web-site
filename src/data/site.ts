@@ -11,6 +11,5 @@ export const siteProfile: SiteProfile = {
         linkedin: 'https://linkedin.com/in/alexandr-misiuk',
         github: 'https://github.com/AlexandrMisiuk',
         email: 'olek.misiuk.pl@gmail.com',
-        cv: '/cv/Oleksandr_Misiuk_CV.pdf',
     },
 };

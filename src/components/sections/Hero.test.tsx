@@ -12,7 +12,6 @@ const mockProfile: SiteProfile = {
         linkedin: 'https://linkedin.com/in/janedoe',
         github: 'https://github.com/janedoe',
         email: 'jane@example.com',
-        cv: '/cv/jane-doe.pdf',
     },
 };
 
