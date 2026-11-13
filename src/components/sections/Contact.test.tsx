@@ -13,7 +13,6 @@ const fullProfile: SiteProfile = {
         linkedin: 'https://linkedin.com/in/alexandr-misiuk',
         github: 'https://github.com/alexandrmisiuk',
         email: 'alexandr@example.com',
-        cv: '/cv/Oleksandr_Misiuk_CV.pdf',
     },
 };
 
@@ -26,7 +25,6 @@ const partialProfile: SiteProfile = {
         linkedin: 'https://linkedin.com/in/alexandr-misiuk',
         github: '',
         email: '',
-        cv: '',
     },
 };
 
@@ -39,7 +37,6 @@ const emailOnlyProfile: SiteProfile = {
         linkedin: '',
         github: '',
         email: 'alexandr@example.com',
-        cv: '',
     },
 };
 
@@ -52,7 +49,6 @@ const emptyLinksProfile: SiteProfile = {
         linkedin: '',
         github: '',
         email: '',
-        cv: '',
     },
 };
 
@@ -100,10 +96,6 @@ describe('Contact', () => {
 
         const githubLink = screen.getByRole('link', { name: /github/i });
         expect(githubLink).toHaveAttribute('href', 'https://github.com/alexandrmisiuk');
-
-        const cvLink = screen.getByRole('link', { name: /cv/i });
-        expect(cvLink).toHaveAttribute('href', '/cv/Oleksandr_Misiuk_CV.pdf');
-        expect(cvLink).toHaveAttribute('download', '');
     });
 
     it('omits empty link strings cleanly without rendering broken anchor tags', () => {
@@ -112,7 +104,6 @@ describe('Contact', () => {
         expect(screen.getByRole('link', { name: /linkedin/i })).toBeInTheDocument();
         expect(screen.queryByRole('link', { name: /github/i })).not.toBeInTheDocument();
         expect(screen.queryByRole('link', { name: /email/i })).not.toBeInTheDocument();
-        expect(screen.queryByRole('link', { name: /cv/i })).not.toBeInTheDocument();
     });
 
     it('renders email link and omits missing linkedin link when email only is present', () => {
@@ -121,7 +112,6 @@ describe('Contact', () => {
         expect(screen.getByRole('link', { name: /email/i })).toBeInTheDocument();
         expect(screen.queryByRole('link', { name: /linkedin/i })).not.toBeInTheDocument();
         expect(screen.queryByRole('link', { name: /github/i })).not.toBeInTheDocument();
-        expect(screen.queryByRole('link', { name: /cv/i })).not.toBeInTheDocument();
     });
 
     it('renders clean fallback or empty link state without crash when all links are empty', () => {
@@ -138,7 +128,6 @@ describe('Contact', () => {
 
         expect(within(card).getByText("Let's build something great.")).toBeInTheDocument();
         expect(within(card).getByRole('link', { name: /email/i })).toBeInTheDocument();
-        expect(within(card).getByRole('link', { name: /cv/i })).toBeInTheDocument();
     });
 
     it('applies custom className when provided', () => {

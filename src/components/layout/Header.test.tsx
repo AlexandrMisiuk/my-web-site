@@ -21,7 +21,6 @@ const mockProfile: SiteProfile = {
         linkedin: 'https://linkedin.com/in/example',
         github: 'https://github.com/example',
         email: 'hello@example.com',
-        cv: '/cv/test.pdf',
     },
 };
 
@@ -60,12 +59,6 @@ describe('Header', () => {
         await user.keyboard('{Escape}');
         expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
         expect(screen.getByRole('button', { name: 'Open menu' })).toHaveAttribute('aria-expanded', 'false');
-    });
-
-    it('does not render a CV action link even when a cv link is provided', () => {
-        renderWithUser(<Header activeId="work" items={mockNavItems} profile={mockProfile} />);
-
-        expect(screen.queryByRole('link', { name: 'CV' })).not.toBeInTheDocument();
     });
 
     it('renders the brand logo link pointing to #hero with accessible name matching profile.name', () => {

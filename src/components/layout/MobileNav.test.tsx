@@ -134,10 +134,4 @@ describe('MobileNav', () => {
 
         expect(onClose).toHaveBeenCalledOnce();
     });
-
-    it('does not render a Download CV action link within the dialog', () => {
-        renderOpenNav();
-
-        expect(screen.queryByRole('link', { name: /Download CV/i })).not.toBeInTheDocument();
-    });
 });

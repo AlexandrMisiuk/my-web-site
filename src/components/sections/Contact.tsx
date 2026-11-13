@@ -1,5 +1,5 @@
 import { ActionLink } from '@/components/ui/ActionLink';
-import { DocumentIcon, GitHubIcon, LinkedInIcon, MailIcon } from '@/components/ui/icons';
+import { GitHubIcon, LinkedInIcon, MailIcon } from '@/components/ui/icons';
 import { contactContent as defaultContactContent } from '@/data/contact';
 import { siteProfile as defaultSiteProfile } from '@/data/site';
 import type { ContactContent, SiteProfile } from '@/data/types';
@@ -18,8 +18,7 @@ export function Contact({
     const hasEmail = Boolean(profile.links?.email);
     const hasLinkedIn = Boolean(profile.links?.linkedin);
     const hasGitHub = Boolean(profile.links?.github);
-    const hasCv = Boolean(profile.links?.cv);
-    const hasAnyLink = hasEmail || hasLinkedIn || hasGitHub || hasCv;
+    const hasAnyLink = hasEmail || hasLinkedIn || hasGitHub;
     const hasParagraphs = Boolean(content.paragraphs && content.paragraphs.length > 0);
 
     return (
@@ -59,12 +58,6 @@ export function Contact({
                             <ActionLink href={profile.links.github} variant="ghost" isExternal>
                                 <GitHubIcon size={18} className="shrink-0 font-mono" />
                                 <span>GitHub</span>
-                            </ActionLink>
-                        ) : null}
-                        {hasCv ? (
-                            <ActionLink href={profile.links.cv} variant="ghost" download>
-                                <DocumentIcon size={18} className="shrink-0 font-mono" />
-                                <span>Download CV</span>
                             </ActionLink>
                         ) : null}
                     </div>

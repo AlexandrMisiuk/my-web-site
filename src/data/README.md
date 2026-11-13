@@ -48,7 +48,6 @@ export const siteProfile: SiteProfile = {
         linkedin: 'https://linkedin.com/in/alexandr-misiuk',
         github: 'https://github.com/your-username', // Replace '' with your GitHub URL
         email: 'oleksandr@example.com', // Replace '' with your contact email
-        cv: '/cv/Oleksandr_Misiuk_CV.pdf', // Place PDF in public/cv/ and set path
     },
 };
 ```

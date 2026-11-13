@@ -41,7 +41,6 @@ export interface SiteProfile {
         linkedin: string;
         github: string;
         email: string;
-        cv: string;
     };
 }
 
